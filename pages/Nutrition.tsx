@@ -12,7 +12,7 @@ interface DayPlan {
 }
 
 const generatePlan = (type: 'lose' | 'gain'): DayPlan[] => {
-    const menus = type === 'lose' 
+    const menus = type === 'lose'
         ? [
             { b: 'Tortilla de claras (4) y espinacas', l: 'Pechuga de pollo (200g) con brócoli', d: 'Ensalada de atún y aguacate' },
             { b: 'Avena cocida con frutos rojos', l: 'Pavo al horno con batata asada', d: 'Crema de calabaza y merluza al vapor' },
@@ -21,7 +21,7 @@ const generatePlan = (type: 'lose' | 'gain'): DayPlan[] => {
             { b: 'Batido de proteína y plátano', l: 'Ensalada de quinoa y pollo', d: 'Lubina al horno con pimientos' },
             { b: 'Tortitas de avena fit', l: 'Hamburguesa de pavo casera', d: 'Ceviche de pescado blanco' },
             { b: 'Huevos revueltos con tomate', l: 'Pasta integral con atún natural', d: 'Pollo al limón con ensalada verde' },
-          ]
+        ]
         : [
             { b: '4 Huevos revueltos con tostadas', l: 'Pasta boloñesa con carne magra', d: 'Salmón con patata asada y aceite' },
             { b: 'Batido de avena, plátano y crema cacahuete', l: 'Arroz con pollo y medio aguacate', d: 'Tortilla de patata y atún' },
@@ -30,7 +30,7 @@ const generatePlan = (type: 'lose' | 'gain'): DayPlan[] => {
             { b: 'Gachas de avena con proteína whey', l: 'Burritos de carne y frijoles', d: 'Hamburguesa de ternera completa' },
             { b: 'Tostadas francesas proteicas', l: 'Pollo al curry con arroz basmati', d: 'Lasagna de calabacín y carne' },
             { b: 'Huevos fritos con bacon de pavo', l: 'Fideuá de marisco', d: 'Bocadillo de lomo y queso' },
-          ];
+        ];
 
     const days: DayPlan[] = [];
     for (let i = 1; i <= 30; i++) {
@@ -72,7 +72,7 @@ const NutritionPlan = () => {
         const currentPlan = PLAN_DATA[goal];
         if (!searchTerm) return currentPlan;
         const lowerTerm = searchTerm.toLowerCase();
-        return currentPlan.filter(day => 
+        return currentPlan.filter(day =>
             day.day.toString().includes(lowerTerm) ||
             day.breakfast.toLowerCase().includes(lowerTerm) ||
             day.lunch.toLowerCase().includes(lowerTerm) ||
@@ -87,7 +87,7 @@ const NutritionPlan = () => {
                 <TopHeader />
                 <div className="flex-grow overflow-y-auto custom-scrollbar p-8">
                     <div className="max-w-7xl mx-auto w-full">
-                        
+
                         {/* Header Section */}
                         <div className="flex flex-col lg:flex-row justify-between items-start lg:items-end gap-6 mb-10">
                             <div className="flex flex-col gap-2">
@@ -97,13 +97,13 @@ const NutritionPlan = () => {
                                 </p>
                             </div>
                             <div className="flex h-12 bg-white dark:bg-surface-dark p-1 rounded-xl border border-slate-200 dark:border-border-dark shadow-sm">
-                                <button 
+                                <button
                                     onClick={() => setGoal('lose')}
                                     className={`px-6 rounded-lg font-bold text-sm uppercase transition-all ${goal === 'lose' ? 'bg-primary text-black shadow-sm' : 'text-slate-500 hover:text-slate-700 dark:hover:text-slate-300'}`}
                                 >
                                     Perder Peso
                                 </button>
-                                <button 
+                                <button
                                     onClick={() => setGoal('gain')}
                                     className={`px-6 rounded-lg font-bold text-sm uppercase transition-all ${goal === 'gain' ? 'bg-primary text-black shadow-sm' : 'text-slate-500 hover:text-slate-700 dark:hover:text-slate-300'}`}
                                 >
@@ -127,7 +127,7 @@ const NutritionPlan = () => {
                                     {weight} kg
                                     {isUpdating && <span className="material-symbols-outlined animate-spin text-lg">sync</span>}
                                 </p>
-                                <button 
+                                <button
                                     onClick={handleUpdateWeight}
                                     disabled={isUpdating}
                                     className="mt-4 w-full py-2 bg-black text-primary text-[10px] font-black uppercase rounded hover:bg-black/80 transition-colors disabled:opacity-70"
@@ -153,39 +153,23 @@ const NutritionPlan = () => {
                                 <span className="material-symbols-outlined text-primary">calendar_month</span>
                                 Calendario de Comidas
                             </h2>
-                            {/* Search Bar with Button */}
-                            <div className="bg-white dark:bg-surface-dark p-2 rounded-2xl shadow-sm border border-slate-200 dark:border-border-dark transition-all focus-within:ring-2 focus-within:ring-primary/50 flex items-center w-full md:w-96">
-                                <div className="flex-1 relative flex items-center">
-                                    <span className="material-symbols-outlined absolute left-4 text-gray-400">search</span>
-                                    <input 
-                                        type="text"
-                                        value={searchTerm}
-                                        onChange={(e) => setSearchTerm(e.target.value)}
-                                        placeholder="Buscar comida o día..."
-                                        className="w-full bg-transparent border-none pl-12 pr-4 py-2 text-sm placeholder:text-gray-500 focus:outline-none dark:text-white"
-                                    />
-                                </div>
-                                <button className="bg-primary text-black px-4 py-2 rounded-xl font-bold text-xs shadow-md hover:bg-primary/90 transition-colors mr-1">
-                                    {language === 'ES' ? 'Buscar' : 'Search'}
-                                </button>
-                            </div>
+                            {/* Search Bar Removed */}
                         </div>
 
                         {filteredPlan.length === 0 ? (
-                             <div className="text-center py-20 opacity-50 bg-white dark:bg-surface-dark rounded-2xl border border-slate-200 dark:border-border-dark">
+                            <div className="text-center py-20 opacity-50 bg-white dark:bg-surface-dark rounded-2xl border border-slate-200 dark:border-border-dark">
                                 <span className="material-symbols-outlined text-6xl mb-4 text-slate-400">no_food</span>
                                 <p className="text-xl text-slate-500">No se encontraron comidas con esa búsqueda.</p>
-                             </div>
+                            </div>
                         ) : (
                             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
                                 {filteredPlan.map((plan) => (
-                                    <div 
-                                        key={plan.day} 
-                                        className={`group rounded-2xl border p-6 transition-all hover:-translate-y-1 hover:shadow-xl ${
-                                            plan.day === 12 
-                                            ? 'bg-white dark:bg-surface-dark border-primary ring-1 ring-primary relative overflow-hidden' 
-                                            : 'bg-white dark:bg-surface-dark border-slate-200 dark:border-border-dark hover:border-primary/50'
-                                        }`}
+                                    <div
+                                        key={plan.day}
+                                        className={`group rounded-2xl border p-6 transition-all hover:-translate-y-1 hover:shadow-xl ${plan.day === 12
+                                                ? 'bg-white dark:bg-surface-dark border-primary ring-1 ring-primary relative overflow-hidden'
+                                                : 'bg-white dark:bg-surface-dark border-slate-200 dark:border-border-dark hover:border-primary/50'
+                                            }`}
                                     >
                                         {plan.day === 12 && (
                                             <div className="absolute top-0 right-0 bg-primary text-black text-[10px] font-black uppercase px-3 py-1 rounded-bl-xl">
@@ -193,14 +177,13 @@ const NutritionPlan = () => {
                                             </div>
                                         )}
                                         <div className="flex items-center gap-3 mb-6">
-                                            <div className={`size-10 rounded-full flex items-center justify-center font-black text-lg ${
-                                                plan.day === 12 ? 'bg-primary text-black' : 'bg-slate-100 dark:bg-border-dark text-slate-500'
-                                            }`}>
+                                            <div className={`size-10 rounded-full flex items-center justify-center font-black text-lg ${plan.day === 12 ? 'bg-primary text-black' : 'bg-slate-100 dark:bg-border-dark text-slate-500'
+                                                }`}>
                                                 {plan.day}
                                             </div>
                                             <h3 className="font-bold text-lg text-slate-900 dark:text-white">Día {plan.day}</h3>
                                         </div>
-                                        
+
                                         <div className="space-y-4">
                                             <div className="flex gap-3 items-start">
                                                 <span className="material-symbols-outlined text-orange-400 text-lg mt-0.5">wb_sunny</span>
@@ -230,7 +213,7 @@ const NutritionPlan = () => {
                                 ))}
                             </div>
                         )}
-                        
+
                     </div>
                 </div>
             </main>

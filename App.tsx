@@ -8,8 +8,8 @@ import Community from './pages/Community';
 import ProfileSettings from './pages/Profile';
 import Onboarding from './pages/Onboarding';
 import DesignSystem from './pages/DesignSystem';
-import AIAnalysis from './pages/AIAnalysis';
-import ChatBot from './components/ChatBot';
+import MusicPlayer from './pages/Music';
+
 
 const App = () => {
     return (
@@ -24,9 +24,9 @@ const App = () => {
                         <Route path="/profile" element={<ProfileSettings />} />
                         <Route path="/onboarding" element={<Onboarding />} />
                         <Route path="/design-system" element={<DesignSystem />} />
-                        <Route path="/analysis" element={<AIAnalysis />} />
+                        <Route path="/music" element={<MusicPlayer />} />
                     </Routes>
-                    <ChatBot />
+
                 </div>
             </HashRouter>
         </LanguageProvider>

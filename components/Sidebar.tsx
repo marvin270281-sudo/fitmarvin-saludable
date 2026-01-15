@@ -64,9 +64,9 @@ const Sidebar = () => {
                     <span className="material-symbols-outlined">group</span>
                     <span className="text-sm">{t('nav.community')}</span>
                 </Link>
-                <Link to="/analysis" className={navItemClass('/analysis')}>
-                    <span className="material-symbols-outlined">smart_toy</span>
-                    <span className="text-sm">{t('nav.ai_coach')}</span>
+                <Link to="/music" className={navItemClass('/music')}>
+                    <span className="material-symbols-outlined">music_note</span>
+                    <span className="text-sm">Música</span>
                 </Link>
                 <Link to="/design-system" className={navItemClass('/design-system')}>
                     <span className="material-symbols-outlined">architecture</span>

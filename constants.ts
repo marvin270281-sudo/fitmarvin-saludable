@@ -1,3 +1,5 @@
+import logoImg from './assets/logo.png';
+
 export const IMAGES = {
     USER_AVATAR: "https://lh3.googleusercontent.com/aida-public/AB6AXuA_i5IA3U7_vaN-AMhaajxA7MiJb9fiBTJedydUXLbWM8gWKmjGc_IM2KcCW77MCG_V4Gw8wq6Ukq5-d8vvn56j47cfULBnqOgcjNf_50z_FJ9xVm_IQEJFbbghGoXcRvswjv10sF8iJwkdyovEO7NGCRkflVJrybvOcnHQgHFh17nC46Ji3dnT4k2DvykYXoC1_Il3hOJcai1Eu2YnMJIpxm0tcpJsbnM_WKDEE-5iLpvRPGSk-sUBG6y00ykLB1N9x7MI9hBKuFdm",
     WORKOUT_BG: "https://lh3.googleusercontent.com/aida-public/AB6AXuCSxDvJUbzF4JeBAx8rvJoy_R9QOYVKD9gVn5Hc5frK2bg0_Igf22PkK7u9vn5JVlwPpS1smMwPP4iw0aTwLwO8DmjPxSGXgSmwQomq9OpGmS3lqHJ6uQZFERYEL9YFsf9QpVVa2-9HO9cFBJX29g-7twlvIL9lRLeNohzgSjlf30QEpN197-4CFUt4-yO15G29XAMLafgdASvTbe3yR7Y_50i0LeYsElaKU1WgDIki0MgqU8fSDm_cDM8N36sWC-mZPPL4XzqTc5z3",
@@ -7,5 +9,5 @@ export const IMAGES = {
     EXERCISE_PRESS: "https://lh3.googleusercontent.com/aida-public/AB6AXuCm6xXz7-_MRvY2xRMwJ22Gm9AQ1ebCtJ0E9bTpjcHpY2LmR-Ax-KbWrTfK2uJ136GAbcotlkj8pYKBMKWkWEQQLwCJghSk5Nw32tsQFSUrmjV9J1SnclAWsZ7JwrX1h8sA5RkklhCWotK3ZVfn0BFij0ONquCW6WZ7VJQ1_AHSPPceMLOPHXwzD0Eph7SHpVRncdbedGsjf2t-eBMQdNLsrYg_ctxvwBRHe6BXkFk208Ws7676uBhTgxXj7CUPAIAbKy_9TB6nqEjx",
     // IMPORTANTE: Reemplaza esta URL con el enlace directo a tu imagen de logo.
     // Puedes subir tu imagen a imgur.com o usar cualquier enlace público.
-    LOGO: "/logo.png" 
+    LOGO: logoImg
 };

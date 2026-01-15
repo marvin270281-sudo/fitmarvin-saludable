@@ -8,6 +8,14 @@ const Dashboard = () => {
     const navigate = useNavigate();
     const [chartPeriod, setChartPeriod] = useState<'7D' | '30D'>('30D');
 
+    // Redirect to onboarding if no user is logged in
+    React.useEffect(() => {
+        const user = localStorage.getItem('userName');
+        if (!user) {
+            navigate('/onboarding');
+        }
+    }, [navigate]);
+
     return (
         <div className="flex h-full">
             <Sidebar />
@@ -39,7 +47,7 @@ const Dashboard = () => {
                         <div className="col-span-12 md:col-span-8 row-span-2 bento-card bg-slate-900 dark:bg-surface-dark border border-slate-200 dark:border-border-dark p-8 rounded-xl relative overflow-hidden flex flex-col justify-end group cursor-pointer" onClick={() => navigate('/exercises')}>
                             <div className="absolute inset-0 z-0 overflow-hidden">
                                 <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent z-10"></div>
-                                <div className="w-full h-full bg-cover bg-center transition-transform duration-700 group-hover:scale-110" style={{backgroundImage: `url('${IMAGES.WORKOUT_BG}')`}}></div>
+                                <div className="w-full h-full bg-cover bg-center transition-transform duration-700 group-hover:scale-110" style={{ backgroundImage: `url('${IMAGES.WORKOUT_BG}')` }}></div>
                             </div>
                             <div className="relative z-10">
                                 <div className="flex items-center gap-2 mb-4">
@@ -65,13 +73,13 @@ const Dashboard = () => {
                                     </div>
                                 </div>
                                 <div className="flex gap-2">
-                                    <button 
+                                    <button
                                         onClick={() => setChartPeriod('7D')}
                                         className={`px-3 py-1 text-[10px] font-bold rounded transition-colors ${chartPeriod === '7D' ? 'bg-primary text-black' : 'bg-slate-100 dark:bg-border-dark text-slate-500'}`}
                                     >
                                         7D
                                     </button>
-                                    <button 
+                                    <button
                                         onClick={() => setChartPeriod('30D')}
                                         className={`px-3 py-1 text-[10px] font-bold rounded transition-colors ${chartPeriod === '30D' ? 'bg-primary text-black' : 'bg-slate-100 dark:bg-border-dark text-slate-500'}`}
                                     >
@@ -89,14 +97,14 @@ const Dashboard = () => {
                                         <div className="flex-1 bg-primary hover:bg-primary/90 transition-colors rounded-t-md h-[42%] tooltip" title="Semana 5"></div>
                                     </>
                                 ) : (
-                                     <>
+                                    <>
                                         <div className="flex-1 bg-primary/10 rounded-t-md h-[30%] animate-pulse"></div>
-                                        <div className="flex-1 bg-primary/20 rounded-t-md h-[45%] animate-pulse" style={{animationDelay: '100ms'}}></div>
-                                        <div className="flex-1 bg-primary/30 rounded-t-md h-[40%] animate-pulse" style={{animationDelay: '200ms'}}></div>
-                                        <div className="flex-1 bg-primary/40 rounded-t-md h-[35%] animate-pulse" style={{animationDelay: '300ms'}}></div>
-                                        <div className="flex-1 bg-primary/60 rounded-t-md h-[42%] animate-pulse" style={{animationDelay: '400ms'}}></div>
-                                        <div className="flex-1 bg-primary/80 rounded-t-md h-[38%] animate-pulse" style={{animationDelay: '500ms'}}></div>
-                                        <div className="flex-1 bg-primary rounded-t-md h-[42%] animate-pulse" style={{animationDelay: '600ms'}}></div>
+                                        <div className="flex-1 bg-primary/20 rounded-t-md h-[45%] animate-pulse" style={{ animationDelay: '100ms' }}></div>
+                                        <div className="flex-1 bg-primary/30 rounded-t-md h-[40%] animate-pulse" style={{ animationDelay: '200ms' }}></div>
+                                        <div className="flex-1 bg-primary/40 rounded-t-md h-[35%] animate-pulse" style={{ animationDelay: '300ms' }}></div>
+                                        <div className="flex-1 bg-primary/60 rounded-t-md h-[42%] animate-pulse" style={{ animationDelay: '400ms' }}></div>
+                                        <div className="flex-1 bg-primary/80 rounded-t-md h-[38%] animate-pulse" style={{ animationDelay: '500ms' }}></div>
+                                        <div className="flex-1 bg-primary rounded-t-md h-[42%] animate-pulse" style={{ animationDelay: '600ms' }}></div>
                                     </>
                                 )}
                             </div>
@@ -109,7 +117,7 @@ const Dashboard = () => {
                             <div className="flex flex-col gap-5">
                                 {[1, 2].map(i => (
                                     <div key={i} className="flex gap-4 p-3 rounded-xl hover:bg-slate-50 dark:hover:bg-border-dark transition-colors border border-transparent hover:border-slate-200 dark:hover:border-border-dark cursor-pointer group">
-                                        <div className="size-12 shrink-0 rounded-lg bg-cover bg-center bg-slate-200" style={{backgroundImage: `url('${IMAGES.COMMUNITY_AVATAR_1}')`}}></div>
+                                        <div className="size-12 shrink-0 rounded-lg bg-cover bg-center bg-slate-200" style={{ backgroundImage: `url('${IMAGES.COMMUNITY_AVATAR_1}')` }}></div>
                                         <div>
                                             <p className="text-sm font-bold mb-0.5 group-hover:text-primary transition-colors">@maria_power</p>
                                             <p className="text-xs text-slate-500 dark:text-slate-400 leading-tight">"¡Finalmente completé el reto de 30 días!"</p>

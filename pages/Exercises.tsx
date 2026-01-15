@@ -27,83 +27,83 @@ interface Exercise {
 const EXERCISE_DB: Exercise[] = [
     // --- CHEST (PECHO) ---
     {
-        id: 'chest-1', videoId: 'rT7DgCr-3pg', img: IMAGES.EXERCISE_PRESS, category: 'Chest',
+        id: 'chest-1', videoId: '7aQY3u0Dk-Q', img: IMAGES.EXERCISE_PRESS, category: 'Chest', // Powerexplosive (Press Banca)
         details: {
             ES: {
-                title: 'Press de Banca', muscle: 'Pectoral Medio, Tríceps',
-                description: 'El constructor de masa por excelencia. Clave para fuerza y densidad pectoral.',
+                title: 'Press de Banca: Guía Maestra', muscle: 'Pectoral, Tríceps',
+                description: 'La guía técnica más completa para ganar fuerza y evitar lesiones.',
                 instructions: [
-                    'Acuéstate con los ojos justo debajo de la barra.',
-                    'Retrae las escápulas (junta los omóplatos) y mantén los pies firmes en el suelo.',
-                    'Baja la barra controlado (3 segundos) hasta tocar la línea media del pecho.',
-                    'Empuja explosivamente hacia arriba sin bloquear los codos al final.'
+                    'Ojos bajo la barra. Retracción escapular (hombros al banco).',
+                    'Arco lumbar natural. Pies firmes en el suelo.',
+                    'Baja la barra al esternón controlando el peso.',
+                    'Empuja explosivamente hacia arriba.'
                 ],
-                sets: '4 series: 12, 10, 8, 6 reps (Subiendo peso)'
+                sets: '4 series: 5-8 reps (Pesado)'
             },
             EN: {
-                title: 'Barbell Bench Press', muscle: 'Middle Chest, Triceps',
-                description: 'The ultimate mass builder. Key for chest strength and density.',
+                title: 'Bench Press Guide', muscle: 'Chest, Triceps',
+                description: 'Complete technical guide for strength and safety.',
                 instructions: [
-                    'Lie down with eyes directly under the bar.',
-                    'Retract scapulae (pinch shoulder blades) and plant feet firmly.',
-                    'Lower bar under control (3 seconds) to mid-chest line.',
-                    'Press explosively up without locking elbows.'
+                    'Eyes under bar. Scapular retraction (shoulders to bench).',
+                    'Natural arch. Feet planted firmly.',
+                    'Lower bar to sternum under control.',
+                    'Press explosively up.'
                 ],
-                sets: '4 sets: 12, 10, 8, 6 reps (Pyramid up)'
+                sets: '4 sets: 5-8 reps (Heavy)'
             }
         }
     },
     {
-        id: 'chest-2', videoId: '0G2_k7psvBQ', img: IMAGES.EXERCISE_PRESS, category: 'Chest',
+        id: 'chest-2', videoId: 'PPPDs2Qhkmo', img: IMAGES.EXERCISE_PRESS, category: 'Chest', // Sergio Peinado (Aprobado)
         details: {
             ES: {
-                title: 'Press Inclinado Mancuernas', muscle: 'Pectoral Superior',
-                description: 'Aísla la parte superior del pecho para dar una estética "llena" y clavicular.',
+                title: 'Press Superior / Rutina', muscle: 'Pectoral Superior',
+                description: 'Enfoque en la parte alta del pecho con mancuernas.',
                 instructions: [
-                    'Ajusta el banco a 30-45 grados.',
-                    'Al bajar, abre los codos ligeramente para estirar las fibras claviculares.',
-                    'Baja profundo hasta sentir el estiramiento en el hombro anterior.',
-                    'Sube las mancuernas convergiendo hacia el centro, pero sin chocarlas.'
+                    'Banco inclinado a 30 grados.',
+                    'Controla la bajada sintiendo el estiramiento.',
+                    'Concéntrate en la conexión mente-músculo.',
+                    'Mantén el pecho alto durante todo el movimiento.'
                 ],
-                sets: '3 series de 10-12 reps (Fallo -1)'
+                sets: '3 series de 10-12 reps'
             },
             EN: {
-                title: 'Incline DB Press', muscle: 'Upper Chest',
-                description: 'Isolates upper chest for that "full" shelf aesthetic.',
+                title: 'Upper Chest Press', muscle: 'Upper Chest',
+                description: 'Focus on upper chest with dumbbells.',
                 instructions: [
-                    'Set bench to 30-45 degrees.',
-                    'On descent, flare elbows slightly to stretch clavicular fibers.',
-                    'Go deep until you feel a stretch in front delts.',
-                    'Press up converging weights to center, avoid clicking them.'
+                    'Bench inclined at 30 degrees.',
+                    'Control the descent feeling the stretch.',
+                    'Focus on mind-muscle connection.',
+                    'Keep chest up throughout movement.'
                 ],
-                sets: '3 sets of 10-12 reps (RIR 1)'
+                sets: '3 sets of 10-12 reps'
             }
         }
     },
     {
-        id: 'chest-3', videoId: 'eozdVDA78K0', img: IMAGES.EXERCISE_PRESS, category: 'Chest',
+        id: 'chest-3', videoId: '2z8JmcrW-As', img: IMAGES.EXERCISE_PRESS, category: 'Chest', // Fondos (Safe)
         details: {
             ES: {
-                title: 'Fondos en Paralelas', muscle: 'Pectoral Inferior',
-                description: 'El "sentadilla" del tren superior. Brutal para la línea inferior del pecho.',
+                title: 'Fondos Básicos', muscle: 'Pectoral Inferior',
+                description: 'Ejercicio clásico de calistenia para fuerza de empuje.',
                 instructions: [
-                    'Inclina el torso hacia adelante (clave para activar pecho, no tríceps).',
-                    'Baja hasta que los hombros estén debajo de los codos.',
-                    'Mantén los codos apuntando hacia afuera ligeramente.',
-                    'Empuja concentrando la fuerza en las palmas de las manos.'
+                    'Cuerpo inclinado hacia adelante.',
+                    'Baja hasta 90 grados en los codos.',
+                    'Sube exhalando el aire.',
+                    'Evita bloquear codos bruscamente.'
                 ],
-                sets: '3 series al Fallo Muscular'
+                sets: '3 series al Fallo'
             },
             EN: {
                 title: 'Chest Dips', muscle: 'Lower Chest',
-                description: 'The "squat" of the upper body. Brutal for lower chest line.',
+                description: 'Classic callisthenics move for pushing strength.',
                 instructions: [
-                    'Lean torso forward (key for chest, not triceps).',
-                    'Lower until shoulders are below elbows.',
-                    'Keep elbows flaring slightly out.',
-                    'Push up aiming force through palms.'
+                    'Lean body forward.',
+                    'Lower to 90 degrees at elbows.',
+                    'Push up exhaling.',
+                    'Avoid locking elbows sharply.'
                 ],
-                sets: '3 sets to Muscle Failure'
+                sets: '3 sets to Failure'
             }
         }
     },
@@ -111,26 +111,26 @@ const EXERCISE_DB: Exercise[] = [
         id: 'chest-4', videoId: 'Iwe6AmxVf7o', img: IMAGES.EXERCISE_PRESS, category: 'Chest',
         details: {
             ES: {
-                title: 'Cruces en Polea', muscle: 'Pectoral (Aislamiento)',
-                description: 'Ejercicio de tensión constante para bombear sangre y detallar el pecho.',
+                title: 'Cruces de Polea', muscle: 'Definición',
+                description: 'Aislamiento constante para detallar el pecho.',
                 instructions: [
-                    'Da un paso adelante con una pierna para estabilidad.',
-                    'Mantén los codos ligeramente flexionados y fijos (no empujes, abraza).',
-                    'Lleva las manos juntas frente al ombligo y aprieta el pecho 1 segundo.',
-                    'Controla el retorno sintiendo cómo se abren las fibras.'
+                    'Posición estable, un pie adelante.',
+                    'Brazos semi-flexionados.',
+                    'Junta las manos al centro apretando el pecho.',
+                    'Regresa despacio controlando el peso.'
                 ],
-                sets: '3 series de 15-20 reps (Bombeo)'
+                sets: '3 series de 15 reps'
             },
             EN: {
-                title: 'Cable Crossovers', muscle: 'Chest (Isolation)',
-                description: 'Constant tension exercise to pump blood and detail the chest.',
+                title: 'Cable Crossovers', muscle: 'Definition',
+                description: 'Constant isolation to detail the chest.',
                 instructions: [
-                    'Step forward with one leg for stability.',
-                    'Keep elbows slightly bent and fixed (don\'t press, hug).',
-                    'Bring hands together in front of navel and squeeze chest for 1s.',
-                    'Control the return feeling fibers stretch.'
+                    'Stable stance, one foot forward.',
+                    'Arms slightly bent.',
+                    'Bring hands together squeezing chest.',
+                    'Return slowly controlling weight.'
                 ],
-                sets: '3 sets of 15-20 reps (Pump)'
+                sets: '3 sets of 15 reps'
             }
         }
     },
@@ -138,24 +138,24 @@ const EXERCISE_DB: Exercise[] = [
         id: 'chest-5', videoId: 'VmB1G1K7v94', img: IMAGES.EXERCISE_PRESS, category: 'Chest',
         details: {
             ES: {
-                title: 'Aperturas Planas', muscle: 'Pectoral',
-                description: 'Estiramiento fascial profundo. Ideal para finalizar la rutina.',
+                title: 'Aperturas', muscle: 'Pectoral',
+                description: 'Estiramiento controlado para expansión torácica.',
                 instructions: [
-                    'Tumbado, levanta las mancuernas con palmas enfrentadas.',
-                    'Abre los brazos en un arco amplio como si fueras a abrazar un árbol.',
-                    'Baja hasta sentir un estiramiento leve, no dolor.',
-                    'Sube usando los pectorales, imagina que juntas los codos.'
+                    'Tumbado boca arriba en banco plano.',
+                    'Abre los brazos lentamente sintiendo el estiramiento.',
+                    'No bajes más allá de la línea del cuerpo.',
+                    'Vuelve a la posición inicial.'
                 ],
                 sets: '3 series de 12-15 reps'
             },
             EN: {
                 title: 'Flat DB Flyes', muscle: 'Chest',
-                description: 'Deep fascial stretch. Ideal finisher.',
+                description: 'Controlled stretch for thoracic expansion.',
                 instructions: [
-                    'Lying down, lift DBs palms facing each other.',
-                    'Open arms in a wide arc like hugging a tree.',
-                    'Lower until mild stretch, not pain.',
-                    'Lift using pectorals, imagine bringing elbows together.'
+                    'Lie flat on bench.',
+                    'Open arms slowly feeling the stretch.',
+                    'Do not lower past body line.',
+                    'Return to start.'
                 ],
                 sets: '3 sets of 12-15 reps'
             }
@@ -164,110 +164,110 @@ const EXERCISE_DB: Exercise[] = [
 
     // --- BACK (ESPALDA) ---
     {
-        id: 'back-1', videoId: 'pYcpY20QaE8', img: IMAGES.EXERCISE_ROW, category: 'Back',
+        id: 'back-1', videoId: 'JMFjtHhwqSg', img: IMAGES.EXERCISE_ROW, category: 'Back', // Iron Masters Remo Mancuerna (Verified)
         details: {
             ES: {
-                title: 'Remo con Mancuerna', muscle: 'Dorsal Ancho',
-                description: 'Corrige desequilibrios y añade densidad a la espalda baja y lateral.',
+                title: 'Remo Unilateral: Guía', muscle: 'Dorsal, Espalda Alta',
+                description: 'La técnica definitiva para activar el dorsal y evitar errores.',
                 instructions: [
-                    'Apoya rodilla y mano del mismo lado en el banco. Espalda plana como una mesa.',
-                    'Deja colgar el brazo para estirar el dorsal.',
-                    'Jala la mancuerna hacia la CADERA (como guardándola en el bolsillo), no al pecho.',
-                    'Baja controladamente estirando todo el lateral.'
+                    'Apoyo de 3 puntos (mano, rodilla, pie).',
+                    'Espalda neutra, sin rotar el tronco excesivamente.',
+                    'Lleva la mancuerna hacia la cadera (como guardándola en el bolsillo).',
+                    'Controla el descenso estirando el dorsal.'
                 ],
-                sets: '4 series de 8-10 reps (Pesado)'
+                sets: '4 series de 10-12 reps por brazo'
             },
             EN: {
-                title: 'One Arm DB Row', muscle: 'Lats',
-                description: 'Corrects imbalances and adds density to lower/outer back.',
+                title: 'One Arm Row Guide', muscle: 'Lats, Upper Back',
+                description: 'The definitive technique to activate lats and avoid mistakes.',
                 instructions: [
-                    'Support knee/hand on bench. Back flat like a table.',
-                    'Let arm hang to stretch the lat.',
-                    'Pull dumbbell to HIP (like putting in pocket), not chest.',
-                    'Lower controlled stretching the entire side.'
+                    '3-point support (hand, knee, foot).',
+                    'Neutral spine, avoid excessive trunk rotation.',
+                    'Pull dumbbell to hip (like putting it in pocket).',
+                    'Control descent stretching the lat.'
                 ],
-                sets: '4 sets of 8-10 reps (Heavy)'
+                sets: '4 sets of 10-12 reps per arm'
             }
         }
     },
     {
-        id: 'back-2', videoId: 'eGo4IYlbE5g', img: IMAGES.EXERCISE_ROW, category: 'Back',
+        id: 'back-2', videoId: 'BYXCXeO64go', img: IMAGES.EXERCISE_ROW, category: 'Back', // Powerexplosive Dominadas (Verified)
         details: {
             ES: {
-                title: 'Dominadas (Pull Ups)', muscle: 'Espalda Completa',
-                description: 'El rey de la amplitud. Ensancha tu espalda en forma de V.',
+                title: 'Dominadas Explosivas', muscle: 'Espalda Completa',
+                description: 'Técnica avanzada para romper tus límites en dominadas.',
                 instructions: [
-                    'Agarre prono (palmas al frente) un poco más ancho que hombros.',
-                    'Inicia el movimiento bajando los hombros (depresión escapular) antes de doblar brazos.',
-                    'Lleva el pecho hacia la barra.',
-                    'Baja completamente hasta estirar los brazos (rango completo).'
+                    'Agarre prono, ancho biacromial + 1 palmo.',
+                    'Retracción escapular explosiva al inicio.',
+                    'Sube con potencia intentando tocar el pecho.',
+                    'Negativa controlada (bajada lenta).'
                 ],
-                sets: '4 series al Fallo (O lastradas 6-8)'
+                sets: '4 series al Fallo'
             },
             EN: {
-                title: 'Pull Ups', muscle: 'Full Back',
-                description: 'The king of width. Builds that V-taper.',
+                title: 'Explosive Pull Ups', muscle: 'Full Back',
+                description: 'Advanced technique to break your pull-up limits.',
                 instructions: [
-                    'Pronated grip (palms forward) slightly wider than shoulders.',
-                    'Start by depressing shoulders (scapular depression) before bending arms.',
-                    'Drive chest toward the bar.',
-                    'Lower completely to dead hang (full ROM).'
+                    'Pronated grip, slightly wider than shoulders.',
+                    'Explosive scapular retraction at start.',
+                    'Pull with power trying to touch chest.',
+                    'Controlled negative (slow descent).'
                 ],
-                sets: '4 sets to Failure (or Weighted 6-8)'
+                sets: '4 sets to Failure'
             }
         }
     },
     {
-        id: 'back-3', videoId: 'CAwf7n6Luuc', img: IMAGES.EXERCISE_ROW, category: 'Back',
+        id: 'back-3', videoId: 'fMebg0kZJ40', img: IMAGES.EXERCISE_ROW, category: 'Back', // Buff Dudes Lat Pulldown (Verified)
         details: {
             ES: {
                 title: 'Jalón al Pecho', muscle: 'Dorsales',
-                description: 'Alternativa controlada a las dominadas para aislar el dorsal.',
+                description: 'Técnica estricta para ampliar la espalda.',
                 instructions: [
-                    'Siéntate y asegura las rodillas firmemente.',
-                    'Inclina el torso levemente hacia atrás (10-15 grados).',
-                    'Jala la barra hacia la parte alta del pecho, juntando escápulas.',
-                    'Evita el impulso con la espalda baja.'
+                    'Agarre un poco más ancho que los hombros.',
+                    'Saca el pecho antes de jalar.',
+                    'Lleva la barra a la clavícula (no más abajo).',
+                    'Controla el retorno para estirar el dorsal.'
                 ],
-                sets: '3 series de 10-12 reps'
+                sets: '3 series de 12 reps'
             },
             EN: {
                 title: 'Lat Pulldown', muscle: 'Lats',
-                description: 'Controlled alternative to pullups to isolate lats.',
+                description: 'Strict technique for back width.',
                 instructions: [
-                    'Sit and secure knees firmly.',
-                    'Lean torso slightly back (10-15 degrees).',
-                    'Pull bar to upper chest, squeezing shoulder blades.',
-                    'Avoid swinging with lower back.'
+                    'Grip slightly wider than shoulders.',
+                    'Stick chest out before pulling.',
+                    'Pull bar to collarbone (no lower).',
+                    'Control return to stretch lats.'
                 ],
-                sets: '3 sets of 10-12 reps'
+                sets: '3 sets of 12 reps'
             }
         }
     },
     {
-        id: 'back-4', videoId: 'G8l_8chR5BE', img: IMAGES.EXERCISE_ROW, category: 'Back',
+        id: 'back-4', videoId: 'e_WLgzvjzxc', img: IMAGES.EXERCISE_ROW, category: 'Back', // Iron Masters Remo (Verified)
         details: {
             ES: {
-                title: 'Remo con Barra', muscle: 'Espalda (Grosor)',
-                description: 'Constructor masivo de fuerza y grosor para toda la cadena posterior.',
+                title: 'Remo con Barra', muscle: 'Grosor',
+                description: 'La guía definitiva de Iron Masters para un remo perfecto.',
                 instructions: [
-                    'Pies ancho de hombros, torso inclinado a 45 grados o paralelo.',
-                    'Mantén la espalda neutra (no curvar).',
-                    'Jala la barra hacia el ombligo usando los codos.',
-                    'Aprieta la espalda 1 segundo arriba y baja controlado.'
+                    'Saca el pecho y mantén la espalda neutra.',
+                    'Inclínate a 45 grados o paralelo (según flexibilidad).',
+                    'Lleva la barra a la cadera (no al pecho alto).',
+                    'Control total en la bajada.'
                 ],
-                sets: '4 series de 6-8 reps (Explosivo)'
+                sets: '4 series de 8-10 reps'
             },
             EN: {
-                title: 'Barbell Row', muscle: 'Back (Thickness)',
-                description: 'Massive builder of strength and thickness for posterior chain.',
+                title: 'Barbell Row', muscle: 'Back Thickness',
+                description: 'Definitive Iron Masters guide for a perfect row.',
                 instructions: [
-                    'Feet shoulder width, torso at 45 degrees or parallel.',
-                    'Keep spine neutral (no rounding).',
-                    'Pull bar to navel driving with elbows.',
-                    'Squeeze back for 1s at top, lower controlled.'
+                    'Chest out, neutral spine.',
+                    'Bend at 45 degrees or parallel (flexibility dependent).',
+                    'Pull bar to hips (not upper chest).',
+                    'Total control on descent.'
                 ],
-                sets: '4 sets of 6-8 reps (Explosive)'
+                sets: '4 sets of 8-10 reps'
             }
         }
     },
@@ -275,24 +275,24 @@ const EXERCISE_DB: Exercise[] = [
         id: 'back-5', videoId: 'XAIrN9t2F1o', img: IMAGES.EXERCISE_ROW, category: 'Back',
         details: {
             ES: {
-                title: 'Remo Gironda', muscle: 'Espalda Media',
-                description: 'Focaliza la parte media de la espalda y romboides.',
+                title: 'Remo en Polea', muscle: 'Espalda Media',
+                description: 'Aislamiento seguro sentado.',
                 instructions: [
-                    'Mantén el pecho erguido, no te balances adelante y atrás.',
-                    'Jala el agarre hacia el abdomen bajo.',
-                    'Al llegar atrás, saca el pecho y junta escápulas al máximo.',
-                    'Estira los brazos completamente al volver.'
+                    'Pecho alto, hombros atrás.',
+                    'Jala hacia el abdomen.',
+                    'Junta los omóplatos fuertemente.',
+                    'Evita balancearte.'
                 ],
                 sets: '3 series de 12-15 reps'
             },
             EN: {
-                title: 'Seated Cable Row', muscle: 'Mid Back',
-                description: 'Focuses on mid-back and rhomboids.',
+                title: 'Cable Row', muscle: 'Mid Back',
+                description: 'Safe seated isolation.',
                 instructions: [
-                    'Keep chest up, don\'t swing torso back and forth.',
-                    'Pull handle toward lower abs.',
-                    'At contraction, pop chest out and squeeze blades fully.',
-                    'Extend arms fully on return.'
+                    'Chest up, shoulders back.',
+                    'Pull to abdomen.',
+                    'Squeeze shoulder blades hard.',
+                    'Avoid swinging.'
                 ],
                 sets: '3 sets of 12-15 reps'
             }
@@ -301,108 +301,108 @@ const EXERCISE_DB: Exercise[] = [
 
     // --- LEGS (PIERNAS) ---
     {
-        id: 'legs-1', videoId: 'MVMNk0HiTMg', img: IMAGES.EXERCISE_SQUAT, category: 'Legs',
+        id: 'legs-1', videoId: 'Q-i5S2hT24w', img: IMAGES.EXERCISE_SQUAT, category: 'Legs', // Fisioterapia Online (Sentadilla)
         details: {
             ES: {
-                title: 'Sentadilla con Barra', muscle: 'Cuádriceps, Glúteos',
-                description: 'El ejercicio más importante del gimnasio. Piernas grandes y core fuerte.',
+                title: 'Sentadilla Educativa', muscle: 'Cuádriceps, Glúteos',
+                description: 'Aprende el patrón de movimiento correcto.',
                 instructions: [
-                    'Barra sobre trapecios. Pies ancho de hombros, puntas levemente afuera.',
-                    'Toma aire y aprieta el abdomen (bracing) antes de bajar.',
-                    'Baja cadera y rodillas a la vez, rompiendo el paralelo (profunda).',
-                    'Sube empujando el suelo con toda la planta del pie.'
+                    'Pies ancho de caderas, puntas levemente fuera.',
+                    'Inicia el movimiento desde la cadera (sentarse).',
+                    'Rodillas siguen la línea de los pies.',
+                    'Espalda recta en todo momento.'
                 ],
-                sets: '5 series: 2 aprox, 3 efectivas de 5-8 reps'
+                sets: '4 series de 6-8 reps'
             },
             EN: {
-                title: 'Barbell Squat', muscle: 'Quads, Glutes',
-                description: 'Most important gym exercise. Big legs and strong core.',
+                title: 'Educational Squat', muscle: 'Quads, Glutes',
+                description: 'Learn the correct movement pattern.',
                 instructions: [
-                    'Bar on traps. Feet shoulder width, toes slightly out.',
-                    'Inhale and brace core tightly before descending.',
-                    'Break parallel with hips and knees simultaneously.',
-                    'Drive up pushing floor with full foot.'
+                    'Feet and knee alignment.',
+                    'Proper depth (break parallel).',
+                    'Keep chest up.',
+                    'Drive from full foot.'
                 ],
-                sets: '5 sets: 2 warmup, 3 working sets of 5-8 reps'
+                sets: '4 sets of 6-8 reps'
             }
         }
     },
     {
-        id: 'legs-2', videoId: 'JCXUYuzwNrM', img: IMAGES.WORKOUT_BG, category: 'Legs',
+        id: 'legs-2', videoId: '7_Wm0YGQinw', img: IMAGES.WORKOUT_BG, category: 'Legs', // Powerexplosive Peso Muerto (Verified)
         details: {
             ES: {
-                title: 'Peso Muerto Rumano', muscle: 'Isquiosurales',
-                description: 'Desarrolla la parte trasera del muslo y glúteo.',
+                title: 'Peso Muerto: Guía', muscle: 'Cadena Posterior',
+                description: 'El rey de los ejercicios compuestos. Potencia total.',
                 instructions: [
-                    'Inicia de pie. Desbloquea ligeramente las rodillas.',
-                    'Empuja la cadera hacia atrás (como cerrando una puerta con el trasero).',
-                    'Baja la barra pegada a las piernas hasta sentir gran estiramiento.',
-                    'Sube contrayendo glúteos y femorales (cadera hacia adelante).'
+                    'Barra pegada a las tibias.',
+                    'Cadera a la altura correcta (ni muy baja ni muy alta).',
+                    'Tensión en el dorsal antes de jalar.',
+                    'Empuja el suelo, no tires con la espalda.'
                 ],
-                sets: '3 series de 8-10 reps (Controlado)'
+                sets: '3 series de 5 reps (Pesado)'
             },
             EN: {
-                title: 'Romanian Deadlift', muscle: 'Hamstrings',
-                description: 'Builds posterior thigh and glutes.',
+                title: 'Deadlift Guide', muscle: 'Posterior Chain',
+                description: 'King of compound exercises. Total power.',
                 instructions: [
-                    'Start standing. Unlock knees slightly.',
-                    'Push hips back (like closing a door with your butt).',
-                    'Lower bar close to legs until deep stretch.',
-                    'Rise by contracting glutes and hams (hips forward).'
+                    'Bar close to shins.',
+                    'Hips at correct height.',
+                    'Lat tension before pulling.',
+                    'Push the floor, don\'t pull with back.'
                 ],
-                sets: '3 sets of 8-10 reps (Controlled)'
+                sets: '3 sets of 5 reps (Heavy)'
             }
         }
     },
     {
-        id: 'legs-3', videoId: '2C-uNgKwPLE', img: IMAGES.EXERCISE_SQUAT, category: 'Legs',
+        id: 'legs-3', videoId: 'c2h5pE6C9rY', img: IMAGES.EXERCISE_SQUAT, category: 'Legs', // Buff Academy Legs (Seemed OK)
         details: {
             ES: {
-                title: 'Zancada Búlgara', muscle: 'Glúteo y Cuádriceps',
-                description: 'El ejercicio unilateral más efectivo para tamaño y estabilidad.',
+                title: 'Rutina de Pierna', muscle: 'Piernas Completas',
+                description: 'Circuito intenso para pierna y glúteo.',
                 instructions: [
-                    'Apoya el empeine del pie trasero en un banco.',
-                    'Inclina el torso adelante para más glúteo, o recto para más cuádriceps.',
-                    'Baja hasta que la rodilla trasera casi toque el suelo.',
-                    'Empuja fuerte con el talón de la pierna delantera.'
+                    'Zancadas alternas.',
+                    'Sentadillas con salto.',
+                    'Puente de glúteo.',
+                    'Mantener intensidad alta.'
                 ],
-                sets: '3 series de 10-12 reps por pierna'
+                sets: '3 rondas'
             },
             EN: {
-                title: 'Bulgarian Split Squat', muscle: 'Glutes & Quads',
-                description: 'Most effective unilateral exercise for size and stability.',
+                title: 'Leg Routine', muscle: 'Full Legs',
+                description: 'Intense circuit for legs and glutes.',
                 instructions: [
-                    'Rest rear foot instep on a bench.',
-                    'Lean forward for glutes, upright for quads.',
-                    'Descend until rear knee almost touches floor.',
-                    'Drive up hard through front heel.'
+                    'Alternating lunges.',
+                    'Jump squats.',
+                    'Glute bridges.',
+                    'Keep intensity high.'
                 ],
-                sets: '3 sets of 10-12 reps per leg'
+                sets: '3 rounds'
             }
         }
     },
     {
-        id: 'legs-4', videoId: 'IZxyjW7MPJQ', img: IMAGES.EXERCISE_SQUAT, category: 'Legs',
+        id: 'legs-4', videoId: 'pT_H1a-n48s', img: IMAGES.EXERCISE_SQUAT, category: 'Legs', // Buff Academy Brutal Legs
         details: {
             ES: {
-                title: 'Prensa Inclinada', muscle: 'Cuádriceps',
-                description: 'Volumen masivo para piernas sin fatigar la espalda baja.',
+                title: 'Piernas Brutales', muscle: 'Cuádriceps',
+                description: 'Entrenamiento de alta intensidad desde casa o gym.',
                 instructions: [
-                    'Pies en el centro de la plataforma.',
-                    'Baja lo máximo posible sin que tu cadera se levante del asiento.',
-                    'Empuja sin bloquear las rodillas al final (tensión constante).',
-                    'No te ayudes con las manos en las rodillas.'
+                    'Enfoque en el tiempo bajo tensión.',
+                    'Controlar la bajada en cada repetición.',
+                    'No bloquear rodillas completamente.',
+                    'Respirar rítmicamente.'
                 ],
                 sets: '4 series de 12-15 reps'
             },
             EN: {
-                title: 'Leg Press', muscle: 'Quads',
-                description: 'Massive leg volume without lower back fatigue.',
+                title: 'Brutal Legs', muscle: 'Quads',
+                description: 'High intensity workout from home or gym.',
                 instructions: [
-                    'Feet in center of platform.',
-                    'Lower as deep as possible without hips lifting off seat.',
-                    'Press up without locking knees (constant tension).',
-                    'Do not push knees with hands.'
+                    'Focus on time under tension.',
+                    'Control the descent on every rep.',
+                    'Do not lock knees completely.',
+                    'Rhythmic breathing.'
                 ],
                 sets: '4 sets of 12-15 reps'
             }
@@ -438,7 +438,7 @@ const EXERCISE_DB: Exercise[] = [
 
     // --- SHOULDERS (HOMBROS) ---
     {
-        id: 'shoulders-1', videoId: 'QAQ64hK4Xxs', img: IMAGES.EXERCISE_PRESS, category: 'Shoulders',
+        id: 'shoulders-1', videoId: '2yjwKXwxoXk', img: IMAGES.EXERCISE_PRESS, category: 'Shoulders',
         details: {
             ES: {
                 title: 'Press Militar Barra', muscle: 'Deltoides Anterior',
@@ -548,7 +548,7 @@ const EXERCISE_DB: Exercise[] = [
 
     // --- ARMS (BRAZOS) ---
     {
-        id: 'arms-1', videoId: 'ykJmrZ5v0Oo', img: IMAGES.EXERCISE_ROW, category: 'Arms',
+        id: 'arms-1', videoId: 'kQj2lS9aK6U', img: IMAGES.EXERCISE_ROW, category: 'Arms',
         details: {
             ES: {
                 title: 'Curl con Barra', muscle: 'Bíceps (Masa)',
@@ -766,29 +766,29 @@ const EXERCISE_DB: Exercise[] = [
         }
     },
     {
-        id: 'abs-3', videoId: 'qAcMJgVf6_E', img: IMAGES.WORKOUT_BG, category: 'Abs',
+        id: 'abs-3', videoId: 'kL6pL4K9B4Y', img: IMAGES.WORKOUT_BG, category: 'Abs', // Scott Herman Hanging Leg Raise (Verified)
         details: {
             ES: {
                 title: 'Elevación de Piernas', muscle: 'Abdominal Inferior',
                 description: 'Ataca la zona baja del abdomen (la más difícil).',
                 instructions: [
-                    'Tumbado o colgado en barra.',
-                    'Sube las piernas rectas (más difícil) o rodillas al pecho (fácil).',
-                    'Al bajar, NO toques el suelo y mantén tensión.',
-                    'Evita balancear el cuerpo para subir.'
+                    'Colgado en barra, evita el balanceo inicial.',
+                    'Sube las piernas hasta la altura de la cadera (o más).',
+                    'Controla la bajada para no usar inercia.',
+                    'Si es difícil, inicia con rodillas al pecho.'
                 ],
-                sets: '3 series de 12-15 reps'
+                sets: '3 series de 10-15 reps'
             },
             EN: {
-                title: 'Leg Raises', muscle: 'Lower Abs',
+                title: 'Hanging Leg Raises', muscle: 'Lower Abs',
                 description: 'Targets stubborn lower belly.',
                 instructions: [
-                    'Lying down or hanging from bar.',
-                    'Raise straight legs (hard) or knees to chest (easy).',
-                    'On lowering, DO NOT touch floor, keep tension.',
-                    'Avoid swinging body to lift.'
+                    'Hang from bar, avoid initial swing.',
+                    'Raise legs to hip height (or higher).',
+                    'Control descent to avoid momentum.',
+                    'If hard, start with knees to chest.'
                 ],
-                sets: '3 sets of 12-15 reps'
+                sets: '3 sets of 10-15 reps'
             }
         }
     },
@@ -1132,10 +1132,10 @@ const ExerciseLibrary = () => {
     const filteredExercises = useMemo(() => {
         return EXERCISE_DB.filter(ex => {
             const details = ex.details[language];
-            const matchesSearch = 
-                details.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
+            const matchesSearch =
+                details.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
                 details.muscle.toLowerCase().includes(searchTerm.toLowerCase());
-            
+
             const matchesCategory = activeCategory === 'All' || ex.category === activeCategory;
 
             return matchesSearch && matchesCategory;
@@ -1161,7 +1161,7 @@ const ExerciseLibrary = () => {
             <main className="flex-grow flex flex-col h-full overflow-hidden bg-background-light dark:bg-background-dark relative">
                 <TopHeader />
                 <div className="flex-grow overflow-y-auto custom-scrollbar p-8">
-                    
+
                     {/* Hero Header */}
                     <header className="mb-8">
                         <div className="flex items-center gap-3 mb-2">
@@ -1176,85 +1176,66 @@ const ExerciseLibrary = () => {
                             {language === 'ES' ? 'Biblioteca Técnica' : 'Technical Library'}
                         </h2>
                         <p className="text-xl text-gray-600 dark:text-gray-400 max-w-2xl">
-                            {language === 'ES' 
-                                ? 'Tutoriales actualizados con biomecánica de vanguardia. Visualiza y aprende.' 
+                            {language === 'ES'
+                                ? 'Tutoriales actualizados con biomecánica de vanguardia. Visualiza y aprende.'
                                 : 'Updated tutorials with cutting-edge biomechanics. Visualize and learn.'}
                         </p>
                     </header>
 
-                    {/* Controls: Search & Filter */}
-                    <div className="mb-8 space-y-6">
-                        {/* Search Bar with Button */}
-                        <div className="bg-white dark:bg-surface-dark p-2 rounded-2xl shadow-sm border border-slate-200 dark:border-border-dark transition-all focus-within:ring-2 focus-within:ring-primary/50 flex items-center">
-                            <div className="flex-1 relative flex items-center">
-                                <span className="material-symbols-outlined absolute left-4 text-gray-400">search</span>
-                                <input 
-                                    className="w-full pl-12 pr-4 py-3 rounded-xl border-none bg-transparent text-lg placeholder:text-gray-500 focus:outline-none dark:text-white" 
-                                    placeholder={language === 'ES' ? "Buscar ejercicio..." : "Search exercise..."} 
-                                    type="text"
-                                    value={searchTerm}
-                                    onChange={(e) => setSearchTerm(e.target.value)}
-                                />
-                            </div>
-                            <button className="bg-primary text-black px-6 py-3 rounded-xl font-bold text-sm shadow-md hover:bg-primary/90 transition-colors mr-1">
-                                {language === 'ES' ? 'Buscar' : 'Search'}
-                            </button>
-                        </div>
-
-                        {/* Category Pills */}
-                        <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
-                            {categories.map((cat) => (
-                                <button
-                                    key={cat.id}
-                                    onClick={() => setActiveCategory(cat.id)}
-                                    className={`px-6 py-2 rounded-full font-bold text-sm whitespace-nowrap transition-all border ${
-                                        activeCategory === cat.id
-                                            ? 'bg-primary text-black border-primary'
-                                            : 'bg-white dark:bg-surface-dark text-slate-600 dark:text-slate-400 border-slate-200 dark:border-border-dark hover:border-primary/50'
-                                    }`}
-                                >
-                                    {cat.label[language]}
-                                </button>
-                            ))}
-                        </div>
+                    {/* Controls Removed as per request */}
+                    <div className="mb-8 hidden">
+                        {/* Search & Filter removed */}
                     </div>
-                    
+
                     {/* Grid */}
                     {filteredExercises.length === 0 ? (
                         <div className="text-center py-20 opacity-50">
-                             <span className="material-symbols-outlined text-6xl mb-4 text-slate-400">sentiment_dissatisfied</span>
-                             <p className="text-xl text-slate-500">
-                                 {language === 'ES' ? 'No se encontraron ejercicios.' : 'No exercises found.'}
-                             </p>
+                            <span className="material-symbols-outlined text-6xl mb-4 text-slate-400">sentiment_dissatisfied</span>
+                            <p className="text-xl text-slate-500">
+                                {language === 'ES' ? 'No se encontraron ejercicios.' : 'No exercises found.'}
+                            </p>
                         </div>
                     ) : (
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 pb-10">
                             {filteredExercises.map((ex) => {
                                 const details = ex.details[language];
                                 return (
-                                    <div 
-                                        key={ex.id} 
-                                        className="group bg-white dark:bg-surface-dark rounded-2xl overflow-hidden border border-slate-200 dark:border-border-dark shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer animate-in fade-in zoom-in-95 flex flex-col" 
+                                    <div
+                                        key={ex.id}
+                                        className="group bg-white dark:bg-surface-dark rounded-2xl overflow-hidden border border-slate-200 dark:border-border-dark shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer animate-in fade-in zoom-in-95 flex flex-col"
                                         onClick={() => setActiveExercise(ex)}
                                     >
-                                        <div className="relative aspect-video overflow-hidden flex-shrink-0">
-                                            <div className="absolute inset-0 bg-cover bg-center group-hover:scale-105 transition-transform duration-500" style={{backgroundImage: `url('${ex.img}')`}}></div>
-                                            {/* Play Overlay */}
-                                            <div className="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-colors flex flex-col items-center justify-center backdrop-blur-[2px] group-hover:backdrop-blur-none">
-                                                <div className="bg-red-600/90 text-white w-14 h-14 rounded-full flex items-center justify-center shadow-2xl shadow-red-600/40 group-hover:scale-110 transition-transform duration-300">
+                                        <div className="relative aspect-video overflow-hidden flex-shrink-0 bg-slate-900 group-hover:bg-slate-800 transition-colors">
+                                            {/* Exercise Image Background */}
+                                            <div className="absolute inset-0 bg-cover bg-center group-hover:scale-105 transition-transform duration-500 opacity-90" style={{ backgroundImage: `url('${ex.img}')` }}></div>
+
+                                            {/* Gradient Overlay for Legibility */}
+                                            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+
+                                            {/* Floating Logo Watermark */}
+                                            <div className="absolute bottom-2 right-2 z-10 opacity-90">
+                                                <img
+                                                    src={IMAGES.LOGO}
+                                                    alt="FitMarvin"
+                                                    className="h-8 w-auto object-contain drop-shadow-md"
+                                                />
+                                            </div>
+
+                                            {/* Play Button Overlay */}
+                                            <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+                                                <div className="bg-white/20 backdrop-blur-sm border border-white/30 text-white w-14 h-14 rounded-full flex items-center justify-center shadow-lg transform group-hover:scale-110 transition-transform duration-300">
                                                     <span className="material-symbols-outlined text-3xl ml-1">play_arrow</span>
                                                 </div>
-                                                <p className="text-white font-bold mt-3 text-xs opacity-0 group-hover:opacity-100 transition-opacity translate-y-2 group-hover:translate-y-0 uppercase tracking-widest">
-                                                    {language === 'ES' ? 'Ver Tutorial' : 'Watch Tutorial'}
-                                                </p>
                                             </div>
-                                            <div className="absolute top-3 left-3 bg-black/60 backdrop-blur-md px-2 py-1 rounded-md">
-                                                <p className="text-[10px] font-black text-white uppercase tracking-widest">{ex.category}</p>
+
+                                            {/* Category Tag */}
+                                            <div className="absolute top-3 left-3 bg-primary/90 backdrop-blur-sm text-black px-2 py-1 rounded-md z-20 shadow-sm">
+                                                <p className="text-[10px] font-black uppercase tracking-widest">{ex.category}</p>
                                             </div>
                                         </div>
                                         <div className="p-5 flex flex-col flex-grow">
                                             <div className="flex-grow">
-                                                <h3 className="text-xl font-bold dark:text-white mb-1 truncate">{details.title}</h3>
+                                                <h3 className="text-xl font-bold dark:text-white mb-2 leading-tight group-hover:text-primary transition-colors">{details.title}</h3>
                                                 <p className="text-gray-500 dark:text-gray-400 text-xs mb-4 flex items-center gap-1">
                                                     <span className="material-symbols-outlined text-sm">accessibility_new</span>
                                                     {details.muscle}
@@ -1263,16 +1244,16 @@ const ExerciseLibrary = () => {
                                                     <div className="h-full bg-primary w-0 group-hover:w-full transition-all duration-700 ease-out"></div>
                                                 </div>
                                             </div>
-                                            
-                                            <button 
+
+                                            <button
                                                 onClick={(e) => {
                                                     e.stopPropagation();
                                                     setActiveExercise(ex);
                                                 }}
-                                                className="w-full mt-4 py-3 bg-slate-100 dark:bg-white/5 hover:bg-primary hover:text-black text-slate-700 dark:text-slate-300 rounded-xl font-bold text-sm flex items-center justify-center gap-2 transition-all group-hover:shadow-lg group-hover:shadow-primary/20"
+                                                className="w-full mt-4 py-3 bg-slate-50 dark:bg-white/5 hover:bg-primary hover:text-black text-slate-700 dark:text-slate-300 rounded-xl font-bold text-sm flex items-center justify-center gap-2 transition-all"
                                             >
                                                 <span className="material-symbols-outlined">play_circle</span>
-                                                {language === 'ES' ? 'Ver Video' : 'Watch Video'}
+                                                {language === 'ES' ? 'Ver Tutorial' : 'Watch Tutorial'}
                                             </button>
                                         </div>
                                     </div>
@@ -1284,51 +1265,51 @@ const ExerciseLibrary = () => {
 
                 {/* Immersive Video Player Modal */}
                 {activeExercise && (
-                    <div 
-                        className="fixed inset-0 z-[100] bg-black/90 backdrop-blur-md flex items-center justify-center p-4 animate-in fade-in duration-200"
+                    <div
+                        className="fixed inset-0 z-[100] bg-black/95 backdrop-blur-md flex items-center justify-center p-0 md:p-4 animate-in fade-in duration-200"
                         onClick={() => setActiveExercise(null)}
                     >
-                        <div 
-                            className="w-full max-w-6xl flex flex-col lg:flex-row bg-surface-dark rounded-3xl overflow-hidden shadow-2xl border border-white/10 max-h-[90vh] relative"
+                        <div
+                            className="w-full max-w-6xl flex flex-col lg:flex-row bg-surface-dark rounded-none md:rounded-3xl overflow-hidden shadow-2xl border border-white/10 h-full md:h-[90vh] relative"
                             onClick={(e) => e.stopPropagation()}
                         >
                             {/* Video Section */}
-                            <div className="flex-grow lg:w-2/3 bg-black relative aspect-video lg:aspect-auto flex flex-col">
-                                <iframe 
+                            <div className="flex-grow lg:w-2/3 bg-black relative flex items-center justify-center group">
+                                <iframe
                                     key={activeExercise.videoId}
-                                    className="absolute inset-0 w-full h-full"
-                                    src={`https://www.youtube.com/embed/${activeExercise.videoId}?autoplay=1&rel=0&origin=${window.location.origin}`} 
+                                    className="w-full h-full aspect-video"
+                                    src={`https://www.youtube-nocookie.com/embed/${activeExercise.videoId}?rel=0&modestbranding=1`}
                                     title={activeExercise.details[language].title}
-                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                                    allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                                     allowFullScreen
                                 ></iframe>
                             </div>
-                            
+
                             {/* Info Section */}
                             <div className="lg:w-1/3 bg-white dark:bg-surface-dark p-8 flex flex-col overflow-y-auto custom-scrollbar">
                                 <div className="flex justify-between items-start mb-6">
                                     <div className="flex items-center gap-2">
-                                         <span className="material-symbols-outlined text-red-500">smart_display</span>
-                                         <span className="text-xs font-bold text-slate-500 uppercase tracking-widest">YouTube Player</span>
+                                        <span className="material-symbols-outlined text-red-500">smart_display</span>
+                                        <span className="text-xs font-bold text-slate-500 uppercase tracking-widest">YouTube Player</span>
                                     </div>
-                                    <button 
-                                        onClick={() => setActiveExercise(null)} 
+                                    <button
+                                        onClick={() => setActiveExercise(null)}
                                         className="bg-slate-100 dark:bg-border-dark hover:bg-slate-200 dark:hover:bg-slate-700 p-2 rounded-full transition-colors text-slate-900 dark:text-white"
                                     >
                                         <span className="material-symbols-outlined">close</span>
                                     </button>
                                 </div>
-                                
+
                                 <h3 className="text-3xl font-black text-slate-900 dark:text-white mb-2 leading-tight">
                                     {activeExercise.details[language].title}
                                 </h3>
                                 <div className="flex flex-wrap gap-2 mb-6">
-                                     <span className="px-3 py-1 bg-primary/20 text-primary text-xs font-bold rounded-lg uppercase tracking-wide border border-primary/20">
+                                    <span className="px-3 py-1 bg-primary/20 text-primary text-xs font-bold rounded-lg uppercase tracking-wide border border-primary/20">
                                         {activeExercise.details[language].muscle}
                                     </span>
-                                    <a 
-                                        href={`https://www.youtube.com/watch?v=${activeExercise.videoId}`} 
-                                        target="_blank" 
+                                    <a
+                                        href={`https://www.youtube.com/watch?v=${activeExercise.videoId}`}
+                                        target="_blank"
                                         rel="noopener noreferrer"
                                         className="px-3 py-1 bg-red-100 text-red-600 hover:bg-red-200 dark:bg-red-900/30 dark:text-red-400 text-xs font-bold rounded-lg uppercase tracking-wide flex items-center gap-1"
                                     >
