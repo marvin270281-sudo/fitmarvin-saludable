@@ -4,6 +4,9 @@ import react from '@vitejs/plugin-react';
 
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, '.', '');
+  /* Prioritize VITE_ prefixed env var, then fallback to standard */
+  const apiKey = env.VITE_GEMINI_API_KEY || env.GEMINI_API_KEY;
+
   return {
     base: '/FitMarvinSaludable/',
     server: {
@@ -12,9 +15,9 @@ export default defineConfig(({ mode }) => {
     },
     plugins: [react()],
     define: {
-      'process.env.API_KEY': JSON.stringify(env.GEMINI_API_KEY),
-      'process.env.GEMINI_API_KEY': JSON.stringify(env.GEMINI_API_KEY),
-      'import.meta.env.VITE_GEMINI_API_KEY': JSON.stringify(env.GEMINI_API_KEY),
+      'process.env.API_KEY': JSON.stringify(apiKey),
+      'process.env.GEMINI_API_KEY': JSON.stringify(apiKey),
+      'import.meta.env.VITE_GEMINI_API_KEY': JSON.stringify(apiKey),
       'process.env': JSON.stringify(env)
     },
     resolve: {

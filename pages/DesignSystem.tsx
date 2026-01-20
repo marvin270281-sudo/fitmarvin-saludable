@@ -1,10 +1,8 @@
 import React from 'react';
-import Sidebar from '../components/Sidebar';
 
 const DesignSystem = () => {
     return (
         <div className="flex h-full">
-            <Sidebar />
             <main className="flex-grow flex flex-col h-full overflow-y-auto custom-scrollbar bg-[#020202] p-10">
                 <header className="mb-12">
                     <p className="text-primary text-[10px] font-black uppercase tracking-[0.3em] mb-2">Technical Documentation</p>

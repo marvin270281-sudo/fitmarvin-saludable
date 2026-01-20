@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, ReactNode } from 'react';
 
-export type Language = 'ES' | 'EN';
+export type Language = 'ES';
 
 interface LanguageContextType {
     language: Language;
@@ -12,18 +12,18 @@ const LanguageContext = createContext<LanguageContextType | undefined>(undefined
 
 export const dictionary: Record<string, Record<Language, string>> = {
     // Sidebar
-    'nav.home': { ES: 'Inicio', EN: 'Dashboard' },
-    'nav.exercises': { ES: 'Ejercicios', EN: 'Exercises' },
-    'nav.nutrition': { ES: 'Nutrición', EN: 'Nutrition' },
-    'nav.community': { ES: 'Comunidad', EN: 'Community' },
-    'nav.ai_coach': { ES: 'AI Coach', EN: 'AI Coach' },
-    'nav.system': { ES: 'Sistema', EN: 'Design System' },
-    'nav.profile': { ES: 'Perfil', EN: 'Profile' },
-    'nav.panel': { ES: 'Panel Elite', EN: 'Elite Panel' },
-    
+    'nav.home': { ES: 'Inicio' },
+    'nav.exercises': { ES: 'Ejercicios' },
+    'nav.nutrition': { ES: 'Nutrición' },
+    'nav.community': { ES: 'Comunidad' },
+
+    'nav.system': { ES: 'Sistema' },
+    'nav.profile': { ES: 'Perfil' },
+    'nav.panel': { ES: 'Panel Elite' },
+
     // Header
-    'header.search': { ES: 'Buscar rutinas, comidas...', EN: 'Search routines, meals...' },
-    'header.config': { ES: 'Configurar Plan', EN: 'Setup Plan' },
+    'header.search': { ES: 'Buscar rutinas, comidas...' },
+    'header.config': { ES: 'Configurar Plan' },
 };
 
 export const LanguageProvider = ({ children }: { children: ReactNode }) => {

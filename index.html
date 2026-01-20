@@ -13,13 +13,28 @@
             theme: {
                 extend: {
                     colors: {
+                        // Color primario (verde)
                         "primary": "#20df70",
-                        "background-light": "#f9fafa",
+                        
+                        // Fondos y superficies
+                        "background-light": "#e3f2fd",
                         "background-dark": "#121416",
+                        
+                        "surface-light": "#c5daf0",
                         "surface-dark": "#1c1f23",
-                        "border-dark": "#2d3238",
+                        
+                        // Cards - Gris en modo claro
+                        "card-light": "#f3f4f6",
                         "card-dark": "#1a1a1a",
+                        
+                        // Bordes
+                        "border-light": "#b3d9f0",
+                        "border-dark": "#2d3238",
+                        
+                        // Colores secundarios
                         "accent-blue": "#3b82f6",
+                        "accent-blue-light": "#dbeafe",
+                        "accent-blue-dark": "#1e3a8a",
                     },
                     fontFamily: {
                         "display": ["Lexend", "Manrope", "sans-serif"]
@@ -38,12 +53,39 @@
     </script>
     <style>
         body { font-family: 'Lexend', sans-serif; }
+        
+        /* Responsividad para pantallas 2XL */
+        @media (min-width: 1536px) {
+            #root { max-width: 1536px; margin: 0 auto; }
+        }
+        
+        /* Scrollbar Styles */
         .custom-scrollbar::-webkit-scrollbar { width: 4px; }
         .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background: #2d3238; border-radius: 10px; }
-        .bento-card { transition: all 0.2s ease-in-out; }
-        .bento-card:hover { border-color: #20df70; background-color: #212529; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 10px; }
+        .dark .custom-scrollbar::-webkit-scrollbar-thumb { background: #2d3238; border-radius: 10px; }
+        
+        /* Bento Card Styles */
+        .bento-card { transition: all 0.3s ease-in-out; }
+        .bento-card:hover { border-color: #20df70; background-color: #bbdefb; box-shadow: 0 0 30px rgba(32, 223, 112, 0.2); }
+        .dark .bento-card:hover { border-color: #20df70; background-color: #212529; box-shadow: 0 0 30px rgba(32, 223, 112, 0.2); }
+        
+        /* Green Hover Button Effects */
+        .btn-green-hover {
+            transition: all 0.3s ease-in-out;
+        }
+        
+        .btn-green-hover:not(.no-green-hover):hover {
+            background-color: #20df70 !important;
+            color: #000 !important;
+            box-shadow: 0 0 25px rgba(32, 223, 112, 0.4) !important;
+            transform: translateY(-2px);
+        }
+        
+        /* Active Navigation */
         .active-nav { background-color: rgba(32, 223, 112, 0.15); border-left: 4px solid #20df70; }
+        
+        /* Scrollbar Hide */
         .scrollbar-hide::-webkit-scrollbar { display: none; }
         .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
     </style>

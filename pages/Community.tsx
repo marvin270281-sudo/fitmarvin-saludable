@@ -1,5 +1,4 @@
 import React, { useState, useRef } from 'react';
-import Sidebar from '../components/Sidebar';
 import { IMAGES } from '../constants';
 
 const Community = () => {
@@ -10,7 +9,10 @@ const Community = () => {
 
     // Initial posts data
     const [posts, setPosts] = useState([
-        { id: 1, user: "Carlos G.", time: "Hace 15 min", text: "¡Reto superado! Logré mis primeros 5km sin parar en menos de 28 minutos. 🏃‍♂️💨", likes: 24, image: null as string | null }
+        { id: 4, user: "Marvin R.", time: "Hace 2 min", text: "¡Finalizando la rutina de tríceps con todo! 💪", likes: 12, image: IMAGES.USER_TRICEPS },
+        { id: 3, user: "Marvin R.", time: "Hace 10 min", text: "Dándole duro al pecho hoy. La constancia es la clave. 🔥", likes: 18, image: IMAGES.USER_CHEST },
+        { id: 2, user: "Marvin R.", time: "Hace 25 min", text: "Empezando el día con unos buenos kilómetros en la cinta. 🏃‍♂️💨", likes: 15, image: IMAGES.USER_TREADMILL },
+        { id: 1, user: "Carlos G.", time: "Hace 1 hora", text: "¡Reto superado! Logré mis primeros 5km sin parar en menos de 28 minutos. 🏃‍♂️💨", likes: 24, image: null as string | null }
     ]);
 
     const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -53,7 +55,6 @@ const Community = () => {
 
     return (
         <div className="flex h-full">
-            <Sidebar />
             <main className="flex-grow flex flex-col h-full overflow-y-auto custom-scrollbar bg-background-light dark:bg-background-dark p-8">
                 <div className="max-w-4xl mx-auto w-full space-y-10">
                     <section>
@@ -90,7 +91,7 @@ const Community = () => {
                         </div>
 
                         {/* Create Post Area */}
-                        <div className="bg-white dark:bg-surface-dark border border-slate-200 dark:border-border-dark rounded-2xl p-6 mb-6 shadow-sm focus-within:ring-2 focus-within:ring-primary/20 transition-all">
+                        <div className="bg-card-light dark:bg-surface-dark border border-slate-200 dark:border-border-dark rounded-2xl p-6 mb-6 shadow-sm focus-within:ring-2 focus-within:ring-primary/20 transition-all">
                             <textarea
                                 value={postText}
                                 onChange={(e) => setPostText(e.target.value)}

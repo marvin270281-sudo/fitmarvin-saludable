@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import Sidebar from '../components/Sidebar';
-import TopHeader from '../components/TopHeader';
 import { Link, useNavigate } from 'react-router-dom';
 import { IMAGES } from '../constants';
+import { useUserStats } from '../context/UserStatsContext';
 
 const Dashboard = () => {
     const navigate = useNavigate();
     const [chartPeriod, setChartPeriod] = useState<'7D' | '30D'>('30D');
+    const { totalUsers, onlineUsers } = useUserStats();
 
     // Redirect to onboarding if no user is logged in
     React.useEffect(() => {
@@ -17,31 +17,37 @@ const Dashboard = () => {
     }, [navigate]);
 
     return (
-        <div className="flex h-full">
-            <Sidebar />
+        <div className="flex h-full flex-col">
             <main className="flex-grow flex flex-col h-full overflow-hidden bg-background-light dark:bg-background-dark">
-                <TopHeader />
                 <div className="flex-grow overflow-y-auto custom-scrollbar p-8">
                     <div className="mb-10 animate-in fade-in slide-in-from-bottom-4 duration-500">
                         <h2 className="text-4xl font-black tracking-tight mb-2">¡Hola, Marvin!</h2>
                         <p className="text-slate-500 dark:text-slate-400 text-lg">Tu cuerpo es el reflejo de tus hábitos. Esto es lo que tenemos para hoy.</p>
                     </div>
                     <div className="grid grid-cols-12 gap-6 auto-rows-[160px]">
-                        <div className="col-span-12 md:col-span-4 row-span-1 bento-card bg-white dark:bg-surface-dark border border-slate-200 dark:border-border-dark p-6 rounded-xl flex flex-col justify-between overflow-hidden relative group cursor-default">
+                        {/* Community Stats Card */}
+                        <div className="col-span-12 md:col-span-4 row-span-1 bento-card bg-card-light dark:bg-surface-dark border border-slate-200 dark:border-border-dark p-6 rounded-xl flex flex-col justify-between overflow-hidden relative group cursor-default">
                             <div className="flex items-center justify-between">
-                                <span className="text-sm font-bold text-slate-400 uppercase tracking-widest">Racha Actual</span>
-                                <span className="material-symbols-outlined text-primary bg-primary/10 p-2 rounded-lg group-hover:scale-110 transition-transform">local_fire_department</span>
+                                <span className="text-sm font-bold text-slate-400 uppercase tracking-widest">Comunidad</span>
+                                <span className="material-symbols-outlined text-primary bg-primary/10 p-2 rounded-lg group-hover:scale-110 transition-transform">group</span>
                             </div>
-                            <div className="flex items-baseline gap-2">
-                                <span className="text-5xl font-black">12</span>
-                                <span className="text-xl font-bold text-slate-400">Días</span>
+                            <div className="flex flex-col gap-1">
+                                <div className="flex items-baseline gap-2">
+                                    <span className="text-4xl font-black text-slate-900 dark:text-white">{onlineUsers}</span>
+                                    <span className="text-sm font-bold text-green-500 flex items-center gap-1">
+                                        <span className="relative flex h-2 w-2">
+                                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                                            <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+                                        </span>
+                                        Online
+                                    </span>
+                                </div>
+                                <div className="text-xs font-medium text-slate-500">
+                                    de <span className="font-bold text-slate-700 dark:text-slate-300">{totalUsers.toLocaleString()}</span> usuarios totales
+                                </div>
                             </div>
-                            <p className="text-xs text-emerald-500 font-bold flex items-center gap-1">
-                                <span className="material-symbols-outlined text-sm">trending_up</span>
-                                +2% mejor que la semana pasada
-                            </p>
-                            <div className="absolute -right-4 -bottom-4 opacity-10 group-hover:opacity-20 transition-opacity">
-                                <span className="material-symbols-outlined text-9xl">local_fire_department</span>
+                            <div className="absolute -right-4 -bottom-4 opacity-5 group-hover:opacity-10 transition-opacity">
+                                <span className="material-symbols-outlined text-9xl">public</span>
                             </div>
                         </div>
                         <div className="col-span-12 md:col-span-8 row-span-2 bento-card bg-slate-900 dark:bg-surface-dark border border-slate-200 dark:border-border-dark p-8 rounded-xl relative overflow-hidden flex flex-col justify-end group cursor-pointer" onClick={() => navigate('/exercises')}>
@@ -63,7 +69,7 @@ const Dashboard = () => {
                                 </button>
                             </div>
                         </div>
-                        <div className="col-span-12 md:col-span-7 row-span-2 bento-card bg-white dark:bg-surface-dark border border-slate-200 dark:border-border-dark p-6 rounded-xl flex flex-col">
+                        <div className="col-span-12 md:col-span-7 row-span-2 bento-card bg-card-light dark:bg-surface-dark border border-slate-200 dark:border-border-dark p-6 rounded-xl flex flex-col">
                             <div className="flex justify-between items-start mb-6">
                                 <div>
                                     <span className="text-sm font-bold text-slate-400 uppercase tracking-widest">Progreso de Peso</span>
@@ -109,7 +115,7 @@ const Dashboard = () => {
                                 )}
                             </div>
                         </div>
-                        <div className="col-span-12 md:col-span-5 row-span-2 bento-card bg-white dark:bg-surface-dark border border-slate-200 dark:border-border-dark p-6 rounded-xl flex flex-col overflow-hidden">
+                        <div className="col-span-12 md:col-span-5 row-span-2 bento-card bg-card-light dark:bg-surface-dark border border-slate-200 dark:border-border-dark p-6 rounded-xl flex flex-col overflow-hidden">
                             <div className="flex items-center justify-between mb-6">
                                 <span className="text-sm font-bold text-slate-400 uppercase tracking-widest">Comunidad</span>
                                 <Link to="/community" className="text-primary text-xs font-bold hover:underline">Ver todos</Link>

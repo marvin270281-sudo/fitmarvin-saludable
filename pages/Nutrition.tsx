@@ -1,6 +1,4 @@
 import React, { useState, useMemo } from 'react';
-import Sidebar from '../components/Sidebar';
-import TopHeader from '../components/TopHeader';
 import { useLanguage } from '../context/LanguageContext';
 
 // --- DATA TYPES & GENERATION ---
@@ -82,9 +80,7 @@ const NutritionPlan = () => {
 
     return (
         <div className="flex h-full">
-            <Sidebar />
             <main className="flex-grow flex flex-col h-full overflow-hidden bg-background-light dark:bg-background-dark">
-                <TopHeader />
                 <div className="flex-grow overflow-y-auto custom-scrollbar p-8">
                     <div className="max-w-7xl mx-auto w-full">
 
@@ -96,7 +92,7 @@ const NutritionPlan = () => {
                                     Tu hoja de ruta de 30 días para {goal === 'lose' ? 'definición máxima' : 'volumen limpio'}.
                                 </p>
                             </div>
-                            <div className="flex h-12 bg-white dark:bg-surface-dark p-1 rounded-xl border border-slate-200 dark:border-border-dark shadow-sm">
+                            <div className="flex h-12 bg-card-light dark:bg-surface-dark p-1 rounded-xl border border-slate-200 dark:border-border-dark shadow-sm">
                                 <button
                                     onClick={() => setGoal('lose')}
                                     className={`px-6 rounded-lg font-bold text-sm uppercase transition-all ${goal === 'lose' ? 'bg-primary text-black shadow-sm' : 'text-slate-500 hover:text-slate-700 dark:hover:text-slate-300'}`}
@@ -167,8 +163,8 @@ const NutritionPlan = () => {
                                     <div
                                         key={plan.day}
                                         className={`group rounded-2xl border p-6 transition-all hover:-translate-y-1 hover:shadow-xl ${plan.day === 12
-                                                ? 'bg-white dark:bg-surface-dark border-primary ring-1 ring-primary relative overflow-hidden'
-                                                : 'bg-white dark:bg-surface-dark border-slate-200 dark:border-border-dark hover:border-primary/50'
+                                            ? 'bg-white dark:bg-surface-dark border-primary ring-1 ring-primary relative overflow-hidden'
+                                            : 'bg-white dark:bg-surface-dark border-slate-200 dark:border-border-dark hover:border-primary/50'
                                             }`}
                                     >
                                         {plan.day === 12 && (

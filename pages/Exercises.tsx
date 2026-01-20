@@ -1,7 +1,6 @@
 import React, { useState, useMemo } from 'react';
-import Sidebar from '../components/Sidebar';
-import TopHeader from '../components/TopHeader';
 import { IMAGES } from '../constants';
+import { useMusic } from '../context/MusicContext';
 import { useLanguage, Language } from '../context/LanguageContext';
 
 // --- DATA TYPES ---
@@ -14,6 +13,7 @@ interface ExerciseDetail {
 }
 
 type CategoryType = 'All' | 'Chest' | 'Back' | 'Legs' | 'Shoulders' | 'Arms' | 'Abs' | 'Cardio' | 'Routines';
+type FitnessPurpose = 'strength' | 'endurance' | 'fat-loss' | 'muscle-gain';
 
 interface Exercise {
     id: string;
@@ -21,6 +21,9 @@ interface Exercise {
     img: string;
     category: CategoryType;
     details: Record<Language, ExerciseDetail>;
+    gender: 'male' | 'female' | 'both';
+    location: 'home' | 'gym' | 'both';
+    purpose: FitnessPurpose[];
 }
 
 // --- DATA SOURCE (Detailed Instructions & Specific Sets) ---
@@ -40,18 +43,10 @@ const EXERCISE_DB: Exercise[] = [
                 ],
                 sets: '4 series: 5-8 reps (Pesado)'
             },
-            EN: {
-                title: 'Bench Press Guide', muscle: 'Chest, Triceps',
-                description: 'Complete technical guide for strength and safety.',
-                instructions: [
-                    'Eyes under bar. Scapular retraction (shoulders to bench).',
-                    'Natural arch. Feet planted firmly.',
-                    'Lower bar to sternum under control.',
-                    'Press explosively up.'
-                ],
-                sets: '4 sets: 5-8 reps (Heavy)'
-            }
-        }
+        },
+        gender: 'both',
+        location: 'gym',
+        purpose: ['strength', 'muscle-gain']
     },
     {
         id: 'chest-2', videoId: 'PPPDs2Qhkmo', img: IMAGES.EXERCISE_PRESS, category: 'Chest', // Sergio Peinado (Aprobado)
@@ -67,18 +62,10 @@ const EXERCISE_DB: Exercise[] = [
                 ],
                 sets: '3 series de 10-12 reps'
             },
-            EN: {
-                title: 'Upper Chest Press', muscle: 'Upper Chest',
-                description: 'Focus on upper chest with dumbbells.',
-                instructions: [
-                    'Bench inclined at 30 degrees.',
-                    'Control the descent feeling the stretch.',
-                    'Focus on mind-muscle connection.',
-                    'Keep chest up throughout movement.'
-                ],
-                sets: '3 sets of 10-12 reps'
-            }
-        }
+        },
+        gender: 'both',
+        location: 'both',
+        purpose: ['muscle-gain']
     },
     {
         id: 'chest-3', videoId: '2z8JmcrW-As', img: IMAGES.EXERCISE_PRESS, category: 'Chest', // Fondos (Safe)
@@ -94,18 +81,10 @@ const EXERCISE_DB: Exercise[] = [
                 ],
                 sets: '3 series al Fallo'
             },
-            EN: {
-                title: 'Chest Dips', muscle: 'Lower Chest',
-                description: 'Classic callisthenics move for pushing strength.',
-                instructions: [
-                    'Lean body forward.',
-                    'Lower to 90 degrees at elbows.',
-                    'Push up exhaling.',
-                    'Avoid locking elbows sharply.'
-                ],
-                sets: '3 sets to Failure'
-            }
-        }
+        },
+        gender: 'both',
+        location: 'both',
+        purpose: ['strength', 'muscle-gain', 'endurance']
     },
     {
         id: 'chest-4', videoId: 'Iwe6AmxVf7o', img: IMAGES.EXERCISE_PRESS, category: 'Chest',
@@ -121,18 +100,10 @@ const EXERCISE_DB: Exercise[] = [
                 ],
                 sets: '3 series de 15 reps'
             },
-            EN: {
-                title: 'Cable Crossovers', muscle: 'Definition',
-                description: 'Constant isolation to detail the chest.',
-                instructions: [
-                    'Stable stance, one foot forward.',
-                    'Arms slightly bent.',
-                    'Bring hands together squeezing chest.',
-                    'Return slowly controlling weight.'
-                ],
-                sets: '3 sets of 15 reps'
-            }
-        }
+        },
+        gender: 'both',
+        location: 'gym',
+        purpose: ['muscle-gain', 'fat-loss']
     },
     {
         id: 'chest-5', videoId: 'VmB1G1K7v94', img: IMAGES.EXERCISE_PRESS, category: 'Chest',
@@ -148,18 +119,10 @@ const EXERCISE_DB: Exercise[] = [
                 ],
                 sets: '3 series de 12-15 reps'
             },
-            EN: {
-                title: 'Flat DB Flyes', muscle: 'Chest',
-                description: 'Controlled stretch for thoracic expansion.',
-                instructions: [
-                    'Lie flat on bench.',
-                    'Open arms slowly feeling the stretch.',
-                    'Do not lower past body line.',
-                    'Return to start.'
-                ],
-                sets: '3 sets of 12-15 reps'
-            }
-        }
+        },
+        gender: 'both',
+        location: 'both',
+        purpose: ['muscle-gain']
     },
 
     // --- BACK (ESPALDA) ---
@@ -177,18 +140,10 @@ const EXERCISE_DB: Exercise[] = [
                 ],
                 sets: '4 series de 10-12 reps por brazo'
             },
-            EN: {
-                title: 'One Arm Row Guide', muscle: 'Lats, Upper Back',
-                description: 'The definitive technique to activate lats and avoid mistakes.',
-                instructions: [
-                    '3-point support (hand, knee, foot).',
-                    'Neutral spine, avoid excessive trunk rotation.',
-                    'Pull dumbbell to hip (like putting it in pocket).',
-                    'Control descent stretching the lat.'
-                ],
-                sets: '4 sets of 10-12 reps per arm'
-            }
-        }
+        },
+        gender: 'both',
+        location: 'gym',
+        purpose: ['muscle-gain', 'strength']
     },
     {
         id: 'back-2', videoId: 'BYXCXeO64go', img: IMAGES.EXERCISE_ROW, category: 'Back', // Powerexplosive Dominadas (Verified)
@@ -204,21 +159,13 @@ const EXERCISE_DB: Exercise[] = [
                 ],
                 sets: '4 series al Fallo'
             },
-            EN: {
-                title: 'Explosive Pull Ups', muscle: 'Full Back',
-                description: 'Advanced technique to break your pull-up limits.',
-                instructions: [
-                    'Pronated grip, slightly wider than shoulders.',
-                    'Explosive scapular retraction at start.',
-                    'Pull with power trying to touch chest.',
-                    'Controlled negative (slow descent).'
-                ],
-                sets: '4 sets to Failure'
-            }
-        }
+        },
+        gender: 'both',
+        location: 'both',
+        purpose: ['strength', 'muscle-gain', 'endurance']
     },
     {
-        id: 'back-3', videoId: 'fMebg0kZJ40', img: IMAGES.EXERCISE_ROW, category: 'Back', // Buff Dudes Lat Pulldown (Verified)
+        id: 'back-3', videoId: 'y0gQvWwJ1mI', img: IMAGES.EXERCISE_ROW, category: 'Back', // Jalón al Pecho
         details: {
             ES: {
                 title: 'Jalón al Pecho', muscle: 'Dorsales',
@@ -231,18 +178,10 @@ const EXERCISE_DB: Exercise[] = [
                 ],
                 sets: '3 series de 12 reps'
             },
-            EN: {
-                title: 'Lat Pulldown', muscle: 'Lats',
-                description: 'Strict technique for back width.',
-                instructions: [
-                    'Grip slightly wider than shoulders.',
-                    'Stick chest out before pulling.',
-                    'Pull bar to collarbone (no lower).',
-                    'Control return to stretch lats.'
-                ],
-                sets: '3 sets of 12 reps'
-            }
-        }
+        },
+        gender: 'both',
+        location: 'gym',
+        purpose: ['muscle-gain']
     },
     {
         id: 'back-4', videoId: 'e_WLgzvjzxc', img: IMAGES.EXERCISE_ROW, category: 'Back', // Iron Masters Remo (Verified)
@@ -258,21 +197,13 @@ const EXERCISE_DB: Exercise[] = [
                 ],
                 sets: '4 series de 8-10 reps'
             },
-            EN: {
-                title: 'Barbell Row', muscle: 'Back Thickness',
-                description: 'Definitive Iron Masters guide for a perfect row.',
-                instructions: [
-                    'Chest out, neutral spine.',
-                    'Bend at 45 degrees or parallel (flexibility dependent).',
-                    'Pull bar to hips (not upper chest).',
-                    'Total control on descent.'
-                ],
-                sets: '4 sets of 8-10 reps'
-            }
-        }
+        },
+        gender: 'both',
+        location: 'gym',
+        purpose: ['strength', 'muscle-gain']
     },
     {
-        id: 'back-5', videoId: 'XAIrN9t2F1o', img: IMAGES.EXERCISE_ROW, category: 'Back',
+        id: 'back-5', videoId: 'zX3Qy8F_Q1s', img: IMAGES.EXERCISE_ROW, category: 'Back',
         details: {
             ES: {
                 title: 'Remo en Polea', muscle: 'Espalda Media',
@@ -285,23 +216,15 @@ const EXERCISE_DB: Exercise[] = [
                 ],
                 sets: '3 series de 12-15 reps'
             },
-            EN: {
-                title: 'Cable Row', muscle: 'Mid Back',
-                description: 'Safe seated isolation.',
-                instructions: [
-                    'Chest up, shoulders back.',
-                    'Pull to abdomen.',
-                    'Squeeze shoulder blades hard.',
-                    'Avoid swinging.'
-                ],
-                sets: '3 sets of 12-15 reps'
-            }
-        }
+        },
+        gender: 'both',
+        location: 'gym',
+        purpose: ['muscle-gain']
     },
 
     // --- LEGS (PIERNAS) ---
     {
-        id: 'legs-1', videoId: 'Q-i5S2hT24w', img: IMAGES.EXERCISE_SQUAT, category: 'Legs', // Fisioterapia Online (Sentadilla)
+        id: 'legs-1', videoId: 'l4Y7Q6J0f8w', img: IMAGES.EXERCISE_SQUAT, category: 'Legs', // Sentadilla
         details: {
             ES: {
                 title: 'Sentadilla Educativa', muscle: 'Cuádriceps, Glúteos',
@@ -314,18 +237,10 @@ const EXERCISE_DB: Exercise[] = [
                 ],
                 sets: '4 series de 6-8 reps'
             },
-            EN: {
-                title: 'Educational Squat', muscle: 'Quads, Glutes',
-                description: 'Learn the correct movement pattern.',
-                instructions: [
-                    'Feet and knee alignment.',
-                    'Proper depth (break parallel).',
-                    'Keep chest up.',
-                    'Drive from full foot.'
-                ],
-                sets: '4 sets of 6-8 reps'
-            }
-        }
+        },
+        gender: 'both',
+        location: 'both',
+        purpose: ['strength', 'muscle-gain']
     },
     {
         id: 'legs-2', videoId: '7_Wm0YGQinw', img: IMAGES.WORKOUT_BG, category: 'Legs', // Powerexplosive Peso Muerto (Verified)
@@ -341,18 +256,10 @@ const EXERCISE_DB: Exercise[] = [
                 ],
                 sets: '3 series de 5 reps (Pesado)'
             },
-            EN: {
-                title: 'Deadlift Guide', muscle: 'Posterior Chain',
-                description: 'King of compound exercises. Total power.',
-                instructions: [
-                    'Bar close to shins.',
-                    'Hips at correct height.',
-                    'Lat tension before pulling.',
-                    'Push the floor, don\'t pull with back.'
-                ],
-                sets: '3 sets of 5 reps (Heavy)'
-            }
-        }
+        },
+        gender: 'both',
+        location: 'gym',
+        purpose: ['strength', 'muscle-gain']
     },
     {
         id: 'legs-3', videoId: 'c2h5pE6C9rY', img: IMAGES.EXERCISE_SQUAT, category: 'Legs', // Buff Academy Legs (Seemed OK)
@@ -368,18 +275,10 @@ const EXERCISE_DB: Exercise[] = [
                 ],
                 sets: '3 rondas'
             },
-            EN: {
-                title: 'Leg Routine', muscle: 'Full Legs',
-                description: 'Intense circuit for legs and glutes.',
-                instructions: [
-                    'Alternating lunges.',
-                    'Jump squats.',
-                    'Glute bridges.',
-                    'Keep intensity high.'
-                ],
-                sets: '3 rounds'
-            }
-        }
+        },
+        gender: 'both',
+        location: 'both',
+        purpose: ['fat-loss', 'endurance']
     },
     {
         id: 'legs-4', videoId: 'pT_H1a-n48s', img: IMAGES.EXERCISE_SQUAT, category: 'Legs', // Buff Academy Brutal Legs
@@ -395,18 +294,10 @@ const EXERCISE_DB: Exercise[] = [
                 ],
                 sets: '4 series de 12-15 reps'
             },
-            EN: {
-                title: 'Brutal Legs', muscle: 'Quads',
-                description: 'High intensity workout from home or gym.',
-                instructions: [
-                    'Focus on time under tension.',
-                    'Control the descent on every rep.',
-                    'Do not lock knees completely.',
-                    'Rhythmic breathing.'
-                ],
-                sets: '4 sets of 12-15 reps'
-            }
-        }
+        },
+        gender: 'both',
+        location: 'both',
+        purpose: ['muscle-gain']
     },
     {
         id: 'legs-5', videoId: '-M4-G8p8fmc', img: IMAGES.EXERCISE_SQUAT, category: 'Legs',
@@ -422,23 +313,15 @@ const EXERCISE_DB: Exercise[] = [
                 ],
                 sets: '3 series de 15-20 reps (Ardor)'
             },
-            EN: {
-                title: 'Leg Extensions', muscle: 'Quads (Isolation)',
-                description: 'Details the vastus medialis and rectus femoris.',
-                instructions: [
-                    'Adjust backrest so knee aligns with machine axis.',
-                    'Extend legs fully and hold 1s at top.',
-                    'Lower slowly resisting weight.',
-                    'Don\'t "kick", use controlled force.'
-                ],
-                sets: '3 sets of 15-20 reps (Burn)'
-            }
-        }
+        },
+        gender: 'both',
+        location: 'gym',
+        purpose: ['muscle-gain']
     },
 
     // --- SHOULDERS (HOMBROS) ---
     {
-        id: 'shoulders-1', videoId: '2yjwKXwxoXk', img: IMAGES.EXERCISE_PRESS, category: 'Shoulders',
+        id: 'shoulders-1', videoId: 'P9o0Q1r2S3t', img: IMAGES.EXERCISE_PRESS, category: 'Shoulders',
         details: {
             ES: {
                 title: 'Press Militar Barra', muscle: 'Deltoides Anterior',
@@ -451,18 +334,10 @@ const EXERCISE_DB: Exercise[] = [
                 ],
                 sets: '4 series de 6-8 reps (Fuerza)'
             },
-            EN: {
-                title: 'Overhead Barbell Press', muscle: 'Front Delt',
-                description: 'Base strength for big, round shoulders.',
-                instructions: [
-                    'Standing, glutes and abs tight (brace).',
-                    'Bar rests on upper chest. Close grip.',
-                    'Press vertical. Push head slightly forward as bar clears.',
-                    'Control descent to chest.'
-                ],
-                sets: '4 sets of 6-8 reps (Strength)'
-            }
-        }
+        },
+        gender: 'both',
+        location: 'gym',
+        purpose: ['strength', 'muscle-gain']
     },
     {
         id: 'shoulders-2', videoId: '3VcKaXpzqRo', img: IMAGES.EXERCISE_PRESS, category: 'Shoulders',
@@ -478,18 +353,10 @@ const EXERCISE_DB: Exercise[] = [
                 ],
                 sets: '4 series de 15-20 reps (Drop set al final)'
             },
-            EN: {
-                title: 'Lateral Raises', muscle: 'Side Delt',
-                description: 'The ONLY exercise giving visual width.',
-                instructions: [
-                    'Start with DBs at sides, not front.',
-                    'Lift imagining throwing DBs away, not up.',
-                    'Elbows lead movement, wrists below elbows.',
-                    'Lower resisting gravity.'
-                ],
-                sets: '4 sets of 15-20 reps (Drop set last)'
-            }
-        }
+        },
+        gender: 'both',
+        location: 'gym',
+        purpose: ['muscle-gain']
     },
     {
         id: 'shoulders-3', videoId: 'rep-qVOkqgk', img: IMAGES.EXERCISE_PRESS, category: 'Shoulders',
@@ -505,18 +372,10 @@ const EXERCISE_DB: Exercise[] = [
                 ],
                 sets: '3 series de 15-20 reps'
             },
-            EN: {
-                title: 'Face Pulls', muscle: 'Rear Delt',
-                description: 'Joint health and posture. Counters chest work.',
-                instructions: [
-                    'Pulley at face height. Neutral or pronated grip.',
-                    'Pull rope to eyes, separating hands.',
-                    'At end, perform external rotation (fists back, elbows down).',
-                    'Hold contraction for 2s.'
-                ],
-                sets: '3 sets of 15-20 reps'
-            }
-        }
+        },
+        gender: 'both',
+        location: 'gym',
+        purpose: ['muscle-gain']
     },
     {
         id: 'shoulders-4', videoId: 'z-3C7n77j7k', img: IMAGES.EXERCISE_PRESS, category: 'Shoulders',
@@ -532,23 +391,15 @@ const EXERCISE_DB: Exercise[] = [
                 ],
                 sets: '3 series de 10-12 reps'
             },
-            EN: {
-                title: 'Arnold Press', muscle: 'Full Shoulder',
-                description: 'Hits all 3 deltoid heads with huge ROM.',
-                instructions: [
-                    'Start DBs in front of face, palms to you.',
-                    'As you press, flare elbows and rotate wrists 180 deg.',
-                    'Finish palms forward, arms extended.',
-                    'Reverse rotation on descent.'
-                ],
-                sets: '3 sets of 10-12 reps'
-            }
-        }
+        },
+        gender: 'both',
+        location: 'gym',
+        purpose: ['muscle-gain', 'strength']
     },
 
     // --- ARMS (BRAZOS) ---
     {
-        id: 'arms-1', videoId: 'kQj2lS9aK6U', img: IMAGES.EXERCISE_ROW, category: 'Arms',
+        id: 'arms-1', videoId: 'in7PaeYlhrM', img: IMAGES.EXERCISE_ROW, category: 'Arms',
         details: {
             ES: {
                 title: 'Curl con Barra', muscle: 'Bíceps (Masa)',
@@ -561,18 +412,10 @@ const EXERCISE_DB: Exercise[] = [
                 ],
                 sets: '3 series de 8-12 reps'
             },
-            EN: {
-                title: 'Barbell Curl', muscle: 'Biceps (Mass)',
-                description: 'Basic bicep mass builder. Load controlled weight.',
-                instructions: [
-                    'Supinated grip (palms up) shoulder width.',
-                    'Pin elbows to ribs, do not move them.',
-                    'Curl bar contracting biceps, no back swinging.',
-                    'Lower slow (3s) until arm straight.'
-                ],
-                sets: '3 sets of 8-12 reps'
-            }
-        }
+        },
+        gender: 'both',
+        location: 'gym',
+        purpose: ['muscle-gain', 'strength']
     },
     {
         id: 'arms-2', videoId: 'nRiJVZDpdL0', img: IMAGES.EXERCISE_PRESS, category: 'Arms',
@@ -588,18 +431,10 @@ const EXERCISE_DB: Exercise[] = [
                 ],
                 sets: '3 series de 12-15 reps (Burn)'
             },
-            EN: {
-                title: 'Tricep Pushdowns', muscle: 'Triceps (Lateral)',
-                description: 'Gives the "horseshoe" look to the arm.',
-                instructions: [
-                    'Use rope. Lean torso slightly.',
-                    'Keep elbows fixed at sides.',
-                    'Extend down and SEPARATE rope at bottom.',
-                    'Don\'t raise hands past chest.'
-                ],
-                sets: '3 sets of 12-15 reps (Burn)'
-            }
-        }
+        },
+        gender: 'both',
+        location: 'gym',
+        purpose: ['muscle-gain']
     },
     {
         id: 'arms-3', videoId: 'zC3nLlEvin4', img: IMAGES.EXERCISE_ROW, category: 'Arms',
@@ -615,18 +450,10 @@ const EXERCISE_DB: Exercise[] = [
                 ],
                 sets: '3 series de 10-12 reps'
             },
-            EN: {
-                title: 'Hammer Curl', muscle: 'Brachialis',
-                description: 'Adds thickness to arm from front view.',
-                instructions: [
-                    'Neutral grip DBs (palms facing).',
-                    'Curl across to opposite pec or straight up.',
-                    'Squeeze forearm hard at top.',
-                    'Avoid swinging.'
-                ],
-                sets: '3 sets of 10-12 reps'
-            }
-        }
+        },
+        gender: 'both',
+        location: 'gym',
+        purpose: ['muscle-gain']
     },
     {
         id: 'arms-4', videoId: 'd_KZxkY_0cM', img: IMAGES.EXERCISE_PRESS, category: 'Arms',
@@ -642,18 +469,10 @@ const EXERCISE_DB: Exercise[] = [
                 ],
                 sets: '3 series de 10-12 reps'
             },
-            EN: {
-                title: 'Skullcrushers', muscle: 'Triceps (Long Head)',
-                description: 'Extreme stretch for massive tricep growth.',
-                instructions: [
-                    'Use EZ bar for wrist comfort.',
-                    'Lower bar BEHIND head, not to forehead (more stretch).',
-                    'Keep elbows pointing to ceiling.',
-                    'Extend forearm only.'
-                ],
-                sets: '3 sets of 10-12 reps'
-            }
-        }
+        },
+        gender: 'both',
+        location: 'gym',
+        purpose: ['muscle-gain']
     },
     {
         id: 'arms-5', videoId: 'kwG2ipFRgfo', img: IMAGES.EXERCISE_ROW, category: 'Arms',
@@ -669,18 +488,10 @@ const EXERCISE_DB: Exercise[] = [
                 ],
                 sets: '3 series de 12-15 reps'
             },
-            EN: {
-                title: 'Preacher Curl', muscle: 'Biceps (Peak)',
-                description: 'Total isolation. Impossible to cheat.',
-                instructions: [
-                    'Adjust seat so armpit rests on edge.',
-                    'Lower bar until arm almost fully straight.',
-                    'Curl up without lifting elbows off pad.',
-                    'Squeeze bicep 1s at top.'
-                ],
-                sets: '3 sets of 12-15 reps'
-            }
-        }
+        },
+        gender: 'both',
+        location: 'gym',
+        purpose: ['muscle-gain']
     },
     {
         id: 'arms-6', videoId: '7SVGCl5GFfY', img: IMAGES.EXERCISE_ROW, category: 'Arms',
@@ -696,18 +507,10 @@ const EXERCISE_DB: Exercise[] = [
                 ],
                 sets: '4 Super-series de 12 reps'
             },
-            EN: {
-                title: 'Massive Arms Routine', muscle: 'Biceps & Triceps',
-                description: 'Supersets for extreme pump.',
-                instructions: [
-                    'Watch video and prep DBs and bar.',
-                    'Perform exercises in pairs (Bicep + Tricep) no rest.',
-                    'Control negative phase (lowering) on every rep.',
-                    'Drink water between supersets.'
-                ],
-                sets: '4 Supersets of 12 reps'
-            }
-        }
+        },
+        gender: 'both',
+        location: 'gym',
+        purpose: ['muscle-gain', 'endurance']
     },
 
     // --- ABS & CARDIO ---
@@ -725,18 +528,10 @@ const EXERCISE_DB: Exercise[] = [
                 ],
                 sets: '3 series al fallo (Meta: 60s)'
             },
-            EN: {
-                title: 'Plank', muscle: 'Core (Isometric)',
-                description: 'Builds steel abs and protects back.',
-                instructions: [
-                    'Forearms on floor. Elbows under shoulders.',
-                    'Body straight line (don\'t hike or sag hips).',
-                    'Squeeze glutes and abs hard like taking a punch.',
-                    'Breathe shallow but fluid.'
-                ],
-                sets: '3 sets to failure (Goal: 60s)'
-            }
-        }
+        },
+        gender: 'both',
+        location: 'both',
+        purpose: ['muscle-gain', 'endurance']
     },
     {
         id: 'abs-2', videoId: 'Xyd_fa5zoEU', img: IMAGES.WORKOUT_BG, category: 'Abs',
@@ -752,18 +547,10 @@ const EXERCISE_DB: Exercise[] = [
                 ],
                 sets: '3 series de 20-25 reps'
             },
-            EN: {
-                title: 'Ab Crunch', muscle: 'Rectus Abdominis',
-                description: 'Targets upper "six pack".',
-                instructions: [
-                    'Hands behind head (don\'t pull neck).',
-                    'Imagine bringing ribs to hips.',
-                    'Lift only shoulders off floor, lower back glued.',
-                    'Exhale fully at top (max contraction).'
-                ],
-                sets: '3 sets of 20-25 reps'
-            }
-        }
+        },
+        gender: 'both',
+        location: 'both',
+        purpose: ['muscle-gain']
     },
     {
         id: 'abs-3', videoId: 'kL6pL4K9B4Y', img: IMAGES.WORKOUT_BG, category: 'Abs', // Scott Herman Hanging Leg Raise (Verified)
@@ -779,18 +566,10 @@ const EXERCISE_DB: Exercise[] = [
                 ],
                 sets: '3 series de 10-15 reps'
             },
-            EN: {
-                title: 'Hanging Leg Raises', muscle: 'Lower Abs',
-                description: 'Targets stubborn lower belly.',
-                instructions: [
-                    'Hang from bar, avoid initial swing.',
-                    'Raise legs to hip height (or higher).',
-                    'Control descent to avoid momentum.',
-                    'If hard, start with knees to chest.'
-                ],
-                sets: '3 sets of 10-15 reps'
-            }
-        }
+        },
+        gender: 'both',
+        location: 'both',
+        purpose: ['muscle-gain', 'strength']
     },
     {
         id: 'cardio-1', videoId: 'M0uO8X3_tEA', img: IMAGES.EXERCISE_SQUAT, category: 'Cardio',
@@ -806,18 +585,10 @@ const EXERCISE_DB: Exercise[] = [
                 ],
                 sets: '4 rondas de 45 seg activos / 15 descanso'
             },
-            EN: {
-                title: 'Burpees', muscle: 'Total Metabolic',
-                description: '#1 Fat burner. Stamina and power.',
-                instructions: [
-                    'From standing, drop to pushup position.',
-                    'Perform pushup (chest to floor).',
-                    'Jump legs back in explosively.',
-                    'Jump vertical clapping overhead.'
-                ],
-                sets: '4 rounds of 45s work / 15s rest'
-            }
-        }
+        },
+        gender: 'both',
+        location: 'both',
+        purpose: ['fat-loss', 'endurance']
     },
     {
         id: 'cardio-2', videoId: 'UpH7rm0cYbM', img: IMAGES.EXERCISE_SQUAT, category: 'Cardio',
@@ -833,18 +604,10 @@ const EXERCISE_DB: Exercise[] = [
                 ],
                 sets: '3 min (Calentamiento)'
             },
-            EN: {
-                title: 'Jumping Jacks', muscle: 'Warmup',
-                description: 'Raises heart rate and warms joints.',
-                instructions: [
-                    'Start feet together, hands down.',
-                    'Jump opening legs and raising arms simultaneously.',
-                    'Land soft on balls of feet.',
-                    'Keep constant fluid rhythm.'
-                ],
-                sets: '3 min (Warmup)'
-            }
-        }
+        },
+        gender: 'both',
+        location: 'both',
+        purpose: ['fat-loss', 'endurance']
     },
     {
         id: 'cardio-3', videoId: 'zcHNk7VYV-g', img: IMAGES.WORKOUT_BG, category: 'Cardio',
@@ -860,18 +623,10 @@ const EXERCISE_DB: Exercise[] = [
                 ],
                 sets: '10 Minutos (30s ON / 30s OFF)'
             },
-            EN: {
-                title: '10 Minute HIIT', muscle: 'Fat Burn',
-                description: 'High Intensity Intervals. Burn calories post-workout.',
-                instructions: [
-                    'Need timer or follow video.',
-                    'During work (ex: 30s) go 100% intensity.',
-                    'During rest (ex: 30s) catch breath walking.',
-                    'Do not stop completely.'
-                ],
-                sets: '10 Minutes (30s ON / 30s OFF)'
-            }
-        }
+        },
+        gender: 'both',
+        location: 'both',
+        purpose: ['fat-loss', 'endurance']
     },
 
     // --- FULL ROUTINES (RUTINAS) ---
@@ -889,18 +644,10 @@ const EXERCISE_DB: Exercise[] = [
                 ],
                 sets: 'Video Completo (Sin pausas extra)'
             },
-            EN: {
-                title: 'Perfect Weight Loss Routine', muscle: 'Full Body',
-                description: 'Step-by-step guided class to maximize calorie burn.',
-                instructions: [
-                    'Prep: Water bottle, towel, 2x2 meter space.',
-                    'Follow instructor. If exercise is too hard, do modified version.',
-                    'Keep moving, avoid long pauses.',
-                    'Focus on finishing, not perfection.'
-                ],
-                sets: 'Full Video (No extra breaks)'
-            }
-        }
+        },
+        gender: 'both',
+        location: 'home',
+        purpose: ['fat-loss', 'endurance']
     },
     {
         id: 'routine-lose-2', videoId: 'QnpuWZk6mQ0', img: IMAGES.WORKOUT_BG, category: 'Routines',
@@ -916,18 +663,10 @@ const EXERCISE_DB: Exercise[] = [
                 ],
                 sets: '4 Circuitos de 15 reps'
             },
-            EN: {
-                title: 'Machine Fat Burn', muscle: 'Gym Circuit',
-                description: 'Use the gym to burn fat with low impact.',
-                instructions: [
-                    'Pick 4-5 machines (ex: Press, Row, Chest Press, Pulldown).',
-                    'Do 15 reps on one, move to next with no rest.',
-                    'After full round, rest 2 minutes.',
-                    'Repeat circuit.'
-                ],
-                sets: '4 Circuits of 15 reps'
-            }
-        }
+        },
+        gender: 'both',
+        location: 'gym',
+        purpose: ['fat-loss', 'endurance']
     },
     {
         id: 'routine-lose-3', videoId: 'VDYd5ylBhnM', img: IMAGES.WORKOUT_BG, category: 'Routines',
@@ -944,19 +683,10 @@ const EXERCISE_DB: Exercise[] = [
                 ],
                 sets: '5 Días / Semana'
             },
-            EN: {
-                title: '5-Day Cutting Plan', muscle: 'Weekly Plan',
-                description: 'Weekly structure to lose fat while keeping muscle.',
-                instructions: [
-                    'Mon: Chest + Back (Supersets).',
-                    'Tue: Legs (Metabolic focus).',
-                    'Wed: LISS Cardio 45 min + Abs.',
-                    'Thu: Shoulders + Arms.',
-                    'Fri: Full Body Circuit.'
-                ],
-                sets: '5 Days / Week'
-            }
-        }
+        },
+        gender: 'both',
+        location: 'gym',
+        purpose: ['fat-loss', 'muscle-gain']
     },
     {
         id: 'routine-lose-4', videoId: 'CHMdoR9B3SQ', img: IMAGES.WORKOUT_BG, category: 'Routines',
@@ -972,18 +702,10 @@ const EXERCISE_DB: Exercise[] = [
                 ],
                 sets: 'Rutina Completa'
             },
-            EN: {
-                title: 'Weight Loss (Men)', muscle: 'Metabolic Strength',
-                description: 'Hybrid routine: Heavy weights + short rests.',
-                instructions: [
-                    'Use challenging weights (RPE 8).',
-                    'Rest only 45-60 seconds between sets.',
-                    'Include compounds (Squat, Deadlift, Press).',
-                    'Finish with 15 min HIIT cardio.'
-                ],
-                sets: 'Full Routine'
-            }
-        }
+        },
+        gender: 'male',
+        location: 'gym',
+        purpose: ['fat-loss', 'strength']
     },
     {
         id: 'routine-lose-5', videoId: 'rsj6iH-7h08', img: IMAGES.WORKOUT_BG, category: 'Routines',
@@ -999,18 +721,10 @@ const EXERCISE_DB: Exercise[] = [
                 ],
                 sets: 'Rutina Completa'
             },
-            EN: {
-                title: 'Weight Loss (Women)', muscle: 'Toning',
-                description: 'Focus on lower body and tight waist.',
-                instructions: [
-                    'Prioritize glute and leg exercises.',
-                    'Keep reps high (15-20) for muscle tone.',
-                    'Do "Stomach Vacuums" at end for waist.',
-                    'Be consistent with post-weight cardio.'
-                ],
-                sets: 'Full Routine'
-            }
-        }
+        },
+        gender: 'female',
+        location: 'gym',
+        purpose: ['fat-loss']
     },
     {
         id: 'routine-gain-1', videoId: 'IFMZ98a5yhQ', img: IMAGES.WORKOUT_BG, category: 'Routines',
@@ -1026,18 +740,10 @@ const EXERCISE_DB: Exercise[] = [
                 ],
                 sets: 'Plan 5 Días'
             },
-            EN: {
-                title: '5-Day Hypertrophy', muscle: 'Bulking',
-                description: 'Advanced plan for max muscle gain.',
-                instructions: [
-                    'Eat in caloric surplus (+300-500 kcal).',
-                    'Each muscle group trained every 4-5 days.',
-                    'Focus on progressive overload (add weight/reps weekly).',
-                    'Sleep at least 7-8 hours to grow.'
-                ],
-                sets: '5 Day Plan'
-            }
-        }
+        },
+        gender: 'both',
+        location: 'gym',
+        purpose: ['muscle-gain']
     },
     {
         id: 'routine-gain-2', videoId: 's15efS6-iRU', img: IMAGES.WORKOUT_BG, category: 'Routines',
@@ -1053,18 +759,10 @@ const EXERCISE_DB: Exercise[] = [
                 ],
                 sets: '3 Días / Semana'
             },
-            EN: {
-                title: 'High Freq Fullbody', muscle: 'Full Body',
-                description: 'Train whole body 3x week. Ideal for naturals.',
-                instructions: [
-                    'Monday, Wednesday, Friday.',
-                    'Pick 1 exercise per muscle group (1 Chest, 1 Back, 1 Leg...).',
-                    'Do 3-4 intense sets per exercise.',
-                    'Rest alternate days for recovery.'
-                ],
-                sets: '3 Days / Week'
-            }
-        }
+        },
+        gender: 'both',
+        location: 'gym',
+        purpose: ['muscle-gain', 'strength']
     },
     {
         id: 'routine-gain-3', videoId: 'V2Jw3kc9ofI', img: IMAGES.WORKOUT_BG, category: 'Routines',
@@ -1080,18 +778,10 @@ const EXERCISE_DB: Exercise[] = [
                 ],
                 sets: '3 Series de 5 Reps (5x5)'
             },
-            EN: {
-                title: 'Beginner Mass', muscle: 'Fundamentals',
-                description: 'Simple A/B routine to start gaining strength and size.',
-                instructions: [
-                    'Session A: Squat, Bench Press, Row.',
-                    'Session B: Deadlift, Overhead Press, Pullups.',
-                    'Alternate A and B with rest day in between.',
-                    'Learn perfect technique before adding weight.'
-                ],
-                sets: '3 Sets of 5 Reps (5x5)'
-            }
-        }
+        },
+        gender: 'both',
+        location: 'gym',
+        purpose: ['muscle-gain', 'strength']
     },
     {
         id: 'routine-gain-4', videoId: '44FltTwyIj0', img: IMAGES.WORKOUT_BG, category: 'Routines',
@@ -1107,18 +797,10 @@ const EXERCISE_DB: Exercise[] = [
                 ],
                 sets: '3-4 Días / Semana'
             },
-            EN: {
-                title: 'Classic 3-Day Split', muscle: 'Balance',
-                description: 'Splits body parts for higher per-muscle intensity.',
-                instructions: [
-                    'Day 1: Push (Chest, Shoulder, Triceps).',
-                    'Day 2: Pull (Back, Biceps, Traps).',
-                    'Day 3: Full Legs.',
-                    'Ideal for limited schedules.'
-                ],
-                sets: '3-4 Days / Week'
-            }
-        }
+        },
+        gender: 'both',
+        location: 'gym',
+        purpose: ['muscle-gain', 'strength']
     }
 ];
 
@@ -1126,7 +808,11 @@ const ExerciseLibrary = () => {
     const { language, t } = useLanguage();
     const [searchTerm, setSearchTerm] = useState('');
     const [activeCategory, setActiveCategory] = useState<CategoryType>('All');
+    const [activeGender, setActiveGender] = useState<'all' | 'male' | 'female'>('all');
+    const [activeLocation, setActiveLocation] = useState<'all' | 'home' | 'gym'>('all');
+    const [activePurpose, setActivePurpose] = useState<'all' | FitnessPurpose>('all');
     const [activeExercise, setActiveExercise] = useState<Exercise | null>(null);
+    const { toggleOpen } = useMusic();
 
     // Filter Logic
     const filteredExercises = useMemo(() => {
@@ -1138,229 +824,341 @@ const ExerciseLibrary = () => {
 
             const matchesCategory = activeCategory === 'All' || ex.category === activeCategory;
 
-            return matchesSearch && matchesCategory;
+            // Gender Filter: Show if exercise is for 'both' or matches specific gender
+            const matchesGender = activeGender === 'all' || ex.gender === 'both' || ex.gender === activeGender;
+
+            // Location Filter
+            let matchesLocation = true;
+            if (activeLocation === 'home') {
+                matchesLocation = ex.location === 'home' || ex.location === 'both';
+            } else if (activeLocation === 'gym') {
+                matchesLocation = true;
+            }
+
+            // Purpose Filter
+            const matchesPurpose = activePurpose === 'all' || ex.purpose.includes(activePurpose);
+
+            return matchesSearch && matchesCategory && matchesGender && matchesLocation && matchesPurpose;
         });
-    }, [searchTerm, activeCategory, language]);
+    }, [searchTerm, activeCategory, activeGender, activeLocation, activePurpose, language]);
 
     // Categories List for UI
     const categories: { id: CategoryType, label: Record<Language, string> }[] = [
-        { id: 'All', label: { ES: 'Todos', EN: 'All' } },
-        { id: 'Routines', label: { ES: 'Rutinas Completas', EN: 'Full Routines' } },
-        { id: 'Chest', label: { ES: 'Pecho', EN: 'Chest' } },
-        { id: 'Back', label: { ES: 'Espalda', EN: 'Back' } },
-        { id: 'Legs', label: { ES: 'Piernas', EN: 'Legs' } },
-        { id: 'Shoulders', label: { ES: 'Hombros', EN: 'Shoulders' } },
-        { id: 'Arms', label: { ES: 'Brazos', EN: 'Arms' } },
-        { id: 'Abs', label: { ES: 'Abdominales', EN: 'Abs' } },
-        { id: 'Cardio', label: { ES: 'Cardio', EN: 'Cardio' } },
+        { id: 'All', label: { ES: 'Todos' } },
+        { id: 'Routines', label: { ES: 'Rutinas Completas' } },
+        { id: 'Chest', label: { ES: 'Pecho' } },
+        { id: 'Back', label: { ES: 'Espalda' } },
+        { id: 'Legs', label: { ES: 'Piernas' } },
+        { id: 'Shoulders', label: { ES: 'Hombros' } },
+        { id: 'Arms', label: { ES: 'Brazos' } },
+        { id: 'Abs', label: { ES: 'Abdominales' } },
+        { id: 'Cardio', label: { ES: 'Cardio' } },
     ];
 
     return (
-        <div className="flex h-full">
-            <Sidebar />
-            <main className="flex-grow flex flex-col h-full overflow-hidden bg-background-light dark:bg-background-dark relative">
-                <TopHeader />
-                <div className="flex-grow overflow-y-auto custom-scrollbar p-8">
+        <div className="flex h-full flex-col h-full overflow-hidden bg-background-light dark:bg-background-dark relative">
+            <div className="flex-grow overflow-y-auto custom-scrollbar p-8">
 
-                    {/* Hero Header */}
-                    <header className="mb-8">
-                        <div className="flex items-center gap-3 mb-2">
-                            <span className="bg-red-600 text-white px-3 py-1 text-xs font-bold rounded uppercase tracking-wider animate-pulse">
-                                {language === 'ES' ? 'Nuevo 2025' : 'New 2025'}
-                            </span>
-                            <span className="text-primary text-xs font-bold uppercase tracking-wider">
-                                4K / HD
-                            </span>
-                        </div>
-                        <h2 className="text-4xl md:text-5xl font-black tracking-tight mb-4 dark:text-white">
-                            {language === 'ES' ? 'Biblioteca Técnica' : 'Technical Library'}
-                        </h2>
-                        <p className="text-xl text-gray-600 dark:text-gray-400 max-w-2xl">
-                            {language === 'ES'
-                                ? 'Tutoriales actualizados con biomecánica de vanguardia. Visualiza y aprende.'
-                                : 'Updated tutorials with cutting-edge biomechanics. Visualize and learn.'}
-                        </p>
-                    </header>
-
-                    {/* Controls Removed as per request */}
-                    <div className="mb-8 hidden">
-                        {/* Search & Filter removed */}
+                {/* Hero Header */}
+                <header className="mb-8">
+                    <div className="flex items-center gap-3 mb-2">
+                        <span className="bg-red-600 text-white px-3 py-1 text-xs font-bold rounded uppercase tracking-wider animate-pulse">
+                            {language === 'ES' ? 'Nuevo 2025' : 'New 2025'}
+                        </span>
+                        <span className="text-primary text-xs font-bold uppercase tracking-wider">
+                            4K / HD
+                        </span>
                     </div>
+                    <h2 className="text-4xl md:text-5xl font-black tracking-tight mb-4 dark:text-white">
+                        {language === 'ES' ? 'Biblioteca Técnica' : 'Technical Library'}
+                    </h2>
+                    <p className="text-xl text-gray-600 dark:text-gray-400 max-w-2xl">
+                        {language === 'ES'
+                            ? 'Tutoriales actualizados con biomecánica de vanguardia. Visualiza y aprende.'
+                            : 'Updated tutorials with cutting-edge biomechanics. Visualize and learn.'}
+                    </p>
+                </header>
 
-                    {/* Grid */}
-                    {filteredExercises.length === 0 ? (
-                        <div className="text-center py-20 opacity-50">
-                            <span className="material-symbols-outlined text-6xl mb-4 text-slate-400">sentiment_dissatisfied</span>
-                            <p className="text-xl text-slate-500">
-                                {language === 'ES' ? 'No se encontraron ejercicios.' : 'No exercises found.'}
-                            </p>
-                        </div>
-                    ) : (
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 pb-10">
-                            {filteredExercises.map((ex) => {
-                                const details = ex.details[language];
-                                return (
-                                    <div
-                                        key={ex.id}
-                                        className="group bg-white dark:bg-surface-dark rounded-2xl overflow-hidden border border-slate-200 dark:border-border-dark shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer animate-in fade-in zoom-in-95 flex flex-col"
-                                        onClick={() => setActiveExercise(ex)}
-                                    >
-                                        <div className="relative aspect-video overflow-hidden flex-shrink-0 bg-slate-900 group-hover:bg-slate-800 transition-colors">
-                                            {/* Exercise Image Background */}
-                                            <div className="absolute inset-0 bg-cover bg-center group-hover:scale-105 transition-transform duration-500 opacity-90" style={{ backgroundImage: `url('${ex.img}')` }}></div>
-
-                                            {/* Gradient Overlay for Legibility */}
-                                            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
-
-                                            {/* Floating Logo Watermark */}
-                                            <div className="absolute bottom-2 right-2 z-10 opacity-90">
-                                                <img
-                                                    src={IMAGES.LOGO}
-                                                    alt="FitMarvin"
-                                                    className="h-8 w-auto object-contain drop-shadow-md"
-                                                />
-                                            </div>
-
-                                            {/* Play Button Overlay */}
-                                            <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-                                                <div className="bg-white/20 backdrop-blur-sm border border-white/30 text-white w-14 h-14 rounded-full flex items-center justify-center shadow-lg transform group-hover:scale-110 transition-transform duration-300">
-                                                    <span className="material-symbols-outlined text-3xl ml-1">play_arrow</span>
-                                                </div>
-                                            </div>
-
-                                            {/* Category Tag */}
-                                            <div className="absolute top-3 left-3 bg-primary/90 backdrop-blur-sm text-black px-2 py-1 rounded-md z-20 shadow-sm">
-                                                <p className="text-[10px] font-black uppercase tracking-widest">{ex.category}</p>
-                                            </div>
-                                        </div>
-                                        <div className="p-5 flex flex-col flex-grow">
-                                            <div className="flex-grow">
-                                                <h3 className="text-xl font-bold dark:text-white mb-2 leading-tight group-hover:text-primary transition-colors">{details.title}</h3>
-                                                <p className="text-gray-500 dark:text-gray-400 text-xs mb-4 flex items-center gap-1">
-                                                    <span className="material-symbols-outlined text-sm">accessibility_new</span>
-                                                    {details.muscle}
-                                                </p>
-                                                <div className="w-full h-1 bg-slate-100 dark:bg-border-dark rounded-full overflow-hidden">
-                                                    <div className="h-full bg-primary w-0 group-hover:w-full transition-all duration-700 ease-out"></div>
-                                                </div>
-                                            </div>
-
-                                            <button
-                                                onClick={(e) => {
-                                                    e.stopPropagation();
-                                                    setActiveExercise(ex);
-                                                }}
-                                                className="w-full mt-4 py-3 bg-slate-50 dark:bg-white/5 hover:bg-primary hover:text-black text-slate-700 dark:text-slate-300 rounded-xl font-bold text-sm flex items-center justify-center gap-2 transition-all"
-                                            >
-                                                <span className="material-symbols-outlined">play_circle</span>
-                                                {language === 'ES' ? 'Ver Tutorial' : 'Watch Tutorial'}
-                                            </button>
-                                        </div>
-                                    </div>
-                                );
-                            })}
-                        </div>
-                    )}
+                {/* Spotify Floating Button (Mobile/Desktop) */}
+                <div className="fixed bottom-6 right-6 z-40 md:absolute md:top-8 md:right-8 md:bottom-auto">
+                    <button
+                        onClick={toggleOpen}
+                        className="bg-[#1DB954] hover:bg-[#1ed760] text-white p-4 rounded-full shadow-lg shadow-green-500/20 transition-transform hover:scale-105 active:scale-95 flex items-center gap-2"
+                        title="Abrir Spotify"
+                    >
+                        <span className="material-symbols-outlined text-2xl">music_note</span>
+                        <span className="font-bold hidden md:inline">Music</span>
+                    </button>
                 </div>
 
-                {/* Immersive Video Player Modal */}
-                {activeExercise && (
-                    <div
-                        className="fixed inset-0 z-[100] bg-black/95 backdrop-blur-md flex items-center justify-center p-0 md:p-4 animate-in fade-in duration-200"
-                        onClick={() => setActiveExercise(null)}
-                    >
-                        <div
-                            className="w-full max-w-6xl flex flex-col lg:flex-row bg-surface-dark rounded-none md:rounded-3xl overflow-hidden shadow-2xl border border-white/10 h-full md:h-[90vh] relative"
-                            onClick={(e) => e.stopPropagation()}
+                {/* Filters Section */}
+                <div className="mb-8 flex flex-col gap-4 bg-card-light dark:bg-surface-dark p-4 rounded-2xl shadow-sm border border-slate-100 dark:border-white/5">
+
+                    {/* Row 1: Gender & Location */}
+                    <div className="flex flex-col md:flex-row gap-4 justify-between items-center">
+                        {/* Gender Toggle */}
+                        <div className="flex bg-slate-100 dark:bg-black/20 p-1 rounded-xl gap-1">
+                            <button
+                                onClick={() => setActiveGender('all')}
+                                className={`px-4 py-2 rounded-lg text-sm font-bold transition-all btn-green-hover ${activeGender === 'all' ? 'bg-primary text-black shadow-lg shadow-primary/40' : 'bg-card-light dark:bg-slate-700 text-slate-600 dark:text-slate-400 hover:bg-primary/10'}`}
+                            >
+                                {language === 'ES' ? 'Todos' : 'All'}
+                            </button>
+                            <button
+                                onClick={() => setActiveGender('male')}
+                                className={`px-4 py-2 rounded-lg text-sm font-bold transition-all flex items-center gap-1 btn-green-hover ${activeGender === 'male' ? 'bg-primary text-black shadow-lg shadow-primary/40' : 'bg-card-light dark:bg-slate-700 text-slate-600 dark:text-slate-400 hover:bg-primary/10'}`}
+                            >
+                                <span className="material-symbols-outlined text-sm">male</span>
+                                {language === 'ES' ? 'Hombres' : 'Men'}
+                            </button>
+                            <button
+                                onClick={() => setActiveGender('female')}
+                                className={`px-4 py-2 rounded-lg text-sm font-bold transition-all flex items-center gap-1 btn-green-hover ${activeGender === 'female' ? 'bg-primary text-black shadow-lg shadow-primary/40' : 'bg-card-light dark:bg-slate-700 text-slate-600 dark:text-slate-400 hover:bg-primary/10'}`}
+                            >
+                                <span className="material-symbols-outlined text-sm">female</span>
+                                {language === 'ES' ? 'Mujeres' : 'Women'}
+                            </button>
+                        </div>
+
+                        {/* Location Toggle */}
+                        <div className="flex bg-slate-100 dark:bg-black/20 p-1 rounded-xl gap-1">
+                            <button
+                                onClick={() => setActiveLocation('all')}
+                                className={`px-4 py-2 rounded-lg text-sm font-bold transition-all btn-green-hover ${activeLocation === 'all' ? 'bg-primary text-black shadow-lg shadow-primary/40' : 'bg-card-light dark:bg-slate-700 text-slate-600 dark:text-slate-400 hover:bg-primary/10'}`}
+                            >
+                                {language === 'ES' ? 'Cualquiera' : 'Anywhere'}
+                            </button>
+                            <button
+                                onClick={() => setActiveLocation('home')}
+                                className={`px-4 py-2 rounded-lg text-sm font-bold transition-all flex items-center gap-1 btn-green-hover ${activeLocation === 'home' ? 'bg-primary text-black shadow-lg shadow-primary/40' : 'bg-card-light dark:bg-slate-700 text-slate-600 dark:text-slate-400 hover:bg-primary/10'}`}
+                            >
+                                <span className="material-symbols-outlined text-sm">home</span>
+                                {language === 'ES' ? 'Casa' : 'Home'}
+                            </button>
+                            <button
+                                onClick={() => setActiveLocation('gym')}
+                                className={`px-4 py-2 rounded-lg text-sm font-bold transition-all flex items-center gap-1 btn-green-hover ${activeLocation === 'gym' ? 'bg-primary text-black shadow-lg shadow-primary/40' : 'bg-card-light dark:bg-slate-700 text-slate-600 dark:text-slate-400 hover:bg-primary/10'}`}
+                            >
+                                <span className="material-symbols-outlined text-sm">fitness_center</span>
+                                {language === 'ES' ? 'Gimnasio' : 'Gym'}
+                            </button>
+                        </div>
+                    </div>
+
+                    {/* Row 2: Purpose Filter */}
+                    <div className="flex flex-wrap gap-2">
+                        <button
+                            onClick={() => setActivePurpose('all')}
+                            className={`px-3 py-2 rounded-lg text-sm font-bold transition-all ${activePurpose === 'all' ? 'bg-primary text-black shadow' : 'bg-slate-100 dark:bg-black/20 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-black/40'}`}
                         >
-                            {/* Video Section */}
-                            <div className="flex-grow lg:w-2/3 bg-black relative flex items-center justify-center group">
-                                <iframe
-                                    key={activeExercise.videoId}
-                                    className="w-full h-full aspect-video"
-                                    src={`https://www.youtube-nocookie.com/embed/${activeExercise.videoId}?rel=0&modestbranding=1`}
-                                    title={activeExercise.details[language].title}
-                                    allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                                    allowFullScreen
-                                ></iframe>
+                            {language === 'ES' ? 'Todos' : 'All'}
+                        </button>
+                        <button
+                            onClick={() => setActivePurpose('strength')}
+                            className={`px-3 py-2 rounded-lg text-sm font-bold transition-all flex items-center gap-1 ${activePurpose === 'strength' ? 'bg-red-500 text-white shadow shadow-red-500/30' : 'bg-slate-100 dark:bg-black/20 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-black/40'}`}
+                        >
+                            <span className="material-symbols-outlined text-sm">flash_on</span>
+                            {language === 'ES' ? 'Fuerza' : 'Strength'}
+                        </button>
+                        <button
+                            onClick={() => setActivePurpose('muscle-gain')}
+                            className={`px-3 py-2 rounded-lg text-sm font-bold transition-all flex items-center gap-1 ${activePurpose === 'muscle-gain' ? 'bg-blue-500 text-white shadow shadow-blue-500/30' : 'bg-slate-100 dark:bg-black/20 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-black/40'}`}
+                        >
+                            <span className="material-symbols-outlined text-sm">favorite</span>
+                            {language === 'ES' ? 'Ganancia Muscular' : 'Muscle Gain'}
+                        </button>
+                        <button
+                            onClick={() => setActivePurpose('fat-loss')}
+                            className={`px-3 py-2 rounded-lg text-sm font-bold transition-all flex items-center gap-1 ${activePurpose === 'fat-loss' ? 'bg-orange-500 text-white shadow shadow-orange-500/30' : 'bg-slate-100 dark:bg-black/20 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-black/40'}`}
+                        >
+                            <span className="material-symbols-outlined text-sm">local_fire_department</span>
+                            {language === 'ES' ? 'Pérdida de Grasa' : 'Fat Loss'}
+                        </button>
+                        <button
+                            onClick={() => setActivePurpose('endurance')}
+                            className={`px-3 py-2 rounded-lg text-sm font-bold transition-all flex items-center gap-1 ${activePurpose === 'endurance' ? 'bg-emerald-500 text-white shadow shadow-emerald-500/30' : 'bg-slate-100 dark:bg-black/20 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-black/40'}`}
+                        >
+                            <span className="material-symbols-outlined text-sm">timer</span>
+                            {language === 'ES' ? 'Resistencia' : 'Endurance'}
+                        </button>
+                    </div>
+                </div>
+
+                {/* Grid */}
+                {filteredExercises.length === 0 ? (
+                    <div className="text-center py-20 opacity-50">
+                        <span className="material-symbols-outlined text-6xl mb-4 text-slate-400">sentiment_dissatisfied</span>
+                        <p className="text-xl text-slate-500">
+                            {language === 'ES' ? 'No se encontraron ejercicios.' : 'No exercises found.'}
+                        </p>
+                    </div>
+                ) : (
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 pb-10">
+                        {filteredExercises.map((ex) => {
+                            const details = ex.details[language];
+                            return (
+                                <div
+                                    key={ex.id}
+                                    className="group bg-card-light dark:bg-surface-dark rounded-2xl overflow-hidden border border-slate-200 dark:border-border-dark shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer animate-in fade-in zoom-in-95 flex flex-col"
+                                    onClick={() => setActiveExercise(ex)}
+                                >
+                                    <div className="relative aspect-video overflow-hidden flex-shrink-0 bg-slate-900 group-hover:bg-slate-800 transition-colors">
+                                        {/* Exercise Image Background */}
+                                        <div className="absolute inset-0 bg-cover bg-center group-hover:scale-105 transition-transform duration-500 opacity-90" style={{ backgroundImage: `url('${ex.img}')` }}></div>
+
+                                        {/* Gradient Overlay for Legibility */}
+                                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+
+                                        {/* Floating Logo Watermark */}
+                                        <div className="absolute bottom-2 right-2 z-10 opacity-90">
+                                            <img
+                                                src={IMAGES.LOGO}
+                                                alt="FitMarvin"
+                                                className="h-8 w-auto object-contain drop-shadow-md"
+                                            />
+                                        </div>
+
+                                        {/* Play Button Overlay */}
+                                        <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+                                            <div className="bg-white/20 backdrop-blur-sm border border-white/30 text-white w-14 h-14 rounded-full flex items-center justify-center shadow-lg transform group-hover:scale-110 transition-transform duration-300">
+                                                <span className="material-symbols-outlined text-3xl ml-1">play_arrow</span>
+                                            </div>
+                                        </div>
+
+                                        {/* Category Tag */}
+                                        <div className="absolute top-3 left-3 bg-primary/90 backdrop-blur-sm text-black px-2 py-1 rounded-md z-20 shadow-sm">
+                                            <p className="text-[10px] font-black uppercase tracking-widest">{ex.category}</p>
+                                        </div>
+                                    </div>
+                                    <div className="p-5 flex flex-col flex-grow">
+                                        <div className="flex-grow">
+                                            <h3 className="text-xl font-bold dark:text-white mb-2 leading-tight group-hover:text-primary transition-colors">{details.title}</h3>
+                                            <p className="text-gray-500 dark:text-gray-400 text-xs mb-4 flex items-center gap-1">
+                                                <span className="material-symbols-outlined text-sm">accessibility_new</span>
+                                                {details.muscle}
+                                            </p>
+                                            <div className="w-full h-1 bg-slate-100 dark:bg-border-dark rounded-full overflow-hidden">
+                                                <div className="h-full bg-primary w-0 group-hover:w-full transition-all duration-700 ease-out"></div>
+                                            </div>
+                                        </div>
+
+                                        <button
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                setActiveExercise(ex);
+                                            }}
+                                            className="w-full mt-4 py-3 bg-slate-50 dark:bg-white/5 hover:bg-primary hover:text-black text-slate-700 dark:text-slate-300 rounded-xl font-bold text-sm flex items-center justify-center gap-2 transition-all"
+                                        >
+                                            <span className="material-symbols-outlined">play_circle</span>
+                                            {language === 'ES' ? 'Ver Tutorial' : 'Watch Tutorial'}
+                                        </button>
+                                    </div>
+                                </div>
+                            );
+                        })}
+                    </div>
+                )}
+            </div>
+
+            {/* Immersive Video Player Modal */}
+            {activeExercise && (
+                <div
+                    className="fixed inset-0 z-[100] bg-black/95 backdrop-blur-md flex items-center justify-center p-0 md:p-4 animate-in fade-in duration-200"
+                    onClick={() => setActiveExercise(null)}
+                >
+                    <div
+                        className="w-full max-w-6xl flex flex-col lg:flex-row bg-surface-dark rounded-none md:rounded-3xl overflow-hidden shadow-2xl border border-white/10 h-full md:h-[90vh] relative"
+                        onClick={(e) => e.stopPropagation()}
+                    >
+                        {/* Video Section */}
+                        <div className="flex-grow lg:w-2/3 bg-black relative flex items-center justify-center group">
+                            <iframe
+                                key={activeExercise.videoId}
+                                className="w-full h-full aspect-video"
+                                src={`https://www.youtube-nocookie.com/embed/${activeExercise.videoId}?rel=0&modestbranding=1`}
+                                title={activeExercise.details[language].title}
+                                allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                allowFullScreen
+                            ></iframe>
+                        </div>
+
+                        {/* Info Section */}
+                        <div className="lg:w-1/3 bg-card-light dark:bg-surface-dark p-8 flex flex-col overflow-y-auto custom-scrollbar">
+                            <div className="flex justify-between items-start mb-6">
+                                <div className="flex items-center gap-2">
+                                    <span className="material-symbols-outlined text-red-500">smart_display</span>
+                                    <span className="text-xs font-bold text-slate-500 uppercase tracking-widest">YouTube Player</span>
+                                </div>
+                                <button
+                                    onClick={() => setActiveExercise(null)}
+                                    className="bg-slate-100 dark:bg-border-dark hover:bg-slate-200 dark:hover:bg-slate-700 p-2 rounded-full transition-colors text-slate-900 dark:text-white"
+                                >
+                                    <span className="material-symbols-outlined">close</span>
+                                </button>
                             </div>
 
-                            {/* Info Section */}
-                            <div className="lg:w-1/3 bg-white dark:bg-surface-dark p-8 flex flex-col overflow-y-auto custom-scrollbar">
-                                <div className="flex justify-between items-start mb-6">
-                                    <div className="flex items-center gap-2">
-                                        <span className="material-symbols-outlined text-red-500">smart_display</span>
-                                        <span className="text-xs font-bold text-slate-500 uppercase tracking-widest">YouTube Player</span>
-                                    </div>
-                                    <button
-                                        onClick={() => setActiveExercise(null)}
-                                        className="bg-slate-100 dark:bg-border-dark hover:bg-slate-200 dark:hover:bg-slate-700 p-2 rounded-full transition-colors text-slate-900 dark:text-white"
-                                    >
-                                        <span className="material-symbols-outlined">close</span>
-                                    </button>
+                            <h3 className="text-3xl font-black text-slate-900 dark:text-white mb-2 leading-tight">
+                                {activeExercise.details[language].title}
+                            </h3>
+                            <div className="flex flex-wrap gap-2 mb-6">
+                                <span className="px-3 py-1 bg-primary/20 text-primary text-xs font-bold rounded-lg uppercase tracking-wide border border-primary/20">
+                                    {activeExercise.details[language].muscle}
+                                </span>
+                                <a
+                                    href={`https://www.youtube.com/watch?v=${activeExercise.videoId}`}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="px-3 py-1 bg-red-100 text-red-600 hover:bg-red-200 dark:bg-red-900/30 dark:text-red-400 text-xs font-bold rounded-lg uppercase tracking-wide flex items-center gap-1"
+                                >
+                                    <span className="material-symbols-outlined text-sm">open_in_new</span> YouTube
+                                </a>
+                            </div>
+
+                            <div className="space-y-6 flex-grow">
+                                <div>
+                                    <h4 className="font-bold text-slate-900 dark:text-white mb-2 flex items-center gap-2">
+                                        <span className="material-symbols-outlined text-primary text-sm">info</span>
+                                        {language === 'ES' ? 'Descripción' : 'Description'}
+                                    </h4>
+                                    <p className="text-slate-600 dark:text-slate-300 text-sm leading-relaxed">
+                                        {activeExercise.details[language].description}
+                                    </p>
                                 </div>
 
-                                <h3 className="text-3xl font-black text-slate-900 dark:text-white mb-2 leading-tight">
-                                    {activeExercise.details[language].title}
-                                </h3>
-                                <div className="flex flex-wrap gap-2 mb-6">
-                                    <span className="px-3 py-1 bg-primary/20 text-primary text-xs font-bold rounded-lg uppercase tracking-wide border border-primary/20">
-                                        {activeExercise.details[language].muscle}
-                                    </span>
-                                    <a
-                                        href={`https://www.youtube.com/watch?v=${activeExercise.videoId}`}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="px-3 py-1 bg-red-100 text-red-600 hover:bg-red-200 dark:bg-red-900/30 dark:text-red-400 text-xs font-bold rounded-lg uppercase tracking-wide flex items-center gap-1"
-                                    >
-                                        <span className="material-symbols-outlined text-sm">open_in_new</span> YouTube
-                                    </a>
+                                <div>
+                                    <h4 className="font-bold text-slate-900 dark:text-white mb-2 flex items-center gap-2">
+                                        <span className="material-symbols-outlined text-primary text-sm">format_list_numbered</span>
+                                        {language === 'ES' ? 'Cómo hacerlo' : 'How to do it'}
+                                    </h4>
+                                    <ul className="list-disc list-outside ml-4 space-y-1 text-slate-600 dark:text-slate-300 text-sm">
+                                        {activeExercise.details[language].instructions.map((step, i) => (
+                                            <li key={i}>{step}</li>
+                                        ))}
+                                    </ul>
                                 </div>
 
-                                <div className="space-y-6 flex-grow">
-                                    <div>
-                                        <h4 className="font-bold text-slate-900 dark:text-white mb-2 flex items-center gap-2">
-                                            <span className="material-symbols-outlined text-primary text-sm">info</span>
-                                            {language === 'ES' ? 'Descripción' : 'Description'}
-                                        </h4>
-                                        <p className="text-slate-600 dark:text-slate-300 text-sm leading-relaxed">
-                                            {activeExercise.details[language].description}
-                                        </p>
-                                    </div>
-
-                                    <div>
-                                        <h4 className="font-bold text-slate-900 dark:text-white mb-2 flex items-center gap-2">
-                                            <span className="material-symbols-outlined text-primary text-sm">format_list_numbered</span>
-                                            {language === 'ES' ? 'Cómo hacerlo' : 'How to do it'}
-                                        </h4>
-                                        <ul className="list-disc list-outside ml-4 space-y-1 text-slate-600 dark:text-slate-300 text-sm">
-                                            {activeExercise.details[language].instructions.map((step, i) => (
-                                                <li key={i}>{step}</li>
-                                            ))}
-                                        </ul>
-                                    </div>
-
-                                    <div className="bg-slate-50 dark:bg-black/20 p-4 rounded-xl border border-slate-100 dark:border-white/5">
-                                        <h4 className="font-bold text-slate-900 dark:text-white mb-1 text-xs uppercase tracking-wider">
-                                            {language === 'ES' ? 'Series Recomendadas' : 'Recommended Sets'}
-                                        </h4>
-                                        <p className="text-primary font-bold">
-                                            {activeExercise.details[language].sets}
-                                        </p>
-                                    </div>
+                                <div className="bg-slate-50 dark:bg-black/20 p-4 rounded-xl border border-slate-100 dark:border-white/5">
+                                    <h4 className="font-bold text-slate-900 dark:text-white mb-1 text-xs uppercase tracking-wider">
+                                        {language === 'ES' ? 'Series Recomendadas' : 'Recommended Sets'}
+                                    </h4>
+                                    <p className="text-primary font-bold">
+                                        {activeExercise.details[language].sets}
+                                    </p>
                                 </div>
+                            </div>
 
-                                <div className="mt-8 space-y-3 shrink-0">
-                                    <button className="w-full flex items-center justify-center gap-2 px-6 py-4 bg-primary text-black rounded-xl font-bold hover:bg-primary/90 transition-colors shadow-lg shadow-primary/20">
-                                        <span className="material-symbols-outlined">add_circle</span>
-                                        {language === 'ES' ? 'Añadir a rutina' : 'Add to workout'}
-                                    </button>
-                                </div>
+                            <div className="mt-8 space-y-3 shrink-0">
+                                <button className="w-full flex items-center justify-center gap-2 px-6 py-4 bg-primary text-black rounded-xl font-bold hover:bg-primary/90 transition-colors shadow-lg shadow-primary/20">
+                                    <span className="material-symbols-outlined">add_circle</span>
+                                    {language === 'ES' ? 'Añadir a rutina' : 'Add to workout'}
+                                </button>
                             </div>
                         </div>
                     </div>
-                )}
-            </main>
+                </div>
+            )}
+
+
         </div>
     );
 };
