@@ -1,7 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useMusic } from '../context/MusicContext';
+import { useNavigate } from 'react-router-dom';
 
 const WalkingSimulation = () => {
+    const navigate = useNavigate();
     const [duration, setDuration] = useState(0);
     const [steps, setSteps] = useState(0);
     const [calories, setCalories] = useState(0);
@@ -15,6 +17,11 @@ const WalkingSimulation = () => {
     const iframeRef = useRef<HTMLIFrameElement>(null);
 
     useEffect(() => {
+        const user = localStorage.getItem('userName');
+        if (!user) {
+            navigate('/onboarding');
+            return;
+        }
         let timer: NodeJS.Timeout;
 
         if (isPlaying) {
@@ -110,97 +117,99 @@ const WalkingSimulation = () => {
             </div>
 
             {/* Content Layer */}
-            <div className="relative z-10 flex-grow flex flex-col justify-between p-8 md:p-12 text-white">
+            <div className="relative z-10 flex-grow flex flex-col items-center px-6 md:px-12 py-10 text-white">
+                <div className="w-full max-w-screen-2xl h-full flex flex-col justify-between relative">
 
-                {/* Header Stats */}
-                <div className="flex justify-between items-start">
-                    <div className="bg-black/40 backdrop-blur-md p-4 rounded-2xl border border-white/10">
-                        <p className="text-xs font-bold uppercase tracking-widest text-primary mb-1">Tiempo</p>
-                        <p className="text-4xl font-black font-mono">{formatTime(duration)}</p>
-                    </div>
+                    {/* Header Stats */}
+                    <div className="flex justify-between items-start">
+                        <div className="bg-black/40 backdrop-blur-md p-4 rounded-2xl border border-white/10 group hover:bg-black/60 transition-colors">
+                            <p className="text-[10px] font-bold uppercase tracking-widest text-primary/80 mb-1">Tiempo de sesión</p>
+                            <p className="text-4xl md:text-5xl font-black font-mono tracking-tighter">{formatTime(duration)}</p>
+                        </div>
 
-                    {/* Spotify Toggle Button */}
-                    <button
-                        onClick={toggleOpen}
-                        className="bg-[#1DB954] hover:bg-[#1ed760] text-white p-4 rounded-full shadow-lg shadow-green-500/20 transition-transform hover:scale-105 active:scale-95 flex items-center gap-2"
-                        title="Abrir Spotify"
-                    >
-                        <span className="material-symbols-outlined text-3xl">music_note</span>
-                        <span className="font-bold hidden md:inline">Spotify</span>
-                    </button>
+                        {/* Spotify Toggle Button */}
+                        <button
+                            onClick={toggleOpen}
+                            className="bg-[#1DB954] hover:bg-[#1ed760] text-white p-4 rounded-full shadow-lg shadow-green-500/20 transition-transform hover:scale-105 active:scale-95 flex items-center gap-2"
+                            title="Abrir Spotify"
+                        >
+                            <span className="material-symbols-outlined text-3xl">music_note</span>
+                            <span className="font-bold hidden md:inline">Spotify</span>
+                        </button>
 
-                    {showHydration && (
-                        <div className="bg-blue-500/90 backdrop-blur-md px-6 py-4 rounded-full flex items-center gap-4 animate-bounce shadow-lg shadow-blue-500/20">
-                            <span className="material-symbols-outlined text-3xl">water_drop</span>
-                            <div>
-                                <p className="font-bold text-lg">¡Hora de Hidratarse!</p>
-                                <p className="text-xs opacity-90">Bebe un sorbo de agua.</p>
+                        {showHydration && (
+                            <div className="bg-blue-500/90 backdrop-blur-md px-6 py-4 rounded-full flex items-center gap-4 animate-bounce shadow-lg shadow-blue-500/20">
+                                <span className="material-symbols-outlined text-3xl">water_drop</span>
+                                <div>
+                                    <p className="font-bold text-lg">¡Hora de Hidratarse!</p>
+                                    <p className="text-xs opacity-90">Bebe un sorbo de agua.</p>
+                                </div>
                             </div>
-                        </div>
-                    )}
-                </div>
-
-                {/* Controls */}
-                <div className="absolute bottom-8 right-8 flex items-end justify-end pointer-events-none">
-                    <div className="pointer-events-auto flex items-center gap-4 bg-black/50 backdrop-blur-md p-4 rounded-3xl border border-white/10 transition-opacity duration-300 hover:bg-black/70 scale-90 origin-bottom-right">
-
-                        {/* Play/Pause Button */}
-                        {!isPlaying ? (
-                            <button
-                                onClick={handleStart}
-                                className="w-20 h-20 rounded-full bg-primary hover:bg-primary/90 flex items-center justify-center text-white shadow-lg shadow-primary/30 transition-all hover:scale-110 active:scale-95 group"
-                                aria-label="Iniciar caminata"
-                            >
-                                <span className="material-symbols-outlined text-5xl group-hover:scale-110 transition-transform">play_arrow</span>
-                            </button>
-                        ) : (
-                            <button
-                                onClick={handlePause}
-                                className="w-20 h-20 rounded-full bg-amber-500 hover:bg-amber-600 flex items-center justify-center text-white shadow-lg shadow-amber-500/30 transition-all hover:scale-110 active:scale-95 group"
-                                aria-label="Pausar caminata"
-                            >
-                                <span className="material-symbols-outlined text-5xl group-hover:scale-110 transition-transform">pause</span>
-                            </button>
                         )}
-
-                        {/* Stop Button */}
-                        <button
-                            onClick={handleStop}
-                            className="w-14 h-14 rounded-full bg-zinc-700/80 hover:bg-red-500 flex items-center justify-center text-white transition-all hover:scale-110 active:scale-95"
-                            title="Parar"
-                            aria-label="Parar"
-                        >
-                            <span className="material-symbols-outlined text-3xl">stop</span>
-                        </button>
-
-                        {/* Reset Button */}
-                        <button
-                            onClick={handleReset}
-                            className="w-14 h-14 rounded-full bg-zinc-700/80 hover:bg-blue-500 flex items-center justify-center text-white transition-all hover:scale-110 active:scale-95"
-                            title="Reiniciar"
-                            aria-label="Reiniciar"
-                        >
-                            <span className="material-symbols-outlined text-3xl">restart_alt</span>
-                        </button>
-                    </div>
-                </div>
-
-                {/* Bottom Stats */}
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8">
-                    <div className="bg-black/40 backdrop-blur-md p-6 rounded-2xl border border-white/10 hover:bg-black/50 transition-colors">
-                        <div className="flex items-center gap-3 mb-2">
-                            <span className="material-symbols-outlined text-orange-500">footprint</span>
-                            <span className="text-xs font-bold uppercase tracking-wider text-slate-300">Pasos</span>
-                        </div>
-                        <p className="text-3xl font-black">{steps}</p>
                     </div>
 
-                    <div className="bg-black/40 backdrop-blur-md p-6 rounded-2xl border border-white/10 hover:bg-black/50 transition-colors">
-                        <div className="flex items-center gap-3 mb-2">
-                            <span className="material-symbols-outlined text-rose-500">local_fire_department</span>
-                            <span className="text-xs font-bold uppercase tracking-wider text-slate-300">Calorías</span>
+                    {/* Controls */}
+                    <div className="absolute bottom-8 right-8 flex items-end justify-end pointer-events-none">
+                        <div className="pointer-events-auto flex items-center gap-3 bg-black/60 backdrop-blur-xl p-3 rounded-full border border-white/10 transition-all hover:bg-black/80 shadow-2xl">
+
+                            {/* Play/Pause Button */}
+                            {!isPlaying ? (
+                                <button
+                                    onClick={handleStart}
+                                    className="w-14 h-14 rounded-full bg-primary hover:bg-primary/90 flex items-center justify-center text-white shadow-lg shadow-primary/30 transition-all hover:scale-105 active:scale-95 group"
+                                    aria-label="Iniciar caminata"
+                                >
+                                    <span className="material-symbols-outlined text-4xl group-hover:scale-110 transition-transform">play_arrow</span>
+                                </button>
+                            ) : (
+                                <button
+                                    onClick={handlePause}
+                                    className="w-14 h-14 rounded-full bg-amber-500 hover:bg-amber-600 flex items-center justify-center text-white shadow-lg shadow-amber-500/30 transition-all hover:scale-105 active:scale-95 group"
+                                    aria-label="Pausar caminata"
+                                >
+                                    <span className="material-symbols-outlined text-4xl group-hover:scale-110 transition-transform">pause</span>
+                                </button>
+                            )}
+
+                            {/* Stop Button */}
+                            <button
+                                onClick={handleStop}
+                                className="w-11 h-11 rounded-full bg-zinc-800/80 hover:bg-red-500 flex items-center justify-center text-white transition-all hover:scale-105 active:scale-95"
+                                title="Parar"
+                                aria-label="Parar"
+                            >
+                                <span className="material-symbols-outlined text-2xl">stop</span>
+                            </button>
+
+                            {/* Reset Button */}
+                            <button
+                                onClick={handleReset}
+                                className="w-11 h-11 rounded-full bg-zinc-800/80 hover:bg-blue-500 flex items-center justify-center text-white transition-all hover:scale-105 active:scale-95"
+                                title="Reiniciar"
+                                aria-label="Reiniciar"
+                            >
+                                <span className="material-symbols-outlined text-2xl">restart_alt</span>
+                            </button>
                         </div>
-                        <p className="text-3xl font-black">{calories.toFixed(1)}</p>
+                    </div>
+
+                    {/* Bottom Stats */}
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 w-full max-w-none">
+                        <div className="bg-black/40 backdrop-blur-md p-4 md:p-6 rounded-2xl border border-white/10 hover:bg-black/50 transition-colors">
+                            <div className="flex items-center gap-3 mb-1">
+                                <span className="material-symbols-outlined text-orange-500 text-sm">footprint</span>
+                                <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Pasos</span>
+                            </div>
+                            <p className="text-2xl md:text-3xl font-black">{steps}</p>
+                        </div>
+
+                        <div className="bg-black/40 backdrop-blur-md p-4 md:p-6 rounded-2xl border border-white/10 hover:bg-black/50 transition-colors">
+                            <div className="flex items-center gap-3 mb-1">
+                                <span className="material-symbols-outlined text-rose-500 text-sm">local_fire_department</span>
+                                <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Calorías</span>
+                            </div>
+                            <p className="text-2xl md:text-3xl font-black">{calories.toFixed(1)}</p>
+                        </div>
                     </div>
                 </div>
             </div>

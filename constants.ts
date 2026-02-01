@@ -1,8 +1,12 @@
+// Assets configuration
 import logoImg from './assets/logo.png';
 import creatorProfileImg from './assets/creator_profile.png';
 import userTreadmillImg from './assets/user_treadmill.png';
 import userChestImg from './assets/user_chest.png';
 import userTricepsImg from './assets/user_triceps.png';
+import marvinTreadmill from './assets/marvin_treadmill.png';
+import marvinCollage from './assets/marvin_collage.jpg';
+import marvinBike from './assets/marvin_bike.png';
 
 export const IMAGES = {
     USER_AVATAR: "https://lh3.googleusercontent.com/aida-public/AB6AXuA_i5IA3U7_vaN-AMhaajxA7MiJb9fiBTJedydUXLbWM8gWKmjGc_IM2KcCW77MCG_V4Gw8wq6Ukq5-d8vvn56j47cfULBnqOgcjNf_50z_FJ9xVm_IQEJFbbghGoXcRvswjv10sF8iJwkdyovEO7NGCRkflVJrybvOcnHQgHFh17nC46Ji3dnT4k2DvykYXoC1_Il3hOJcai1Eu2YnMJIpxm0tcpJsbnM_WKDEE-5iLpvRPGSk-sUBG6y00ykLB1N9x7MI9hBKuFdm",
@@ -17,5 +21,8 @@ export const IMAGES = {
     CREATOR_PROFILE: creatorProfileImg,
     USER_TREADMILL: userTreadmillImg,
     USER_CHEST: userChestImg,
-    USER_TRICEPS: userTricepsImg
+    USER_TRICEPS: userTricepsImg,
+    MARVIN_TREADMILL: marvinTreadmill,
+    MARVIN_COLLAGE: marvinCollage,
+    MARVIN_BIKE: marvinBike
 };

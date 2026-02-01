@@ -1,69 +1,134 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+interface UserJoinEvent {
+    id: number;
+    name: string;
+    avatar: string;
+    timestamp: number;
+}
+
 interface UserStatsContextType {
     totalUsers: number;
     onlineUsers: number;
+    lastJoiner: UserJoinEvent | null;
+    members: UserJoinEvent[];
+    markAsWelcomed: (id: number) => void;
     deleteAccount: () => void;
+    logout: () => void;
 }
 
 const UserStatsContext = createContext<UserStatsContextType | undefined>(undefined);
 
+import { IMAGES } from '../constants';
+
 export const UserStatsProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-    // Initial base for total users. 
-    // We check localStorage to see if it was previously modified (e.g. by deletion).
-    const INITIAL_BASE_USERS = 1250;
+    // Initial base for total users
+    const INITIAL_BASE_USERS = 1;
 
     const [totalUsers, setTotalUsers] = useState(() => {
         const stored = localStorage.getItem('app_total_users');
-        return stored ? parseInt(stored, 10) : INITIAL_BASE_USERS;
+        const count = stored ? parseInt(stored, 10) : INITIAL_BASE_USERS;
+        // FORCE RESET: If the number is still the old fake one (over 1000), reset it to 1 for honesty
+        if (count > 1000) return 1;
+        return count;
     });
 
-    const [onlineUsers, setOnlineUsers] = useState(0);
+    const [onlineUsers, setOnlineUsers] = useState(1);
+    const [lastJoiner, setLastJoiner] = useState<UserJoinEvent | null>(null);
+    const [members, setMembers] = useState<UserJoinEvent[]>(() => {
+        const stored = localStorage.getItem('app_members');
+        return stored ? JSON.parse(stored) : [];
+    });
+
     const navigate = useNavigate();
 
-    // Persist total users changes
+    // Sync current user to members list and handle persistence
+    useEffect(() => {
+        const syncCurrentMember = () => {
+            const name = localStorage.getItem('userName');
+            const avatar = localStorage.getItem('userAvatar');
+            const weight = localStorage.getItem('userWeight');
+
+            if (name) {
+                setMembers(prev => {
+                    const alreadyExists = prev.some(m => m.name === name);
+                    let updated;
+                    if (alreadyExists) {
+                        updated = prev.map(m => m.name === name ? {
+                            ...m,
+                            avatar: avatar || IMAGES.USER_AVATAR,
+                            weight: weight || m.weight
+                        } : m);
+                    } else {
+                        const newMember = {
+                            id: Date.now(),
+                            name: name,
+                            avatar: avatar || IMAGES.USER_AVATAR,
+                            weight: weight || '75',
+                            timestamp: Date.now()
+                        };
+                        updated = [newMember, ...prev];
+                    }
+                    localStorage.setItem('app_members', JSON.stringify(updated));
+                    return updated;
+                });
+            }
+        };
+
+        syncCurrentMember();
+
+        window.addEventListener('user-update', syncCurrentMember);
+        return () => window.removeEventListener('user-update', syncCurrentMember);
+    }, []);
+
+    // Persist changes
     useEffect(() => {
         localStorage.setItem('app_total_users', totalUsers.toString());
-    }, [totalUsers]);
+        localStorage.setItem('app_members', JSON.stringify(members));
+    }, [totalUsers, members]);
 
-    // Simulate Online Users fluctuation
+    // Update online users
     useEffect(() => {
-        // Initial random value between 10% and 15% of total users
-        const getSimulatedOnline = () => Math.floor(totalUsers * (0.10 + Math.random() * 0.05));
+        setOnlineUsers(1); // Always at least 1 (the current user)
 
-        setOnlineUsers(getSimulatedOnline());
+        const statsInterval = setInterval(() => {
+            setOnlineUsers(1);
+        }, 10000);
 
-        const interval = setInterval(() => {
-            setOnlineUsers(prev => {
-                // Randomly add or subtract 1-3 users to simulate activity
-                const change = Math.floor(Math.random() * 5) - 2;
-                return Math.max(0, prev + change);
-            });
-        }, 5000); // Update every 5 seconds
+        return () => clearInterval(statsInterval);
+    }, []);
 
-        return () => clearInterval(interval);
-    }, [totalUsers]);
+    const markAsWelcomed = (id: number) => {
+        // We can keep this for internal logic or simple removal for the admin
+        // But for "members", we probably don't want to remove them.
+        // This function might be repurposed or removed if no longer needed for a "join queue" concept.
+    };
 
     const deleteAccount = () => {
-        // Decrease total users
-        setTotalUsers(prev => Math.max(0, prev - 1));
+        const name = localStorage.getItem('userName');
+        setTotalUsers(prev => Math.max(1, prev - 1)); // Ensure total users doesn't go below 1 if current user is the only one
+        setMembers(prev => prev.filter(m => m.name !== name));
 
-        // Clear user data
         localStorage.removeItem('userName');
         localStorage.removeItem('userWeight');
         localStorage.removeItem('userHeight');
         localStorage.removeItem('userInstagram');
         localStorage.removeItem('userAvatar');
-        localStorage.removeItem('userAttendance');
-        localStorage.removeItem('userWeightHistory');
+        localStorage.removeItem('userAttendance'); // This was in original, keep it
+        localStorage.removeItem('userWeightHistory'); // This was in original, keep it
+        localStorage.removeItem('app_members'); // Remove members data on account deletion
+        navigate('/onboarding');
+    };
 
-        // Redirect to onboarding
+    const logout = () => {
+        localStorage.removeItem('userName');
+        window.dispatchEvent(new Event('user-update'));
         navigate('/onboarding');
     };
 
     return (
-        <UserStatsContext.Provider value={{ totalUsers, onlineUsers, deleteAccount }}>
+        <UserStatsContext.Provider value={{ totalUsers, onlineUsers, lastJoiner, members, markAsWelcomed, deleteAccount, logout }}>
             {children}
         </UserStatsContext.Provider>
     );

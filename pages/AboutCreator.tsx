@@ -4,7 +4,7 @@ import { IMAGES } from '../constants';
 const AboutCreator = () => {
     return (
         <div className="flex-1 h-full overflow-y-auto bg-background-light dark:bg-background-dark p-6 md:p-10">
-            <div className="max-w-4xl mx-auto">
+            <div className="max-w-screen-2xl mx-auto w-full">
                 <div className="bg-white dark:bg-surface-dark rounded-2xl shadow-xl overflow-hidden animate-fade-in border border-slate-200 dark:border-border-dark">
                     <div className="md:flex">
                         {/* Image/Sidebar Section */}
@@ -60,6 +60,22 @@ const AboutCreator = () => {
                                 <p className="italic font-medium border-l-4 border-primary pl-4 py-2 bg-primary/5 rounded-r-lg">
                                     "Esta es mi breve descripción, un saludo a todos y que disfruten la aplicación. Un fuerte abrazo de Marcus De Araujo."
                                 </p>
+
+                                <div className="mt-10 pt-8 border-t border-slate-100 dark:border-white/5">
+                                    <h3 className="text-xl font-bold mb-4 flex items-center gap-2">
+                                        <span className="material-symbols-outlined text-primary">connect_without_contact</span>
+                                        ¡Conectemos en redes!
+                                    </h3>
+                                    <a
+                                        href="https://www.instagram.com/fitmarvin_dev/"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-[#833ab4] via-[#fd1d1d] to-[#fcb045] text-white font-black uppercase tracking-widest rounded-2xl hover:scale-105 transition-all shadow-xl shadow-orange-500/20 group"
+                                    >
+                                        <span className="material-symbols-outlined text-2xl group-hover:rotate-12 transition-transform">share</span>
+                                        Seguir en Instagram
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     </div>

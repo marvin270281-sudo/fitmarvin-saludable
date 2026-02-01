@@ -1,20 +1,22 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useUserStats } from '../context/UserStatsContext';
 import AttendanceCalendar from '../components/AttendanceCalendar';
 import EvolutionChart from '../components/EvolutionChart';
 import { IMAGES } from '../constants';
 
 const ProfileSettings = () => {
+    const navigate = useNavigate();
     // Check initial dark mode from html class
     const [isDarkMode, setIsDarkMode] = useState(document.documentElement.classList.contains('dark'));
-    const { deleteAccount } = useUserStats();
+    const { deleteAccount, logout, totalUsers, joinQueue, markAsWelcomed } = useUserStats();
     const [avatar, setAvatar] = useState(IMAGES.USER_AVATAR);
 
     // Editable States
-    const [name, setName] = useState('Marvin R.');
+    const [name, setName] = useState('Marvin De Araujo');
     const [weight, setWeight] = useState('75');
     const [height, setHeight] = useState('180');
-    const [instagram, setInstagram] = useState('@marvin_fit');
+    const [instagram, setInstagram] = useState('@fitmarvin_dev');
     const [goal, setGoal] = useState('');
 
     // New Features state
@@ -27,6 +29,12 @@ const ProfileSettings = () => {
     useEffect(() => {
         const storedAvatar = localStorage.getItem('userAvatar');
         const storedName = localStorage.getItem('userName');
+
+        if (!storedName) {
+            navigate('/onboarding');
+            return;
+        }
+
         const storedWeight = localStorage.getItem('userWeight');
         const storedHeight = localStorage.getItem('userHeight');
         const storedInsta = localStorage.getItem('userInstagram');
@@ -152,8 +160,12 @@ const ProfileSettings = () => {
     return (
         <div className="flex h-full">
             <main className="flex-grow flex flex-col h-full overflow-y-auto custom-scrollbar bg-background-light dark:bg-background-dark">
-                <header className="sticky top-0 z-10 bg-background-light/95 dark:bg-background-dark/95 backdrop-blur-md px-8 py-8 border-b border-slate-200 dark:border-border-dark">
-                    <div className="max-w-4xl mx-auto flex justify-between items-end">
+                {/* Header Profile */}
+                <header className="relative h-64 md:h-80 shrink-0">
+                    <div className="absolute inset-0 bg-primary/20 backdrop-blur-sm"></div>
+                    <div className="absolute inset-0 bg-gradient-to-t from-background-light dark:from-background-dark to-transparent"></div>
+
+                    <div className="max-w-screen-2xl mx-auto flex justify-between items-end h-full px-6 md:px-12 pb-8 relative z-10">
                         <div>
                             <h2 className="text-4xl font-extrabold">Perfil y Ajustes</h2>
                             <p className="text-slate-500 mt-2">Gestiona tus datos físicos y preferencias.</p>
@@ -167,7 +179,8 @@ const ProfileSettings = () => {
                         </button>
                     </div>
                 </header>
-                <div className="max-w-4xl mx-auto w-full px-8 py-10 space-y-12">
+                {/* Main Content */}
+                <div className="max-w-screen-2xl mx-auto w-full px-6 md:px-12 py-10 space-y-12">
 
                     {/* Editable User Header */}
                     <section className="flex flex-col md:flex-row items-center gap-8 p-8 bg-card-light dark:bg-surface-dark border border-slate-200 dark:border-border-dark rounded-3xl shadow-sm">
@@ -198,10 +211,22 @@ const ProfileSettings = () => {
                             </div>
                             <div>
                                 <label className="block text-xs font-bold text-slate-400 uppercase mb-1">Objetivo Actual</label>
-                                <div className="p-3 bg-slate-100 dark:bg-background-dark/50 rounded-xl flex items-center gap-2 border border-transparent hover:border-slate-200 dark:hover:border-border-dark transition-colors cursor-pointer group/goal" onClick={() => alert('Para cambiar tu objetivo, ve a Configurar Plan.')}>
-                                    <span className="material-symbols-outlined text-primary group-hover/goal:scale-110 transition-transform">flag</span>
-                                    <span className="font-bold text-lg text-slate-700 dark:text-slate-300">{goal || 'Sin definir'}</span>
-                                    <span className="material-symbols-outlined text-slate-400 text-sm ml-auto opacity-0 group-hover/goal:opacity-100 transition-opacity">edit</span>
+                                <div className="relative group/goal">
+                                    <div className="p-3 bg-slate-100 dark:bg-background-dark/50 rounded-xl flex items-center gap-2 border border-transparent hover:border-slate-200 dark:hover:border-border-dark transition-colors cursor-pointer">
+                                        <span className="material-symbols-outlined text-primary group-hover/goal:scale-110 transition-transform">flag</span>
+                                        <select
+                                            value={goal}
+                                            onChange={(e) => setGoal(e.target.value)}
+                                            className="bg-transparent border-none appearance-none font-bold text-lg text-slate-700 dark:text-slate-300 w-full focus:ring-0 cursor-pointer"
+                                        >
+                                            <option value="" disabled>Seleccionar...</option>
+                                            <option value="gain_muscle">Ganar Músculo</option>
+                                            <option value="lose_fat">Perder Grasa</option>
+                                            <option value="gain_fat">Ganar Peso</option>
+                                            <option value="gain_endurance">Ganar Resistencia</option>
+                                        </select>
+                                        <span className="material-symbols-outlined text-slate-400 text-sm ml-auto opacity-0 group-hover/goal:opacity-100 transition-opacity pointer-events-none">expand_more</span>
+                                    </div>
                                 </div>
                             </div>
                             <div>
@@ -219,15 +244,6 @@ const ProfileSettings = () => {
                             </div>
                         </div>
                     </section>
-
-                    {/* Plan Configuration Button */}
-                    <button
-                        onClick={() => alert("Próximamente: Configuración de Plan Personalizado y Rutinas.")}
-                        className="w-full py-4 rounded-2xl bg-gradient-to-r from-primary/20 to-primary/10 border border-primary/20 text-primary font-bold text-lg hover:from-primary/30 hover:to-primary/20 transition-all flex items-center justify-center gap-2 active:scale-[0.99] shadow-sm"
-                    >
-                        <span className="material-symbols-outlined">settings_suggest</span>
-                        Configurar Plan de Entrenamiento
-                    </button>
 
                     <section>
                         <h3 className="text-2xl font-bold mb-6 flex items-center gap-2"><span className="material-symbols-outlined text-primary">monitoring</span> Datos Físicos Editables</h3>
@@ -283,6 +299,8 @@ const ProfileSettings = () => {
                         </div>
                     </section>
 
+
+
                     <section>
                         <h3 className="text-2xl font-bold mb-6 flex items-center gap-2"><span className="material-symbols-outlined text-primary">accessibility_new</span> Accesibilidad & Tema</h3>
                         <div className="bg-white dark:bg-surface-dark border border-slate-200 dark:border-border-dark rounded-2xl overflow-hidden divide-y divide-slate-100 dark:divide-border-dark">
@@ -298,16 +316,29 @@ const ProfileSettings = () => {
                             </div>
                         </div>
                     </section>
-                    <div className="pt-10 border-t border-slate-200 dark:border-border-dark">
+                    <div className="pt-10 border-t border-slate-200 dark:border-border-dark flex flex-col sm:flex-row gap-4">
                         <button
                             onClick={() => {
-                                if (confirm('¿Estás seguro de que quieres eliminar tu cuenta? Esta acción no se puede deshacer y reducirá el contador de usuarios.')) {
+                                if (confirm('¿Estás seguro de que quieres cerrar sesión?')) {
+                                    logout();
+                                }
+                            }}
+                            className="flex-1 flex items-center justify-center gap-2 px-6 py-3 bg-slate-100 dark:bg-white/5 text-slate-700 dark:text-slate-300 font-bold rounded-xl hover:bg-slate-200 dark:hover:bg-white/10 transition-all border border-slate-200 dark:border-white/10"
+                        >
+                            <span className="material-symbols-outlined">logout</span>
+                            Cerrar Sesión
+                        </button>
+
+                        <button
+                            onClick={() => {
+                                if (confirm('¿Estás seguro de que quieres eliminar tu cuenta? Esta acción no se puede deshacer y borrará todos tus datos.')) {
                                     deleteAccount();
                                 }
                             }}
-                            className="text-rose-500 font-bold hover:text-rose-400 flex items-center gap-2 transition-colors px-4 py-2 hover:bg-rose-500/10 rounded-lg w-fit"
+                            className="flex-1 flex items-center justify-center gap-2 px-6 py-3 bg-rose-500/10 text-rose-500 font-bold rounded-xl hover:bg-rose-500 hover:text-white transition-all border border-rose-500/20"
                         >
-                            <span className="material-symbols-outlined">delete_forever</span> Eliminar cuenta y Salir
+                            <span className="material-symbols-outlined">delete_forever</span>
+                            Eliminar Cuenta
                         </button>
                     </div>
                 </div>

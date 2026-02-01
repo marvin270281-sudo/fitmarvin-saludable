@@ -8,6 +8,13 @@ const Onboarding = () => {
     const [name, setName] = React.useState('');
     const [selectedGoal, setSelectedGoal] = React.useState('');
 
+    React.useEffect(() => {
+        const user = localStorage.getItem('userName');
+        if (user) {
+            navigate('/');
+        }
+    }, [navigate]);
+
     const goals = [
         { id: 'gain_fat', label: 'Ganar Grasa', icon: 'fastfood', color: 'text-orange-500' },
         { id: 'lose_fat', label: 'Perder Grasa', icon: 'local_fire_department', color: 'text-red-500' },
@@ -88,7 +95,7 @@ const Onboarding = () => {
                             {goals.map((goal) => (
                                 <button
                                     key={goal.id}
-                                    onClick={() => handleFinish(goal.label)}
+                                    onClick={() => handleFinish(goal.id)}
                                     className="bg-white/5 border border-white/10 hover:border-primary hover:bg-white/10 p-6 rounded-2xl flex flex-col items-center gap-4 transition-all group"
                                 >
                                     <div className={`p-4 rounded-full bg-white/5 group-hover:scale-110 transition-transform ${goal.color}`}>

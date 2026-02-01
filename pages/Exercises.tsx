@@ -1,7 +1,9 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { IMAGES } from '../constants';
 import { useMusic } from '../context/MusicContext';
 import { useLanguage, Language } from '../context/LanguageContext';
+import { useRoutine } from '../context/RoutineContext';
 
 // --- DATA TYPES ---
 interface ExerciseDetail {
@@ -30,7 +32,7 @@ interface Exercise {
 const EXERCISE_DB: Exercise[] = [
     // --- CHEST (PECHO) ---
     {
-        id: 'chest-1', videoId: '7aQY3u0Dk-Q', img: IMAGES.EXERCISE_PRESS, category: 'Chest', // Powerexplosive (Press Banca)
+        id: 'chest-1', videoId: '7aQY3u0Dk-Q', img: IMAGES.USER_CHEST, category: 'Chest', // Powerexplosive (Press Banca)
         details: {
             ES: {
                 title: 'Press de Banca: Guía Maestra', muscle: 'Pectoral, Tríceps',
@@ -44,12 +46,12 @@ const EXERCISE_DB: Exercise[] = [
                 sets: '4 series: 5-8 reps (Pesado)'
             },
         },
-        gender: 'both',
+        gender: 'male',
         location: 'gym',
         purpose: ['strength', 'muscle-gain']
     },
     {
-        id: 'chest-2', videoId: 'PPPDs2Qhkmo', img: IMAGES.EXERCISE_PRESS, category: 'Chest', // Sergio Peinado (Aprobado)
+        id: 'chest-2', videoId: 'PPPDs2Qhkmo', img: IMAGES.USER_CHEST, category: 'Chest', // Sergio Peinado (Aprobado)
         details: {
             ES: {
                 title: 'Press Superior / Rutina', muscle: 'Pectoral Superior',
@@ -63,12 +65,12 @@ const EXERCISE_DB: Exercise[] = [
                 sets: '3 series de 10-12 reps'
             },
         },
-        gender: 'both',
+        gender: 'male',
         location: 'both',
         purpose: ['muscle-gain']
     },
     {
-        id: 'chest-3', videoId: '2z8JmcrW-As', img: IMAGES.EXERCISE_PRESS, category: 'Chest', // Fondos (Safe)
+        id: 'chest-3', videoId: '2z8JmcrW-As', img: IMAGES.USER_TRICEPS, category: 'Chest', // Fondos (Safe)
         details: {
             ES: {
                 title: 'Fondos Básicos', muscle: 'Pectoral Inferior',
@@ -82,12 +84,12 @@ const EXERCISE_DB: Exercise[] = [
                 sets: '3 series al Fallo'
             },
         },
-        gender: 'both',
+        gender: 'male',
         location: 'both',
         purpose: ['strength', 'muscle-gain', 'endurance']
     },
     {
-        id: 'chest-4', videoId: 'Iwe6AmxVf7o', img: IMAGES.EXERCISE_PRESS, category: 'Chest',
+        id: 'chest-4', videoId: 'Iwe6AmxVf7o', img: IMAGES.USER_CHEST, category: 'Chest',
         details: {
             ES: {
                 title: 'Cruces de Polea', muscle: 'Definición',
@@ -165,7 +167,7 @@ const EXERCISE_DB: Exercise[] = [
         purpose: ['strength', 'muscle-gain', 'endurance']
     },
     {
-        id: 'back-3', videoId: 'y0gQvWwJ1mI', img: IMAGES.EXERCISE_ROW, category: 'Back', // Jalón al Pecho
+        id: 'back-3', videoId: 'B_lEaI3Lq18', img: IMAGES.EXERCISE_ROW, category: 'Back', // Jalón al Pecho (Replaced with ATHLEAN-X or high quality)
         details: {
             ES: {
                 title: 'Jalón al Pecho', muscle: 'Dorsales',
@@ -203,7 +205,7 @@ const EXERCISE_DB: Exercise[] = [
         purpose: ['strength', 'muscle-gain']
     },
     {
-        id: 'back-5', videoId: 'zX3Qy8F_Q1s', img: IMAGES.EXERCISE_ROW, category: 'Back',
+        id: 'back-5', videoId: 'GZbfZ033f74', img: IMAGES.EXERCISE_ROW, category: 'Back', // Remo en Polea (Replaced)
         details: {
             ES: {
                 title: 'Remo en Polea', muscle: 'Espalda Media',
@@ -224,7 +226,7 @@ const EXERCISE_DB: Exercise[] = [
 
     // --- LEGS (PIERNAS) ---
     {
-        id: 'legs-1', videoId: 'l4Y7Q6J0f8w', img: IMAGES.EXERCISE_SQUAT, category: 'Legs', // Sentadilla
+        id: 'legs-1', videoId: 'ubdIGnX2Hfs', img: IMAGES.EXERCISE_SQUAT, category: 'Legs', // Sentadilla Educativa (Replaced with 'Perfect Your Squat')
         details: {
             ES: {
                 title: 'Sentadilla Educativa', muscle: 'Cuádriceps, Glúteos',
@@ -281,7 +283,7 @@ const EXERCISE_DB: Exercise[] = [
         purpose: ['fat-loss', 'endurance']
     },
     {
-        id: 'legs-4', videoId: 'pT_H1a-n48s', img: IMAGES.EXERCISE_SQUAT, category: 'Legs', // Buff Academy Brutal Legs
+        id: 'legs-4', videoId: 'WUzdDB4TJPM', img: IMAGES.EXERCISE_SQUAT, category: 'Legs', // Piernas Brutales (Replaced with functional leg workout)
         details: {
             ES: {
                 title: 'Piernas Brutales', muscle: 'Cuádriceps',
@@ -321,7 +323,7 @@ const EXERCISE_DB: Exercise[] = [
 
     // --- SHOULDERS (HOMBROS) ---
     {
-        id: 'shoulders-1', videoId: 'P9o0Q1r2S3t', img: IMAGES.EXERCISE_PRESS, category: 'Shoulders',
+        id: 'shoulders-1', videoId: 'OjsHUmqukIs', img: IMAGES.EXERCISE_PRESS, category: 'Shoulders', // Press Militar (Replaced)
         details: {
             ES: {
                 title: 'Press Militar Barra', muscle: 'Deltoides Anterior',
@@ -378,7 +380,7 @@ const EXERCISE_DB: Exercise[] = [
         purpose: ['muscle-gain']
     },
     {
-        id: 'shoulders-4', videoId: 'z-3C7n77j7k', img: IMAGES.EXERCISE_PRESS, category: 'Shoulders',
+        id: 'shoulders-4', videoId: '6Z15_i1X48s', img: IMAGES.EXERCISE_PRESS, category: 'Shoulders', // Press Arnold (Replaced)
         details: {
             ES: {
                 title: 'Press Arnold', muscle: 'Hombro Completo',
@@ -553,7 +555,7 @@ const EXERCISE_DB: Exercise[] = [
         purpose: ['muscle-gain']
     },
     {
-        id: 'abs-3', videoId: 'kL6pL4K9B4Y', img: IMAGES.WORKOUT_BG, category: 'Abs', // Scott Herman Hanging Leg Raise (Verified)
+        id: 'abs-3', videoId: 'hdng3FgdwQk', img: IMAGES.WORKOUT_BG, category: 'Abs', // Elevacion Piernas (Replaced)
         details: {
             ES: {
                 title: 'Elevación de Piernas', muscle: 'Abdominal Inferior',
@@ -801,261 +803,381 @@ const EXERCISE_DB: Exercise[] = [
         gender: 'both',
         location: 'gym',
         purpose: ['muscle-gain', 'strength']
+    },
+    // --- WOMEN'S FOCUS & TONING (2025) ---
+    {
+        id: 'glutes-fem-1', videoId: 'yG7Cj0JL_rM', img: IMAGES.EXERCISE_SQUAT, category: 'Legs',
+        details: {
+            ES: {
+                title: 'Glúteos y Piernas (20 min)', muscle: 'Glúteos',
+                description: 'Rutina enfocada en elevar y tonificar glúteos.',
+                instructions: ['Sentadillas sumo.', 'Puente de glúteo.', 'Zancadas cruzadas.', 'Patadas de burro.'],
+                sets: '20 min AMRAP'
+            }
+        },
+        gender: 'female', location: 'home', purpose: ['muscle-gain', 'fat-loss']
+    },
+    {
+        id: 'fullbody-fem-1', videoId: 'ZeJLIdQenTo', img: IMAGES.WORKOUT_BG, category: 'Routines',
+        details: {
+            ES: {
+                title: 'Full Body Principiantes', muscle: 'Cuerpo Completo',
+                description: 'Ideal para empezar sin saltos ni impacto.',
+                instructions: ['Movimientos suaves.', 'Sin equipo.', 'Sigue el ritmo.'],
+                sets: '20 min'
+            }
+        },
+        gender: 'female', location: 'home', purpose: ['fat-loss', 'endurance']
+    },
+    {
+        id: 'abs-fem-1', videoId: '9g29dCXHOSI', img: IMAGES.WORKOUT_BG, category: 'Abs',
+        details: {
+            ES: {
+                title: 'Abs Reloj de Arena', muscle: 'Cintura',
+                description: 'El famoso reto de Chloe Ting para cintura.',
+                instructions: ['Giros rusos.', 'Planchas laterales.', 'Elevaciones de pierna.'],
+                sets: '10 min'
+            }
+        },
+        gender: 'female', location: 'home', purpose: ['fat-loss']
+    },
+    {
+        id: 'arms-fem-1', videoId: 'cE02F_X9k8s', img: IMAGES.EXERCISE_ROW, category: 'Arms',
+        details: {
+            ES: {
+                title: 'Brazos Tonificados (5 min)', muscle: 'Brazos',
+                description: 'Elimina la flacidez sin pesas.',
+                instructions: ['Círculos de brazos.', 'Push ups de pared.', 'Fondos de tríceps.'],
+                sets: '5 min'
+            }
+        },
+        gender: 'female', location: 'home', purpose: ['muscle-gain']
+    },
+    {
+        id: 'glutes-fem-2', videoId: 'F03g0V1zY-I', img: IMAGES.EXERCISE_SQUAT, category: 'Legs',
+        details: {
+            ES: {
+                title: 'Pilates para Glúteos', muscle: 'Glúteos (Aislamiento)',
+                description: 'Movimientos controlados para dar forma.',
+                instructions: ['Conexión mente-músculo.', 'Movimientos lentos.', 'Aprieta al máximo.'],
+                sets: '6 min'
+            }
+        },
+        gender: 'female', location: 'home', purpose: ['muscle-gain']
+    },
+    {
+        id: 'cardio-fem-1', videoId: 'VWj8ZxCxrYk', img: IMAGES.EXERCISE_SQUAT, category: 'Cardio',
+        details: {
+            ES: {
+                title: 'Cardio Bajo Impacto', muscle: 'Corazón',
+                description: 'Quema calorías sin dañar rodillas.',
+                instructions: ['Marcha en el sitio.', 'Rodillas al pecho.', 'Desplazamientos laterales.'],
+                sets: '15 min'
+            }
+        },
+        gender: 'female', location: 'home', purpose: ['fat-loss']
+    },
+    {
+        id: 'fullbody-fem-2', videoId: 'cbKkB3POqaY', img: IMAGES.WORKOUT_BG, category: 'Routines',
+        details: {
+            ES: {
+                title: 'HIIT en Casa (25 min)', muscle: 'Full Body',
+                description: 'Suda y tonifica todo el cuerpo.',
+                instructions: ['Burpees modificados.', 'Escaladores.', 'Sentadillas con salto.'],
+                sets: '25 min'
+            }
+        },
+        gender: 'female', location: 'home', purpose: ['fat-loss']
+    },
+    {
+        id: 'abs-fem-2', videoId: '3yL0klflL0M', img: IMAGES.WORKOUT_BG, category: 'Abs',
+        details: {
+            ES: {
+                title: 'Cintura de Avispa Ep.2', muscle: 'Oblicuos',
+                description: 'Continuación del reto de cintura.',
+                instructions: ['Plancha spiderman.', 'Toques de talón.', 'Bicicleta.'],
+                sets: '10 min'
+            }
+        },
+        gender: 'female', location: 'home', purpose: ['fat-loss']
+    },
+    {
+        id: 'legs-fem-2', videoId: 'hQn6G33fNgo', img: IMAGES.EXERCISE_SQUAT, category: 'Legs',
+        details: {
+            ES: {
+                title: 'Sentadilla Segura Mujer', muscle: 'Piernas',
+                description: 'Aprende la técnica para no ensanchar cadera si no quieres.',
+                instructions: ['Posición de los pies.', 'Profundidad.', 'Activación de glúteo.'],
+                sets: 'Técnica'
+            }
+        },
+        gender: 'female', location: 'gym', purpose: ['strength']
+    },
+    {
+        id: 'arms-fem-2', videoId: 'zGf-9VVgCDw', img: IMAGES.EXERCISE_ROW, category: 'Arms',
+        details: {
+            ES: {
+                title: 'Tren Superior (10 min)', muscle: 'Espalda y Brazos',
+                description: 'Postura y tono para brazos elegantes.',
+                instructions: [' Remos sin peso.', 'Aperturas.', 'Elevaciones.'],
+                sets: '10 min'
+            }
+        },
+        gender: 'female', location: 'home', purpose: ['muscle-gain']
+    },
+    {
+        id: 'routine-fem-1', videoId: 'IT94xC35u6k', img: IMAGES.WORKOUT_BG, category: 'Routines',
+        details: {
+            ES: {
+                title: 'Quema Grasa Total', muscle: 'Metabólico',
+                description: 'Entrenamiento continuo para perder peso.',
+                instructions: ['Mantén el movimiento.', 'No pares.', 'Diviértete.'],
+                sets: '20 min'
+            }
+        },
+        gender: 'female', location: 'home', purpose: ['fat-loss']
+    },
+    {
+        id: 'glutes-fem-3', videoId: 'tC2PuvibB7w', img: IMAGES.EXERCISE_SQUAT, category: 'Legs',
+        details: {
+            ES: {
+                title: 'Glúteos Redondos', muscle: 'Glúteos',
+                description: 'Ejercicios específicos para forma.',
+                instructions: ['Hip Thrust.', 'Abducciones.', 'Sentadilla búlgara.'],
+                sets: '12 min'
+            }
+        },
+        gender: 'female', location: 'gym', purpose: ['muscle-gain']
+    },
+    {
+        id: 'yoga-fem-1', videoId: 'xCSaHRtgw1w', img: IMAGES.WORKOUT_BG, category: 'Routines',
+        details: {
+            ES: {
+                title: 'Yoga Fit (15 min)', muscle: 'Flexibilidad',
+                description: 'Fuerza y flexibilidad combinadas.',
+                instructions: ['Perro boca abajo.', 'Guerrero.', 'Saludo al sol.'],
+                sets: '15 min'
+            }
+        },
+        gender: 'female', location: 'home', purpose: ['endurance']
+    },
+    {
+        id: 'back-fem-1', videoId: 'r0u_yQf793Q', img: IMAGES.EXERCISE_ROW, category: 'Back',
+        details: {
+            ES: {
+                title: 'Espalda Sexy (10 min)', muscle: 'Espalda Alta',
+                description: 'Elimina los rollitos de la espalda.',
+                instructions: ['Superman.', 'Nado en seco.', 'Aperturas invertidas.'],
+                sets: '10 min'
+            }
+        },
+        gender: 'female', location: 'home', purpose: ['fat-loss']
+    },
+    {
+        id: 'chest-fem-1', videoId: '0qJ72n_a1Jc', img: IMAGES.EXERCISE_PRESS, category: 'Chest',
+        details: {
+            ES: {
+                title: 'Pecho Firme', muscle: 'Pectoral',
+                description: 'Realza y reafirma el busto.',
+                instructions: ['Flexiones de rodillas.', 'Press con mancuernas.', 'Aperturas suelo.'],
+                sets: '12 min'
+            }
+        },
+        gender: 'female', location: 'home', purpose: ['muscle-gain']
+    },
+    {
+        id: 'cardio-fem-2', videoId: 'ZrNXcyoy8-w', img: IMAGES.WORKOUT_BG, category: 'Cardio',
+        details: {
+            ES: {
+                title: 'Cardio Dance', muscle: 'Full Body',
+                description: 'Baila y quema calorías.',
+                instructions: ['Sigue la coreografía simple.', 'Sonríe.', 'Suda.'],
+                sets: '15 min'
+            }
+        },
+        gender: 'female', location: 'home', purpose: ['fat-loss']
+    },
+    {
+        id: 'legs-fem-3', videoId: 'BCZjD3TBVJI', img: IMAGES.EXERCISE_SQUAT, category: 'Legs',
+        details: {
+            ES: {
+                title: 'Piernas Definidas', muscle: 'Cuádriceps',
+                description: 'Piernas torneadas sin volumen excesivo.',
+                instructions: ['Sentadillas aire.', 'Zancadas atrás.', 'Elevación talones.'],
+                sets: '15 min'
+            }
+        },
+        gender: 'female', location: 'home', purpose: ['fat-loss']
+    },
+    {
+        id: 'abs-fem-3', videoId: '7T4Vy_ufszk', img: IMAGES.WORKOUT_BG, category: 'Abs',
+        details: {
+            ES: {
+                title: 'Vientre Plano', muscle: 'Abdomen Bajo',
+                description: 'Enfoque en la zona inferior del abdomen.',
+                instructions: ['Tijeras.', 'Elevación piernas.', 'Plancha.'],
+                sets: '10 min'
+            }
+        },
+        gender: 'female', location: 'home', purpose: ['fat-loss']
     }
 ];
 
 const ExerciseLibrary = () => {
+    const navigate = useNavigate();
     const { language, t } = useLanguage();
     const [searchTerm, setSearchTerm] = useState('');
-    const [activeCategory, setActiveCategory] = useState<CategoryType>('All');
-    const [activeGender, setActiveGender] = useState<'all' | 'male' | 'female'>('all');
     const [activeLocation, setActiveLocation] = useState<'all' | 'home' | 'gym'>('all');
-    const [activePurpose, setActivePurpose] = useState<'all' | FitnessPurpose>('all');
     const [activeExercise, setActiveExercise] = useState<Exercise | null>(null);
     const { toggleOpen } = useMusic();
+    const { addToRoutine, removeFromRoutine, isInRoutine } = useRoutine();
+    const [showMyRoutine, setShowMyRoutine] = useState(false);
+
+    useEffect(() => {
+        const user = localStorage.getItem('userName');
+        if (!user) {
+            navigate('/onboarding');
+        }
+    }, [navigate]);
 
     // Filter Logic
     const filteredExercises = useMemo(() => {
         return EXERCISE_DB.filter(ex => {
+            if (showMyRoutine && !isInRoutine(ex.id)) return false;
+
             const details = ex.details[language];
-            const matchesSearch =
-                details.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                details.muscle.toLowerCase().includes(searchTerm.toLowerCase());
+            const matchesSearch = details.title.toLowerCase().includes(searchTerm.toLowerCase()) || details.muscle.toLowerCase().includes(searchTerm.toLowerCase());
 
-            const matchesCategory = activeCategory === 'All' || ex.category === activeCategory;
-
-            // Gender Filter: Show if exercise is for 'both' or matches specific gender
-            const matchesGender = activeGender === 'all' || ex.gender === 'both' || ex.gender === activeGender;
-
-            // Location Filter
             let matchesLocation = true;
-            if (activeLocation === 'home') {
-                matchesLocation = ex.location === 'home' || ex.location === 'both';
-            } else if (activeLocation === 'gym') {
-                matchesLocation = true;
-            }
+            if (activeLocation === 'home') matchesLocation = ex.location === 'home' || ex.location === 'both';
+            if (activeLocation === 'gym') matchesLocation = ex.location === 'gym' || ex.location === 'both';
 
-            // Purpose Filter
-            const matchesPurpose = activePurpose === 'all' || ex.purpose.includes(activePurpose);
-
-            return matchesSearch && matchesCategory && matchesGender && matchesLocation && matchesPurpose;
+            return matchesSearch && matchesLocation;
         });
-    }, [searchTerm, activeCategory, activeGender, activeLocation, activePurpose, language]);
+    }, [searchTerm, activeLocation, language, showMyRoutine, isInRoutine]);
 
-    // Categories List for UI
-    const categories: { id: CategoryType, label: Record<Language, string> }[] = [
-        { id: 'All', label: { ES: 'Todos' } },
-        { id: 'Routines', label: { ES: 'Rutinas Completas' } },
-        { id: 'Chest', label: { ES: 'Pecho' } },
-        { id: 'Back', label: { ES: 'Espalda' } },
-        { id: 'Legs', label: { ES: 'Piernas' } },
-        { id: 'Shoulders', label: { ES: 'Hombros' } },
-        { id: 'Arms', label: { ES: 'Brazos' } },
-        { id: 'Abs', label: { ES: 'Abdominales' } },
-        { id: 'Cardio', label: { ES: 'Cardio' } },
-    ];
+
+
+    const renderCard = (ex: Exercise) => {
+        const details = ex.details[language];
+        return (
+            <div
+                key={ex.id}
+                className="group bg-card-light dark:bg-surface-dark rounded-2xl overflow-hidden border border-slate-200 dark:border-border-dark shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer animate-in fade-in zoom-in-95 flex flex-col"
+                onClick={() => setActiveExercise(ex)}
+            >
+                <div className="relative aspect-video overflow-hidden flex-shrink-0 bg-slate-900 group-hover:bg-slate-800 transition-colors">
+                    <div className="absolute inset-0 bg-cover bg-center group-hover:scale-105 transition-transform duration-500 opacity-90" style={{ backgroundImage: `url('${ex.img}')` }}></div>
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+
+                    <div className="absolute bottom-2 right-2 z-10 opacity-70">
+                        <img src={IMAGES.LOGO} alt="FitMarvin" className="h-6 w-auto object-contain drop-shadow-md" />
+                    </div>
+
+                    <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+                        <div className="bg-white/20 backdrop-blur-sm border border-white/30 text-white w-14 h-14 rounded-full flex items-center justify-center shadow-lg transform group-hover:scale-110 transition-transform duration-300">
+                            <span className="material-symbols-outlined text-3xl ml-1">play_arrow</span>
+                        </div>
+                    </div>
+                    <button
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            isInRoutine(ex.id) ? removeFromRoutine(ex.id) : addToRoutine(ex.id);
+                        }}
+                        className="absolute top-3 right-3 z-30 p-2 rounded-full bg-black/40 backdrop-blur-md hover:bg-black/60 transition-all group/star"
+                    >
+                        <span className={`material-symbols-outlined text-2xl transition-colors ${isInRoutine(ex.id) ? 'text-yellow-400 fill-current' : 'text-white group-hover:text-yellow-200'}`}>
+                            {isInRoutine(ex.id) ? 'star' : 'star'}
+                        </span>
+                    </button>
+                    <div className="absolute top-3 left-3 bg-black/60 backdrop-blur-md px-2 py-1 rounded text-[10px] font-bold text-white uppercase tracking-wider border border-white/10">
+                        {ex.location === 'both' ? (language === 'ES' ? 'Casa / Gym' : 'Home / Gym') : (ex.location === 'home' ? (language === 'ES' ? 'Casa' : 'Home') : 'Gym')}
+                    </div>
+                </div>
+                <div className="p-5 flex flex-col flex-grow">
+                    <h3 className="text-xl font-bold dark:text-white mb-2 leading-tight group-hover:text-primary transition-colors">{details.title}</h3>
+                    <p className="text-gray-500 dark:text-gray-400 text-xs mb-4 flex items-center gap-1">
+                        <span className="material-symbols-outlined text-sm">accessibility_new</span>
+                        {details.muscle}
+                    </p>
+                    <div className="mt-auto">
+                        <div className="w-full h-1 bg-slate-100 dark:bg-border-dark rounded-full overflow-hidden">
+                            <div className="h-full bg-primary w-0 group-hover:w-full transition-all duration-700 ease-out"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        );
+    };
 
     return (
         <div className="flex h-full flex-col h-full overflow-hidden bg-background-light dark:bg-background-dark relative">
-            <div className="flex-grow overflow-y-auto custom-scrollbar p-8">
+            <div className="flex-grow overflow-y-auto custom-scrollbar px-6 md:px-12 py-10 max-w-screen-2xl mx-auto w-full">
 
-                {/* Hero Header */}
+                {/* Header */}
                 <header className="mb-8">
-                    <div className="flex items-center gap-3 mb-2">
-                        <span className="bg-red-600 text-white px-3 py-1 text-xs font-bold rounded uppercase tracking-wider animate-pulse">
-                            {language === 'ES' ? 'Nuevo 2025' : 'New 2025'}
-                        </span>
-                        <span className="text-primary text-xs font-bold uppercase tracking-wider">
-                            4K / HD
-                        </span>
+                    <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
+                        <div>
+                            <h2 className="text-4xl md:text-5xl font-black tracking-tight dark:text-white leading-none mb-1">
+                                {language === 'ES' ? 'Biblioteca' : 'Library'}
+                            </h2>
+                            <p className="text-sm text-slate-500 font-bold uppercase tracking-widest">
+                                {language === 'ES' ? 'Técnica & Rutinas' : 'Technique & Routines'}
+                            </p>
+                        </div>
+
+                        <div className="shrink-0">
+                            <button
+                                onClick={() => setShowMyRoutine(!showMyRoutine)}
+                                className={`flex items-center gap-2 px-6 py-3 rounded-2xl font-bold transition-all shadow-lg border-2 ${showMyRoutine ? 'bg-primary border-primary text-black shadow-primary/30' : 'bg-transparent border-slate-200 dark:border-white/10 text-slate-700 dark:text-white'}`}
+                            >
+                                <span className="material-symbols-outlined fill-current">{showMyRoutine ? 'bookmark' : 'bookmark_border'}</span>
+                                {language === 'ES' ? 'Mi Rutina' : 'My Routine'}
+                            </button>
+                        </div>
                     </div>
-                    <h2 className="text-4xl md:text-5xl font-black tracking-tight mb-4 dark:text-white">
-                        {language === 'ES' ? 'Biblioteca Técnica' : 'Technical Library'}
-                    </h2>
-                    <p className="text-xl text-gray-600 dark:text-gray-400 max-w-2xl">
-                        {language === 'ES'
-                            ? 'Tutoriales actualizados con biomecánica de vanguardia. Visualiza y aprende.'
-                            : 'Updated tutorials with cutting-edge biomechanics. Visualize and learn.'}
-                    </p>
                 </header>
 
-                {/* Spotify Floating Button (Mobile/Desktop) */}
-                <div className="fixed bottom-6 right-6 z-40 md:absolute md:top-8 md:right-8 md:bottom-auto">
-                    <button
-                        onClick={toggleOpen}
-                        className="bg-[#1DB954] hover:bg-[#1ed760] text-white p-4 rounded-full shadow-lg shadow-green-500/20 transition-transform hover:scale-105 active:scale-95 flex items-center gap-2"
-                        title="Abrir Spotify"
-                    >
-                        <span className="material-symbols-outlined text-2xl">music_note</span>
-                        <span className="font-bold hidden md:inline">Music</span>
-                    </button>
-                </div>
-
-                {/* Filters Section */}
-                <div className="mb-8 flex flex-col gap-4 bg-card-light dark:bg-surface-dark p-4 rounded-2xl shadow-sm border border-slate-100 dark:border-white/5">
-
-                    {/* Row 1: Gender & Location */}
-                    <div className="flex flex-col md:flex-row gap-4 justify-between items-center">
-                        {/* Gender Toggle */}
-                        <div className="flex bg-slate-100 dark:bg-black/20 p-1 rounded-xl gap-1">
-                            <button
-                                onClick={() => setActiveGender('all')}
-                                className={`px-4 py-2 rounded-lg text-sm font-bold transition-all btn-green-hover ${activeGender === 'all' ? 'bg-primary text-black shadow-lg shadow-primary/40' : 'bg-card-light dark:bg-slate-700 text-slate-600 dark:text-slate-400 hover:bg-primary/10'}`}
-                            >
-                                {language === 'ES' ? 'Todos' : 'All'}
-                            </button>
-                            <button
-                                onClick={() => setActiveGender('male')}
-                                className={`px-4 py-2 rounded-lg text-sm font-bold transition-all flex items-center gap-1 btn-green-hover ${activeGender === 'male' ? 'bg-primary text-black shadow-lg shadow-primary/40' : 'bg-card-light dark:bg-slate-700 text-slate-600 dark:text-slate-400 hover:bg-primary/10'}`}
-                            >
-                                <span className="material-symbols-outlined text-sm">male</span>
-                                {language === 'ES' ? 'Hombres' : 'Men'}
-                            </button>
-                            <button
-                                onClick={() => setActiveGender('female')}
-                                className={`px-4 py-2 rounded-lg text-sm font-bold transition-all flex items-center gap-1 btn-green-hover ${activeGender === 'female' ? 'bg-primary text-black shadow-lg shadow-primary/40' : 'bg-card-light dark:bg-slate-700 text-slate-600 dark:text-slate-400 hover:bg-primary/10'}`}
-                            >
-                                <span className="material-symbols-outlined text-sm">female</span>
-                                {language === 'ES' ? 'Mujeres' : 'Women'}
-                            </button>
-                        </div>
-
-                        {/* Location Toggle */}
-                        <div className="flex bg-slate-100 dark:bg-black/20 p-1 rounded-xl gap-1">
-                            <button
-                                onClick={() => setActiveLocation('all')}
-                                className={`px-4 py-2 rounded-lg text-sm font-bold transition-all btn-green-hover ${activeLocation === 'all' ? 'bg-primary text-black shadow-lg shadow-primary/40' : 'bg-card-light dark:bg-slate-700 text-slate-600 dark:text-slate-400 hover:bg-primary/10'}`}
-                            >
-                                {language === 'ES' ? 'Cualquiera' : 'Anywhere'}
-                            </button>
-                            <button
-                                onClick={() => setActiveLocation('home')}
-                                className={`px-4 py-2 rounded-lg text-sm font-bold transition-all flex items-center gap-1 btn-green-hover ${activeLocation === 'home' ? 'bg-primary text-black shadow-lg shadow-primary/40' : 'bg-card-light dark:bg-slate-700 text-slate-600 dark:text-slate-400 hover:bg-primary/10'}`}
-                            >
-                                <span className="material-symbols-outlined text-sm">home</span>
-                                {language === 'ES' ? 'Casa' : 'Home'}
-                            </button>
-                            <button
-                                onClick={() => setActiveLocation('gym')}
-                                className={`px-4 py-2 rounded-lg text-sm font-bold transition-all flex items-center gap-1 btn-green-hover ${activeLocation === 'gym' ? 'bg-primary text-black shadow-lg shadow-primary/40' : 'bg-card-light dark:bg-slate-700 text-slate-600 dark:text-slate-400 hover:bg-primary/10'}`}
-                            >
-                                <span className="material-symbols-outlined text-sm">fitness_center</span>
-                                {language === 'ES' ? 'Gimnasio' : 'Gym'}
-                            </button>
-                        </div>
-                    </div>
-
-                    {/* Row 2: Purpose Filter */}
-                    <div className="flex flex-wrap gap-2">
+                {/* Simplified Filters: Only Location */}
+                <div className="mb-10 flex justify-center">
+                    <div className="bg-slate-100 dark:bg-surface-dark p-1.5 rounded-2xl inline-flex shadow-inner border border-slate-200 dark:border-white/5">
                         <button
-                            onClick={() => setActivePurpose('all')}
-                            className={`px-3 py-2 rounded-lg text-sm font-bold transition-all ${activePurpose === 'all' ? 'bg-primary text-black shadow' : 'bg-slate-100 dark:bg-black/20 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-black/40'}`}
+                            onClick={() => setActiveLocation('all')}
+                            className={`px-8 py-3 rounded-xl text-sm font-bold transition-all ${activeLocation === 'all' ? 'bg-white dark:bg-white/10 text-black dark:text-white shadow-md' : 'text-slate-500 hover:text-slate-700 dark:hover:text-slate-300'}`}
                         >
-                            {language === 'ES' ? 'Todos' : 'All'}
+                            {language === 'ES' ? 'Todo' : 'All'}
                         </button>
                         <button
-                            onClick={() => setActivePurpose('strength')}
-                            className={`px-3 py-2 rounded-lg text-sm font-bold transition-all flex items-center gap-1 ${activePurpose === 'strength' ? 'bg-red-500 text-white shadow shadow-red-500/30' : 'bg-slate-100 dark:bg-black/20 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-black/40'}`}
+                            onClick={() => setActiveLocation('home')}
+                            className={`px-8 py-3 rounded-xl text-sm font-bold transition-all flex items-center gap-2 ${activeLocation === 'home' ? 'bg-white dark:bg-white/10 text-orange-600 dark:text-orange-400 shadow-md' : 'text-slate-500 hover:text-slate-700 dark:hover:text-slate-300'}`}
                         >
-                            <span className="material-symbols-outlined text-sm">flash_on</span>
-                            {language === 'ES' ? 'Fuerza' : 'Strength'}
+                            <span className="material-symbols-outlined text-lg">home</span>
+                            {language === 'ES' ? 'Casa' : 'Home'}
                         </button>
                         <button
-                            onClick={() => setActivePurpose('muscle-gain')}
-                            className={`px-3 py-2 rounded-lg text-sm font-bold transition-all flex items-center gap-1 ${activePurpose === 'muscle-gain' ? 'bg-blue-500 text-white shadow shadow-blue-500/30' : 'bg-slate-100 dark:bg-black/20 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-black/40'}`}
+                            onClick={() => setActiveLocation('gym')}
+                            className={`px-8 py-3 rounded-xl text-sm font-bold transition-all flex items-center gap-2 ${activeLocation === 'gym' ? 'bg-white dark:bg-white/10 text-blue-600 dark:text-blue-400 shadow-md' : 'text-slate-500 hover:text-slate-700 dark:hover:text-slate-300'}`}
                         >
-                            <span className="material-symbols-outlined text-sm">favorite</span>
-                            {language === 'ES' ? 'Ganancia Muscular' : 'Muscle Gain'}
-                        </button>
-                        <button
-                            onClick={() => setActivePurpose('fat-loss')}
-                            className={`px-3 py-2 rounded-lg text-sm font-bold transition-all flex items-center gap-1 ${activePurpose === 'fat-loss' ? 'bg-orange-500 text-white shadow shadow-orange-500/30' : 'bg-slate-100 dark:bg-black/20 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-black/40'}`}
-                        >
-                            <span className="material-symbols-outlined text-sm">local_fire_department</span>
-                            {language === 'ES' ? 'Pérdida de Grasa' : 'Fat Loss'}
-                        </button>
-                        <button
-                            onClick={() => setActivePurpose('endurance')}
-                            className={`px-3 py-2 rounded-lg text-sm font-bold transition-all flex items-center gap-1 ${activePurpose === 'endurance' ? 'bg-emerald-500 text-white shadow shadow-emerald-500/30' : 'bg-slate-100 dark:bg-black/20 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-black/40'}`}
-                        >
-                            <span className="material-symbols-outlined text-sm">timer</span>
-                            {language === 'ES' ? 'Resistencia' : 'Endurance'}
+                            <span className="material-symbols-outlined text-lg">fitness_center</span>
+                            {language === 'ES' ? 'Gimnasio' : 'Gym'}
                         </button>
                     </div>
                 </div>
 
-                {/* Grid */}
-                {filteredExercises.length === 0 ? (
+                {/* Content */}
+                <div className="pb-12">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
+                        {filteredExercises.map(renderCard)}
+                    </div>
+                </div>
+
+                {/* Empty State */}
+                {filteredExercises.length === 0 && (
                     <div className="text-center py-20 opacity-50">
-                        <span className="material-symbols-outlined text-6xl mb-4 text-slate-400">sentiment_dissatisfied</span>
-                        <p className="text-xl text-slate-500">
-                            {language === 'ES' ? 'No se encontraron ejercicios.' : 'No exercises found.'}
+                        <span className="material-symbols-outlined text-6xl text-slate-300 mb-4">search_off</span>
+                        <p className="text-xl font-bold text-slate-500">
+                            {language === 'ES' ? 'No hay ejercicios aquí.' : 'No exercises found.'}
                         </p>
-                    </div>
-                ) : (
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 pb-10">
-                        {filteredExercises.map((ex) => {
-                            const details = ex.details[language];
-                            return (
-                                <div
-                                    key={ex.id}
-                                    className="group bg-card-light dark:bg-surface-dark rounded-2xl overflow-hidden border border-slate-200 dark:border-border-dark shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer animate-in fade-in zoom-in-95 flex flex-col"
-                                    onClick={() => setActiveExercise(ex)}
-                                >
-                                    <div className="relative aspect-video overflow-hidden flex-shrink-0 bg-slate-900 group-hover:bg-slate-800 transition-colors">
-                                        {/* Exercise Image Background */}
-                                        <div className="absolute inset-0 bg-cover bg-center group-hover:scale-105 transition-transform duration-500 opacity-90" style={{ backgroundImage: `url('${ex.img}')` }}></div>
-
-                                        {/* Gradient Overlay for Legibility */}
-                                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
-
-                                        {/* Floating Logo Watermark */}
-                                        <div className="absolute bottom-2 right-2 z-10 opacity-90">
-                                            <img
-                                                src={IMAGES.LOGO}
-                                                alt="FitMarvin"
-                                                className="h-8 w-auto object-contain drop-shadow-md"
-                                            />
-                                        </div>
-
-                                        {/* Play Button Overlay */}
-                                        <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-                                            <div className="bg-white/20 backdrop-blur-sm border border-white/30 text-white w-14 h-14 rounded-full flex items-center justify-center shadow-lg transform group-hover:scale-110 transition-transform duration-300">
-                                                <span className="material-symbols-outlined text-3xl ml-1">play_arrow</span>
-                                            </div>
-                                        </div>
-
-                                        {/* Category Tag */}
-                                        <div className="absolute top-3 left-3 bg-primary/90 backdrop-blur-sm text-black px-2 py-1 rounded-md z-20 shadow-sm">
-                                            <p className="text-[10px] font-black uppercase tracking-widest">{ex.category}</p>
-                                        </div>
-                                    </div>
-                                    <div className="p-5 flex flex-col flex-grow">
-                                        <div className="flex-grow">
-                                            <h3 className="text-xl font-bold dark:text-white mb-2 leading-tight group-hover:text-primary transition-colors">{details.title}</h3>
-                                            <p className="text-gray-500 dark:text-gray-400 text-xs mb-4 flex items-center gap-1">
-                                                <span className="material-symbols-outlined text-sm">accessibility_new</span>
-                                                {details.muscle}
-                                            </p>
-                                            <div className="w-full h-1 bg-slate-100 dark:bg-border-dark rounded-full overflow-hidden">
-                                                <div className="h-full bg-primary w-0 group-hover:w-full transition-all duration-700 ease-out"></div>
-                                            </div>
-                                        </div>
-
-                                        <button
-                                            onClick={(e) => {
-                                                e.stopPropagation();
-                                                setActiveExercise(ex);
-                                            }}
-                                            className="w-full mt-4 py-3 bg-slate-50 dark:bg-white/5 hover:bg-primary hover:text-black text-slate-700 dark:text-slate-300 rounded-xl font-bold text-sm flex items-center justify-center gap-2 transition-all"
-                                        >
-                                            <span className="material-symbols-outlined">play_circle</span>
-                                            {language === 'ES' ? 'Ver Tutorial' : 'Watch Tutorial'}
-                                        </button>
-                                    </div>
-                                </div>
-                            );
-                        })}
                     </div>
                 )}
             </div>
@@ -1148,17 +1270,33 @@ const ExerciseLibrary = () => {
                             </div>
 
                             <div className="mt-8 space-y-3 shrink-0">
-                                <button className="w-full flex items-center justify-center gap-2 px-6 py-4 bg-primary text-black rounded-xl font-bold hover:bg-primary/90 transition-colors shadow-lg shadow-primary/20">
-                                    <span className="material-symbols-outlined">add_circle</span>
-                                    {language === 'ES' ? 'Añadir a rutina' : 'Add to workout'}
+                                <button
+                                    onClick={() => {
+                                        if (isInRoutine(activeExercise.id)) {
+                                            removeFromRoutine(activeExercise.id);
+                                        } else {
+                                            addToRoutine(activeExercise.id);
+                                            alert(language === 'ES' ? '¡Añadido a tu rutina!' : 'Added to your routine!');
+                                        }
+                                    }}
+                                    className={`w-full flex items-center justify-center gap-2 px-6 py-4 rounded-xl font-bold transition-colors shadow-lg ${isInRoutine(activeExercise.id)
+                                        ? 'bg-green-500 text-white shadow-green-500/20 hover:bg-green-600'
+                                        : 'bg-primary text-black shadow-primary/20 hover:bg-primary/90'
+                                        }`}
+                                >
+                                    <span className="material-symbols-outlined">
+                                        {isInRoutine(activeExercise.id) ? 'check_circle' : 'add_circle'}
+                                    </span>
+                                    {isInRoutine(activeExercise.id)
+                                        ? (language === 'ES' ? 'En tu rutina' : 'In your routine')
+                                        : (language === 'ES' ? 'Añadir a rutina' : 'Add to workout')
+                                    }
                                 </button>
                             </div>
                         </div>
                     </div>
                 </div>
             )}
-
-
         </div>
     );
 };
