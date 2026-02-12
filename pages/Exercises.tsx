@@ -167,23 +167,16 @@ const EXERCISE_DB: Exercise[] = [
         purpose: ['strength', 'muscle-gain', 'endurance']
     },
     {
-        id: 'back-3', videoId: 'B_lEaI3Lq18', img: IMAGES.EXERCISE_ROW, category: 'Back', // Jalón al Pecho (Replaced with ATHLEAN-X or high quality)
+        id: 'home-strength-1', videoId: 'N4HbeyDChFw', img: IMAGES.WORKOUT_BG, category: 'Routines',
         details: {
             ES: {
-                title: 'Jalón al Pecho', muscle: 'Dorsales',
-                description: 'Técnica estricta para ampliar la espalda.',
-                instructions: [
-                    'Agarre un poco más ancho que los hombros.',
-                    'Saca el pecho antes de jalar.',
-                    'Lleva la barra a la clavícula (no más abajo).',
-                    'Controla el retorno para estirar el dorsal.'
-                ],
-                sets: '3 series de 12 reps'
-            },
+                title: 'Fuerza Total sin Equipo', muscle: 'Cuerpo Completo',
+                description: 'Desarrolla fuerza y masa muscular usando solo tu peso corporal.',
+                instructions: ['Controla cada fase del movimiento.', 'Mantén la tensión muscular.', 'Respira de forma constante.'],
+                sets: '20 min AMRAP'
+            }
         },
-        gender: 'both',
-        location: 'gym',
-        purpose: ['muscle-gain']
+        gender: 'both', location: 'home', purpose: ['strength', 'muscle-gain']
     },
     {
         id: 'back-4', videoId: 'e_WLgzvjzxc', img: IMAGES.EXERCISE_ROW, category: 'Back', // Iron Masters Remo (Verified)
@@ -264,42 +257,16 @@ const EXERCISE_DB: Exercise[] = [
         purpose: ['strength', 'muscle-gain']
     },
     {
-        id: 'legs-3', videoId: 'c2h5pE6C9rY', img: IMAGES.EXERCISE_SQUAT, category: 'Legs', // Buff Academy Legs (Seemed OK)
+        id: 'beach-strength-1', videoId: 'Rvfi88yFjpM', img: IMAGES.EXERCISE_SQUAT, category: 'Routines',
         details: {
             ES: {
-                title: 'Rutina de Pierna', muscle: 'Piernas Completas',
-                description: 'Circuito intenso para pierna y glúteo.',
-                instructions: [
-                    'Zancadas alternas.',
-                    'Sentadillas con salto.',
-                    'Puente de glúteo.',
-                    'Mantener intensidad alta.'
-                ],
-                sets: '3 rondas'
-            },
+                title: 'Fuerza Beach Body', muscle: 'Piernas y Glúteos',
+                description: 'Entrenamiento de potencia en la playa para resistencia y fuerza.',
+                instructions: ['Explosividad en la arena.', 'Mantén el equilibrio.', 'Hidrátate bien.'],
+                sets: '10 min Intensos'
+            }
         },
-        gender: 'both',
-        location: 'both',
-        purpose: ['fat-loss', 'endurance']
-    },
-    {
-        id: 'legs-4', videoId: 'WUzdDB4TJPM', img: IMAGES.EXERCISE_SQUAT, category: 'Legs', // Piernas Brutales (Replaced with functional leg workout)
-        details: {
-            ES: {
-                title: 'Piernas Brutales', muscle: 'Cuádriceps',
-                description: 'Entrenamiento de alta intensidad desde casa o gym.',
-                instructions: [
-                    'Enfoque en el tiempo bajo tensión.',
-                    'Controlar la bajada en cada repetición.',
-                    'No bloquear rodillas completamente.',
-                    'Respirar rítmicamente.'
-                ],
-                sets: '4 series de 12-15 reps'
-            },
-        },
-        gender: 'both',
-        location: 'both',
-        purpose: ['muscle-gain']
+        gender: 'both', location: 'both', purpose: ['strength', 'endurance']
     },
     {
         id: 'legs-5', videoId: '-M4-G8p8fmc', img: IMAGES.EXERCISE_SQUAT, category: 'Legs',
@@ -379,25 +346,7 @@ const EXERCISE_DB: Exercise[] = [
         location: 'gym',
         purpose: ['muscle-gain']
     },
-    {
-        id: 'shoulders-4', videoId: '6Z15_i1X48s', img: IMAGES.EXERCISE_PRESS, category: 'Shoulders', // Press Arnold (Replaced)
-        details: {
-            ES: {
-                title: 'Press Arnold', muscle: 'Hombro Completo',
-                description: 'Trabaja las 3 cabezas del deltoides con gran rango de movimiento.',
-                instructions: [
-                    'Inicia con mancuernas frente a la cara, palmas hacia ti.',
-                    'Al subir, abre los codos y rota las muñecas 180 grados.',
-                    'Termina con palmas al frente y brazos estirados.',
-                    'Invierte el giro al bajar.'
-                ],
-                sets: '3 series de 10-12 reps'
-            },
-        },
-        gender: 'both',
-        location: 'gym',
-        purpose: ['muscle-gain', 'strength']
-    },
+
 
     // --- ARMS (BRAZOS) ---
     {
@@ -555,23 +504,16 @@ const EXERCISE_DB: Exercise[] = [
         purpose: ['muscle-gain']
     },
     {
-        id: 'abs-3', videoId: 'hdng3FgdwQk', img: IMAGES.WORKOUT_BG, category: 'Abs', // Elevacion Piernas (Replaced)
+        id: 'home-cardio-1', videoId: 'uyxOhWTln_s', img: IMAGES.WORKOUT_BG, category: 'Cardio',
         details: {
             ES: {
-                title: 'Elevación de Piernas', muscle: 'Abdominal Inferior',
-                description: 'Ataca la zona baja del abdomen (la más difícil).',
-                instructions: [
-                    'Colgado en barra, evita el balanceo inicial.',
-                    'Sube las piernas hasta la altura de la cadera (o más).',
-                    'Controla la bajada para no usar inercia.',
-                    'Si es difícil, inicia con rodillas al pecho.'
-                ],
-                sets: '3 series de 10-15 reps'
-            },
+                title: 'Cardio Total Casa (15 min)', muscle: 'Cuerpo Completo',
+                description: 'Entrenamiento dinámico para quemar calorías en poco tiempo.',
+                instructions: ['Sigue los pasos.', 'Mantén el abdomen contraído.', 'Aumenta el ritmo progresivamente.'],
+                sets: '15 min'
+            }
         },
-        gender: 'both',
-        location: 'both',
-        purpose: ['muscle-gain', 'strength']
+        gender: 'both', location: 'home', purpose: ['endurance', 'fat-loss']
     },
     {
         id: 'cardio-1', videoId: 'M0uO8X3_tEA', img: IMAGES.EXERCISE_SQUAT, category: 'Cardio',
@@ -806,18 +748,6 @@ const EXERCISE_DB: Exercise[] = [
     },
     // --- WOMEN'S FOCUS & TONING (2025) ---
     {
-        id: 'glutes-fem-1', videoId: 'yG7Cj0JL_rM', img: IMAGES.EXERCISE_SQUAT, category: 'Legs',
-        details: {
-            ES: {
-                title: 'Glúteos y Piernas (20 min)', muscle: 'Glúteos',
-                description: 'Rutina enfocada en elevar y tonificar glúteos.',
-                instructions: ['Sentadillas sumo.', 'Puente de glúteo.', 'Zancadas cruzadas.', 'Patadas de burro.'],
-                sets: '20 min AMRAP'
-            }
-        },
-        gender: 'female', location: 'home', purpose: ['muscle-gain', 'fat-loss']
-    },
-    {
         id: 'fullbody-fem-1', videoId: 'ZeJLIdQenTo', img: IMAGES.WORKOUT_BG, category: 'Routines',
         details: {
             ES: {
@@ -840,30 +770,6 @@ const EXERCISE_DB: Exercise[] = [
             }
         },
         gender: 'female', location: 'home', purpose: ['fat-loss']
-    },
-    {
-        id: 'arms-fem-1', videoId: 'cE02F_X9k8s', img: IMAGES.EXERCISE_ROW, category: 'Arms',
-        details: {
-            ES: {
-                title: 'Brazos Tonificados (5 min)', muscle: 'Brazos',
-                description: 'Elimina la flacidez sin pesas.',
-                instructions: ['Círculos de brazos.', 'Push ups de pared.', 'Fondos de tríceps.'],
-                sets: '5 min'
-            }
-        },
-        gender: 'female', location: 'home', purpose: ['muscle-gain']
-    },
-    {
-        id: 'glutes-fem-2', videoId: 'F03g0V1zY-I', img: IMAGES.EXERCISE_SQUAT, category: 'Legs',
-        details: {
-            ES: {
-                title: 'Pilates para Glúteos', muscle: 'Glúteos (Aislamiento)',
-                description: 'Movimientos controlados para dar forma.',
-                instructions: ['Conexión mente-músculo.', 'Movimientos lentos.', 'Aprieta al máximo.'],
-                sets: '6 min'
-            }
-        },
-        gender: 'female', location: 'home', purpose: ['muscle-gain']
     },
     {
         id: 'cardio-fem-1', videoId: 'VWj8ZxCxrYk', img: IMAGES.EXERCISE_SQUAT, category: 'Cardio',
@@ -902,18 +808,6 @@ const EXERCISE_DB: Exercise[] = [
         gender: 'female', location: 'home', purpose: ['fat-loss']
     },
     {
-        id: 'legs-fem-2', videoId: 'hQn6G33fNgo', img: IMAGES.EXERCISE_SQUAT, category: 'Legs',
-        details: {
-            ES: {
-                title: 'Sentadilla Segura Mujer', muscle: 'Piernas',
-                description: 'Aprende la técnica para no ensanchar cadera si no quieres.',
-                instructions: ['Posición de los pies.', 'Profundidad.', 'Activación de glúteo.'],
-                sets: 'Técnica'
-            }
-        },
-        gender: 'female', location: 'gym', purpose: ['strength']
-    },
-    {
         id: 'arms-fem-2', videoId: 'zGf-9VVgCDw', img: IMAGES.EXERCISE_ROW, category: 'Arms',
         details: {
             ES: {
@@ -950,40 +844,16 @@ const EXERCISE_DB: Exercise[] = [
         gender: 'female', location: 'gym', purpose: ['muscle-gain']
     },
     {
-        id: 'yoga-fem-1', videoId: 'xCSaHRtgw1w', img: IMAGES.WORKOUT_BG, category: 'Routines',
+        id: 'casa-fem-1', videoId: 'xCSaHRtgw1w', img: IMAGES.WORKOUT_BG, category: 'Routines',
         details: {
             ES: {
-                title: 'Yoga Fit (15 min)', muscle: 'Flexibilidad',
+                title: 'Ejercicios en Casa (15 min)', muscle: 'Flexibilidad',
                 description: 'Fuerza y flexibilidad combinadas.',
-                instructions: ['Perro boca abajo.', 'Guerrero.', 'Saludo al sol.'],
+                instructions: ['Estiramiento total.', 'Control de respiración.', 'Movilidad articular.'],
                 sets: '15 min'
             }
         },
         gender: 'female', location: 'home', purpose: ['endurance']
-    },
-    {
-        id: 'back-fem-1', videoId: 'r0u_yQf793Q', img: IMAGES.EXERCISE_ROW, category: 'Back',
-        details: {
-            ES: {
-                title: 'Espalda Sexy (10 min)', muscle: 'Espalda Alta',
-                description: 'Elimina los rollitos de la espalda.',
-                instructions: ['Superman.', 'Nado en seco.', 'Aperturas invertidas.'],
-                sets: '10 min'
-            }
-        },
-        gender: 'female', location: 'home', purpose: ['fat-loss']
-    },
-    {
-        id: 'chest-fem-1', videoId: '0qJ72n_a1Jc', img: IMAGES.EXERCISE_PRESS, category: 'Chest',
-        details: {
-            ES: {
-                title: 'Pecho Firme', muscle: 'Pectoral',
-                description: 'Realza y reafirma el busto.',
-                instructions: ['Flexiones de rodillas.', 'Press con mancuernas.', 'Aperturas suelo.'],
-                sets: '12 min'
-            }
-        },
-        gender: 'female', location: 'home', purpose: ['muscle-gain']
     },
     {
         id: 'cardio-fem-2', videoId: 'ZrNXcyoy8-w', img: IMAGES.WORKOUT_BG, category: 'Cardio',
@@ -1020,7 +890,7 @@ const EXERCISE_DB: Exercise[] = [
             }
         },
         gender: 'female', location: 'home', purpose: ['fat-loss']
-    }
+    },
 ];
 
 const ExerciseLibrary = () => {
@@ -1028,6 +898,7 @@ const ExerciseLibrary = () => {
     const { language, t } = useLanguage();
     const [searchTerm, setSearchTerm] = useState('');
     const [activeLocation, setActiveLocation] = useState<'all' | 'home' | 'gym'>('all');
+    const [activeCategory, setActiveCategory] = useState<CategoryType | 'All'>('All');
     const [activeExercise, setActiveExercise] = useState<Exercise | null>(null);
     const { toggleOpen } = useMusic();
     const { addToRoutine, removeFromRoutine, isInRoutine } = useRoutine();
@@ -1046,15 +917,18 @@ const ExerciseLibrary = () => {
             if (showMyRoutine && !isInRoutine(ex.id)) return false;
 
             const details = ex.details[language];
-            const matchesSearch = details.title.toLowerCase().includes(searchTerm.toLowerCase()) || details.muscle.toLowerCase().includes(searchTerm.toLowerCase());
+            const matchesSearch = details.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                details.muscle.toLowerCase().includes(searchTerm.toLowerCase());
+
+            const matchesCategory = activeCategory === 'All' || ex.category === activeCategory;
 
             let matchesLocation = true;
             if (activeLocation === 'home') matchesLocation = ex.location === 'home' || ex.location === 'both';
             if (activeLocation === 'gym') matchesLocation = ex.location === 'gym' || ex.location === 'both';
 
-            return matchesSearch && matchesLocation;
+            return matchesSearch && matchesLocation && matchesCategory;
         });
-    }, [searchTerm, activeLocation, language, showMyRoutine, isInRoutine]);
+    }, [searchTerm, activeLocation, activeCategory, language, showMyRoutine, isInRoutine]);
 
 
 
@@ -1142,8 +1016,12 @@ const ExerciseLibrary = () => {
                 <div className="mb-10 flex justify-center">
                     <div className="bg-slate-100 dark:bg-surface-dark p-1.5 rounded-2xl inline-flex shadow-inner border border-slate-200 dark:border-white/5">
                         <button
-                            onClick={() => setActiveLocation('all')}
-                            className={`px-8 py-3 rounded-xl text-sm font-bold transition-all ${activeLocation === 'all' ? 'bg-white dark:bg-white/10 text-black dark:text-white shadow-md' : 'text-slate-500 hover:text-slate-700 dark:hover:text-slate-300'}`}
+                            onClick={() => {
+                                setActiveLocation('all');
+                                setActiveCategory('All');
+                                setSearchTerm('');
+                            }}
+                            className={`px-8 py-3 rounded-xl text-sm font-bold transition-all ${activeLocation === 'all' && activeCategory === 'All' ? 'bg-white dark:bg-white/10 text-black dark:text-white shadow-md' : 'text-slate-500 hover:text-slate-700 dark:hover:text-slate-300'}`}
                         >
                             {language === 'ES' ? 'Todo' : 'All'}
                         </button>

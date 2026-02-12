@@ -122,8 +122,8 @@ const Dashboard = () => {
                                 <div className="space-y-3">
                                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
                                         {members.map((member) => {
-                                            const isCreator = member.name === 'Marvin De Araujo';
-                                            const isNew = Date.now() - member.timestamp < 3600000 * 24; // New for 24 hours
+                                            const isCreator = member.role === 'admin' || member.name === 'Marvin De Araujo' || member.name === 'MARVIN DE ARAUJO';
+                                            const isNew = !isCreator && (Date.now() - member.timestamp < 3600000 * 24); // New for 24 hours
 
                                             const isMe = member.name === userData.name;
 
@@ -151,7 +151,10 @@ const Dashboard = () => {
                                                             </p>
                                                             <div className="flex items-center gap-1 mt-0.5">
                                                                 {isCreator ? (
-                                                                    <span className="text-[8px] bg-primary text-black font-black px-1.5 py-0.5 rounded-sm uppercase tracking-tighter">Creador</span>
+                                                                    <span className="text-[8px] bg-primary text-black font-black px-1.5 py-0.5 rounded-sm uppercase tracking-tighter flex items-center gap-0.5">
+                                                                        <span className="material-symbols-outlined text-[10px]">verified</span>
+                                                                        Creador
+                                                                    </span>
                                                                 ) : isNew ? (
                                                                     <span className="text-[8px] bg-green-500 text-white font-black px-1.5 py-0.5 rounded-sm uppercase tracking-tighter flex items-center gap-0.5">
                                                                         <span className="size-1 bg-white rounded-full animate-pulse"></span>
@@ -439,8 +442,11 @@ const Dashboard = () => {
                             </h3>
 
                             <div className="flex flex-wrap items-center justify-center gap-1.5 mb-4">
-                                {selectedMember.name === userData.name ? (
-                                    <span className="bg-primary px-3 py-0.5 rounded-full text-[8px] font-black uppercase tracking-widest text-black">TÚ</span>
+                                {selectedMember.role === 'admin' || selectedMember.name === 'Marvin De Araujo' || selectedMember.name === 'MARVIN DE ARAUJO' ? (
+                                    <span className="bg-primary px-3 py-0.5 rounded-full text-[8px] font-black uppercase tracking-widest text-black flex items-center gap-1">
+                                        <span className="material-symbols-outlined text-[10px]">verified</span>
+                                        CREADOR
+                                    </span>
                                 ) : (Date.now() - selectedMember.timestamp < 3600000 * 24) ? (
                                     <span className="bg-green-500 px-3 py-0.5 rounded-full text-[8px] font-black uppercase tracking-widest text-white flex items-center gap-1">
                                         <span className="size-1 bg-white rounded-full animate-pulse"></span>

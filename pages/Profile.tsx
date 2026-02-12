@@ -10,61 +10,57 @@ const ProfileSettings = () => {
     // Check initial dark mode from html class
     const [isDarkMode, setIsDarkMode] = useState(document.documentElement.classList.contains('dark'));
     const { deleteAccount, logout, totalUsers, joinQueue, markAsWelcomed } = useUserStats();
-    const [avatar, setAvatar] = useState(IMAGES.USER_AVATAR);
+    const [avatar, setAvatar] = useState(() => localStorage.getItem('userAvatar') || IMAGES.USER_AVATAR);
 
     // Editable States
-    const [name, setName] = useState('Marvin De Araujo');
-    const [weight, setWeight] = useState('75');
-    const [height, setHeight] = useState('180');
-    const [instagram, setInstagram] = useState('@fitmarvin_dev');
-    const [goal, setGoal] = useState('');
+    const [name, setName] = useState(() => localStorage.getItem('userName') || 'Marvin De Araujo');
+    const [weight, setWeight] = useState(() => localStorage.getItem('userWeight') || '75');
+    const [height, setHeight] = useState(() => localStorage.getItem('userHeight') || '180');
+    const [instagram, setInstagram] = useState(() => localStorage.getItem('userInstagram') || '@fitmarvin_dev');
+    const [phone, setPhone] = useState(() => localStorage.getItem('userPhone') || '');
+    const [goal, setGoal] = useState(() => localStorage.getItem('userGoal') || '');
+    const [role, setRole] = useState<'user' | 'admin'>(() => (localStorage.getItem('userRole') as 'user' | 'admin') || 'user');
 
     // New Features state
-    const [attendance, setAttendance] = useState<Record<string, 'present' | 'absent' | undefined>>({});
-    const [weightHistory, setWeightHistory] = useState<{ date: string, weight: number }[]>([]);
+    const [attendance, setAttendance] = useState<Record<string, 'present' | 'absent' | undefined>>(() => {
+        const stored = localStorage.getItem('userAttendance');
+        return stored ? JSON.parse(stored) : {};
+    });
+    const [weightHistory, setWeightHistory] = useState<{ date: string, weight: number }[]>(() => {
+        const stored = localStorage.getItem('userWeightHistory');
+        return stored ? JSON.parse(stored) : [];
+    });
 
     const fileInputRef = useRef<HTMLInputElement>(null);
 
-    // Load data from localStorage on mount
+    // Load data corrections on mount if needed
     useEffect(() => {
-        const storedAvatar = localStorage.getItem('userAvatar');
         const storedName = localStorage.getItem('userName');
-
         if (!storedName) {
             navigate('/onboarding');
             return;
         }
 
         const storedWeight = localStorage.getItem('userWeight');
-        const storedHeight = localStorage.getItem('userHeight');
-        const storedInsta = localStorage.getItem('userInstagram');
-        const storedGoal = localStorage.getItem('userGoal');
-
-        const storedAttendance = localStorage.getItem('userAttendance');
-        const storedHistory = localStorage.getItem('userWeightHistory');
-
-        if (storedAvatar) setAvatar(storedAvatar);
-        if (storedName) setName(storedName);
-        if (storedWeight) setWeight(storedWeight);
-        if (storedHeight) setHeight(storedHeight);
-        if (storedInsta) setInstagram(storedInsta);
-        if (storedGoal) setGoal(storedGoal);
-
-        if (storedAttendance) {
-            try {
-                setAttendance(JSON.parse(storedAttendance));
-            } catch (e) { console.error("Error parsing attendance", e); }
-        }
-
-        if (storedHistory) {
-            try {
-                setWeightHistory(JSON.parse(storedHistory));
-            } catch (e) { console.error("Error parsing weight history", e); }
-        } else if (storedWeight) {
-            // Initialize history with current weight if no history exists
+        if (weightHistory.length === 0 && storedWeight) {
             setWeightHistory([{ date: new Date().toISOString().split('T')[0], weight: parseFloat(storedWeight) }]);
         }
-    }, []);
+    }, [navigate]);
+
+    // AUTO-SAVE LOGIC
+    useEffect(() => {
+        if (!name) return;
+        localStorage.setItem('userName', name);
+        localStorage.setItem('userWeight', weight);
+        localStorage.setItem('userHeight', height);
+        localStorage.setItem('userInstagram', instagram);
+        localStorage.setItem('userPhone', phone);
+        localStorage.setItem('userAvatar', avatar);
+        localStorage.setItem('userGoal', goal);
+
+        // Dispatch event for sidebar/context updates
+        window.dispatchEvent(new Event('user-update'));
+    }, [name, weight, height, instagram, phone, avatar, goal]);
 
     const toggleDarkMode = () => {
         if (isDarkMode) {
@@ -76,14 +72,9 @@ const ProfileSettings = () => {
     };
 
     const handleSave = () => {
-        // Save all data to localStorage
-        localStorage.setItem('userName', name);
-        localStorage.setItem('userWeight', weight);
-        localStorage.setItem('userHeight', height);
-        localStorage.setItem('userInstagram', instagram);
-        localStorage.setItem('userAvatar', avatar);
+        // Since we have auto-save, this manually triggers the feedback UI
+        // and ensures weight history is updated (which we might want only on manual save or periodically)
 
-        // Update Weight History
         const today = new Date().toISOString().split('T')[0];
         const currentWeightVal = parseFloat(weight);
 
@@ -96,15 +87,11 @@ const ProfileSettings = () => {
             newHistory.push({ date: today, weight: currentWeightVal });
         }
 
-        // Sort by date just in case
         newHistory.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
 
         setWeightHistory(newHistory);
         localStorage.setItem('userWeightHistory', JSON.stringify(newHistory));
         localStorage.setItem('userAttendance', JSON.stringify(attendance));
-
-        // Dispatch event so Sidebar updates immediately
-        window.dispatchEvent(new Event('user-update'));
 
         // UI Feedback
         const btn = document.getElementById('save-btn');
@@ -153,7 +140,6 @@ const ProfileSettings = () => {
         }
 
         setAttendance(newAttendance);
-        // Save immediately for better UX
         localStorage.setItem('userAttendance', JSON.stringify(newAttendance));
     };
 
@@ -166,16 +152,26 @@ const ProfileSettings = () => {
                     <div className="absolute inset-0 bg-gradient-to-t from-background-light dark:from-background-dark to-transparent"></div>
 
                     <div className="max-w-screen-2xl mx-auto flex justify-between items-end h-full px-6 md:px-12 pb-8 relative z-10">
-                        <div>
-                            <h2 className="text-4xl font-extrabold">Perfil y Ajustes</h2>
-                            <p className="text-slate-500 mt-2">Gestiona tus datos físicos y preferencias.</p>
+                        <div className="flex items-center gap-4">
+                            <div>
+                                <h2 className="text-4xl font-extrabold flex items-center gap-3">
+                                    Perfil y Ajustes
+                                    {role === 'admin' && (
+                                        <span className="bg-primary/20 text-primary text-xs px-3 py-1 rounded-full border border-primary/30 font-black tracking-widest uppercase flex items-center gap-1.5 animate-pulse">
+                                            <span className="material-symbols-outlined text-sm">verified</span>
+                                            Creador
+                                        </span>
+                                    )}
+                                </h2>
+                                <p className="text-slate-500 mt-2 italic font-medium">Gestiona tus datos físicos y preferencias. <span className="text-primary/70 ml-2 font-bold not-italic underline decoration-primary/30 underline-offset-4">(Guardado automático activado)</span></p>
+                            </div>
                         </div>
                         <button
                             id="save-btn"
                             onClick={handleSave}
                             className="bg-primary text-black px-6 py-2.5 rounded-lg font-bold flex items-center gap-2 shadow-lg shadow-primary/20 hover:bg-primary/90 transition-all active:scale-95"
                         >
-                            <span className="material-symbols-outlined text-lg">save</span> Guardar
+                            <span className="material-symbols-outlined text-lg">sync</span> Actualizar Historial
                         </button>
                     </div>
                 </header>
@@ -200,46 +196,65 @@ const ProfileSettings = () => {
                             />
                         </div>
                         <div className="flex-1 w-full text-center md:text-left space-y-4">
-                            <div>
-                                <label className="block text-xs font-bold text-slate-400 uppercase mb-1">Nombre de Usuario</label>
-                                <input
-                                    type="text"
-                                    value={name}
-                                    onChange={(e) => setName(e.target.value)}
-                                    className="w-full bg-slate-100 dark:bg-background-dark/50 border-none rounded-xl px-4 py-3 text-xl font-bold focus:ring-2 focus:ring-primary/50 text-slate-900 dark:text-white"
-                                />
-                            </div>
-                            <div>
-                                <label className="block text-xs font-bold text-slate-400 uppercase mb-1">Objetivo Actual</label>
-                                <div className="relative group/goal">
-                                    <div className="p-3 bg-slate-100 dark:bg-background-dark/50 rounded-xl flex items-center gap-2 border border-transparent hover:border-slate-200 dark:hover:border-border-dark transition-colors cursor-pointer">
-                                        <span className="material-symbols-outlined text-primary group-hover/goal:scale-110 transition-transform">flag</span>
-                                        <select
-                                            value={goal}
-                                            onChange={(e) => setGoal(e.target.value)}
-                                            className="bg-transparent border-none appearance-none font-bold text-lg text-slate-700 dark:text-slate-300 w-full focus:ring-0 cursor-pointer"
-                                        >
-                                            <option value="" disabled>Seleccionar...</option>
-                                            <option value="gain_muscle">Ganar Músculo</option>
-                                            <option value="lose_fat">Perder Grasa</option>
-                                            <option value="gain_fat">Ganar Peso</option>
-                                            <option value="gain_endurance">Ganar Resistencia</option>
-                                        </select>
-                                        <span className="material-symbols-outlined text-slate-400 text-sm ml-auto opacity-0 group-hover/goal:opacity-100 transition-opacity pointer-events-none">expand_more</span>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label className="block text-xs font-bold text-slate-400 uppercase mb-1">Nombre de Usuario</label>
+                                    <input
+                                        type="text"
+                                        value={name}
+                                        onChange={(e) => setName(e.target.value)}
+                                        className="w-full bg-slate-100 dark:bg-background-dark/50 border-none rounded-xl px-4 py-3 text-xl font-bold focus:ring-2 focus:ring-primary/50 text-slate-900 dark:text-white"
+                                    />
+                                </div>
+                                <div>
+                                    <label className="block text-xs font-bold text-slate-400 uppercase mb-1">Objetivo Actual</label>
+                                    <div className="relative group/goal">
+                                        <div className="p-3 bg-slate-100 dark:bg-background-dark/50 rounded-xl flex items-center gap-2 border border-transparent hover:border-slate-200 dark:hover:border-border-dark transition-colors cursor-pointer">
+                                            <span className="material-symbols-outlined text-primary group-hover/goal:scale-110 transition-transform">flag</span>
+                                            <select
+                                                value={goal}
+                                                onChange={(e) => setGoal(e.target.value)}
+                                                className="bg-transparent border-none appearance-none font-bold text-lg text-slate-700 dark:text-slate-300 w-full focus:ring-0 cursor-pointer"
+                                            >
+                                                <option value="" disabled>Seleccionar...</option>
+                                                <option value="gain_muscle">Ganar Músculo</option>
+                                                <option value="lose_fat">Perder Grasa</option>
+                                                <option value="gain_fat">Ganar Peso</option>
+                                                <option value="gain_endurance">Ganar Resistencia</option>
+                                            </select>
+                                            <span className="material-symbols-outlined text-slate-400 text-sm ml-auto opacity-0 group-hover/goal:opacity-100 transition-opacity pointer-events-none">expand_more</span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                            <div>
-                                <label className="block text-xs font-bold text-slate-400 uppercase mb-1">Instagram / Red Social</label>
-                                <div className="relative">
-                                    <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 font-bold text-lg">@</span>
-                                    <input
-                                        type="text"
-                                        value={instagram.replace('@', '')}
-                                        onChange={(e) => setInstagram('@' + e.target.value.replace('@', ''))}
-                                        className="w-full bg-slate-100 dark:bg-background-dark/50 border-none rounded-xl pl-10 pr-4 py-3 text-lg font-medium focus:ring-2 focus:ring-primary/50 text-slate-700 dark:text-slate-300"
-                                        placeholder="usuario"
-                                    />
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label className="block text-xs font-bold text-slate-400 uppercase mb-1">Instagram</label>
+                                    <div className="relative">
+                                        <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 font-bold text-lg">@</span>
+                                        <input
+                                            type="text"
+                                            value={instagram.replace('@', '')}
+                                            onChange={(e) => setInstagram('@' + e.target.value.replace('@', ''))}
+                                            className="w-full bg-slate-100 dark:bg-background-dark/50 border-none rounded-xl pl-10 pr-4 py-3 text-lg font-medium focus:ring-2 focus:ring-primary/50 text-slate-700 dark:text-slate-300"
+                                            placeholder="usuario"
+                                        />
+                                    </div>
+                                </div>
+                                <div>
+                                    <label className="block text-xs font-bold text-slate-400 uppercase mb-1">Teléfono / WhatsApp</label>
+                                    <div className="relative">
+                                        <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 font-bold text-lg">
+                                            <span className="material-symbols-outlined text-lg">call</span>
+                                        </span>
+                                        <input
+                                            type="tel"
+                                            value={phone}
+                                            onChange={(e) => setPhone(e.target.value)}
+                                            className="w-full bg-slate-100 dark:bg-background-dark/50 border-none rounded-xl pl-12 pr-4 py-3 text-lg font-medium focus:ring-2 focus:ring-primary/50 text-slate-700 dark:text-slate-300"
+                                            placeholder="+34 ..."
+                                        />
+                                    </div>
                                 </div>
                             </div>
                         </div>

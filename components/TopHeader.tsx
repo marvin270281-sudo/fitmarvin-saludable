@@ -14,9 +14,9 @@ const TopHeader = () => {
     const [isLogoModalOpen, setIsLogoModalOpen] = useState(false);
     const [userInstagram, setUserInstagram] = useState(() => localStorage.getItem('userInstagram')?.replace('@', '') || 'fitmarvin_dev');
 
-    // User Data State
     const [userAvatar, setUserAvatar] = useState(() => localStorage.getItem('userAvatar') || IMAGES.USER_AVATAR);
     const [userName, setUserName] = useState(() => localStorage.getItem('userName') || 'Marvin De Araujo');
+    const [userRole, setUserRole] = useState(() => (localStorage.getItem('userRole') as 'user' | 'admin') || 'user');
 
     // Listen for profile updates
     React.useEffect(() => {
@@ -24,9 +24,12 @@ const TopHeader = () => {
             const storedAvatar = localStorage.getItem('userAvatar');
             const storedName = localStorage.getItem('userName');
             const storedInsta = localStorage.getItem('userInstagram');
+            const storedRole = localStorage.getItem('userRole') as 'user' | 'admin';
+
             if (storedAvatar) setUserAvatar(storedAvatar);
             if (storedName) setUserName(storedName);
             if (storedInsta) setUserInstagram(storedInsta.replace('@', ''));
+            if (storedRole) setUserRole(storedRole);
         };
 
         window.addEventListener('user-update', handleUserUpdate);
@@ -125,7 +128,14 @@ const TopHeader = () => {
                     <Link to="/profile" className="flex items-center gap-2 md:gap-3 pl-2 md:pl-4 md:border-l border-slate-200 dark:border-white/10 hover:opacity-80 transition-opacity">
                         <div className="text-right hidden sm:block">
                             <p className="text-sm font-bold leading-none dark:text-white">{userName}</p>
-                            <p className="text-[10px] text-primary font-bold">Pro Member</p>
+                            {userRole === 'admin' ? (
+                                <p className="text-[10px] text-primary font-black uppercase tracking-tighter flex items-center justify-end gap-1">
+                                    <span className="material-symbols-outlined text-[10px]">verified</span>
+                                    Creador
+                                </p>
+                            ) : (
+                                <p className="text-[10px] text-primary font-bold">Pro Member</p>
+                            )}
                         </div>
                         <div className="size-8 md:size-10 rounded-full bg-slate-200 bg-cover bg-center border-2 border-primary" style={{ backgroundImage: `url('${userAvatar}')` }}></div>
                     </Link>

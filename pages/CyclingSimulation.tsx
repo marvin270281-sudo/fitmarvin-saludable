@@ -144,39 +144,39 @@ const CyclingSimulation = () => {
                             {!isPlaying ? (
                                 <button
                                     onClick={handleStart}
-                                    className="w-14 h-14 rounded-full bg-primary hover:bg-primary/90 flex items-center justify-center text-white shadow-lg shadow-primary/30 transition-all hover:scale-105 active:scale-95 group"
+                                    className="w-11 h-11 rounded-full bg-primary hover:bg-primary/90 flex items-center justify-center text-white shadow-lg shadow-primary/30 transition-all hover:scale-105 active:scale-95 group"
                                     aria-label="Iniciar ciclismo"
                                 >
-                                    <span className="material-symbols-outlined text-4xl group-hover:scale-110 transition-transform">play_arrow</span>
+                                    <span className="material-symbols-outlined text-3xl group-hover:scale-110 transition-transform">play_arrow</span>
                                 </button>
                             ) : (
                                 <button
                                     onClick={handlePause}
-                                    className="w-14 h-14 rounded-full bg-amber-500 hover:bg-amber-600 flex items-center justify-center text-white shadow-lg shadow-amber-500/30 transition-all hover:scale-105 active:scale-95 group"
+                                    className="w-11 h-11 rounded-full bg-amber-500 hover:bg-amber-600 flex items-center justify-center text-white shadow-lg shadow-amber-500/30 transition-all hover:scale-105 active:scale-95 group"
                                     aria-label="Pausar ciclismo"
                                 >
-                                    <span className="material-symbols-outlined text-4xl group-hover:scale-110 transition-transform">pause</span>
+                                    <span className="material-symbols-outlined text-3xl group-hover:scale-110 transition-transform">pause</span>
                                 </button>
                             )}
 
                             {/* Stop Button */}
                             <button
                                 onClick={handleStop}
-                                className="w-11 h-11 rounded-full bg-zinc-800/80 hover:bg-red-500 flex items-center justify-center text-white transition-all hover:scale-105 active:scale-95"
+                                className="w-9 h-9 rounded-full bg-zinc-800/80 hover:bg-red-500 flex items-center justify-center text-white transition-all hover:scale-105 active:scale-95"
                                 title="Parar"
                                 aria-label="Parar"
                             >
-                                <span className="material-symbols-outlined text-2xl">stop</span>
+                                <span className="material-symbols-outlined text-xl">stop</span>
                             </button>
 
                             {/* Reset Button */}
                             <button
                                 onClick={handleReset}
-                                className="w-11 h-11 rounded-full bg-zinc-800/80 hover:bg-blue-500 flex items-center justify-center text-white transition-all hover:scale-105 active:scale-95"
+                                className="w-9 h-9 rounded-full bg-zinc-800/80 hover:bg-blue-500 flex items-center justify-center text-white transition-all hover:scale-105 active:scale-95"
                                 title="Reiniciar"
                                 aria-label="Reiniciar"
                             >
-                                <span className="material-symbols-outlined text-2xl">restart_alt</span>
+                                <span className="material-symbols-outlined text-xl">restart_alt</span>
                             </button>
                         </div>
                     </div>

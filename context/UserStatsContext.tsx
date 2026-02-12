@@ -5,6 +5,7 @@ interface UserJoinEvent {
     id: number;
     name: string;
     avatar: string;
+    role: 'user' | 'admin';
     timestamp: number;
 }
 
@@ -29,7 +30,6 @@ export const UserStatsProvider: React.FC<{ children: ReactNode }> = ({ children 
     const [totalUsers, setTotalUsers] = useState(() => {
         const stored = localStorage.getItem('app_total_users');
         const count = stored ? parseInt(stored, 10) : INITIAL_BASE_USERS;
-        // FORCE RESET: If the number is still the old fake one (over 1000), reset it to 1 for honesty
         if (count > 1000) return 1;
         return count;
     });
@@ -49,6 +49,7 @@ export const UserStatsProvider: React.FC<{ children: ReactNode }> = ({ children 
             const name = localStorage.getItem('userName');
             const avatar = localStorage.getItem('userAvatar');
             const weight = localStorage.getItem('userWeight');
+            const role = (localStorage.getItem('userRole') as 'user' | 'admin') || 'user';
 
             if (name) {
                 setMembers(prev => {
@@ -58,7 +59,8 @@ export const UserStatsProvider: React.FC<{ children: ReactNode }> = ({ children 
                         updated = prev.map(m => m.name === name ? {
                             ...m,
                             avatar: avatar || IMAGES.USER_AVATAR,
-                            weight: weight || m.weight
+                            weight: weight || m.weight,
+                            role: role
                         } : m);
                     } else {
                         const newMember = {
@@ -66,6 +68,7 @@ export const UserStatsProvider: React.FC<{ children: ReactNode }> = ({ children 
                             name: name,
                             avatar: avatar || IMAGES.USER_AVATAR,
                             weight: weight || '75',
+                            role: role,
                             timestamp: Date.now()
                         };
                         updated = [newMember, ...prev];
