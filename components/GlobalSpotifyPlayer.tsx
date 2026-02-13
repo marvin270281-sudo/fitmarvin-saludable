@@ -50,32 +50,6 @@ const GlobalSpotifyPlayer = () => {
                     ></iframe>
                 </div>
             </div>
-
-            {/* 2. Floating Toggle Button */}
-            <button
-                onClick={toggleOpen}
-                className={`
-                    pointer-events-auto
-                    size-14 rounded-full flex items-center justify-center shadow-2xl transition-all duration-500 hover:scale-110 active:scale-95
-                    ${isOpen
-                        ? 'bg-white text-black rotate-180 opacity-0 scale-50 pointer-events-none'
-                        : 'bg-[#1DB954] text-black hover:shadow-[#1DB954]/40 scale-100 opacity-100'}
-                    relative group
-                `}
-            >
-                {/* Spotify Logo Icon logic */}
-                <span className="material-symbols-outlined text-3xl font-black">music_note</span>
-
-                {/* Visual Glow */}
-                {!isOpen && (
-                    <span className="absolute inset-0 rounded-full bg-[#1DB954] animate-ping opacity-20"></span>
-                )}
-
-                {/* Tooltip */}
-                <div className="absolute right-full mr-4 px-3 py-1.5 bg-slate-900 text-white text-[10px] font-black uppercase tracking-widest rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap border border-white/10 pointer-events-none">
-                    Música Motivacional
-                </div>
-            </button>
         </div>
     );
 };

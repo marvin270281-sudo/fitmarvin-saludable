@@ -118,11 +118,55 @@ const CyclingSimulation = () => {
             <div className="relative z-10 flex-grow flex flex-col items-center px-6 md:px-12 py-10 text-white">
                 <div className="w-full max-w-screen-2xl h-full flex flex-col justify-between relative">
 
-                    {/* Header Stats */}
-                    <div className="flex justify-between items-start">
-                        <div className="bg-black/40 backdrop-blur-md p-4 rounded-2xl border border-white/10 group hover:bg-black/60 transition-colors">
-                            <p className="text-[10px] font-bold uppercase tracking-widest text-primary/80 mb-1">Tiempo de sesión</p>
-                            <p className="text-4xl md:text-5xl font-black font-mono tracking-tighter">{formatTime(duration)}</p>
+                    {/* Header Stats & Controls */}
+                    <div className="flex flex-wrap justify-between items-start gap-4">
+                        <div className="flex flex-wrap items-center gap-4">
+                            <div className="bg-black/40 backdrop-blur-md p-4 rounded-2xl border border-white/10 group hover:bg-black/60 transition-colors">
+                                <p className="text-[10px] font-bold uppercase tracking-widest text-primary/80 mb-1">Tiempo de sesión</p>
+                                <p className="text-4xl md:text-5xl font-black font-mono tracking-tighter">{formatTime(duration)}</p>
+                            </div>
+
+                            {/* Controls */}
+                            <div className="flex items-center gap-3 bg-black/60 backdrop-blur-xl p-3 rounded-full border border-white/10 transition-all hover:bg-black/80 shadow-2xl">
+                                {/* Play/Pause Button */}
+                                {!isPlaying ? (
+                                    <button
+                                        onClick={handleStart}
+                                        className="w-11 h-11 rounded-full bg-primary hover:bg-primary/90 flex items-center justify-center text-white shadow-lg shadow-primary/30 transition-all hover:scale-105 active:scale-95 group"
+                                        aria-label="Iniciar ciclismo"
+                                    >
+                                        <span className="material-symbols-outlined text-3xl group-hover:scale-110 transition-transform">play_arrow</span>
+                                    </button>
+                                ) : (
+                                    <button
+                                        onClick={handlePause}
+                                        className="w-11 h-11 rounded-full bg-amber-500 hover:bg-amber-600 flex items-center justify-center text-white shadow-lg shadow-amber-500/30 transition-all hover:scale-105 active:scale-95 group"
+                                        aria-label="Pausar ciclismo"
+                                    >
+                                        <span className="material-symbols-outlined text-3xl group-hover:scale-110 transition-transform">pause</span>
+                                    </button>
+                                )}
+
+                                {/* Stop Button */}
+                                <button
+                                    onClick={handleStop}
+                                    className="w-9 h-9 rounded-full bg-zinc-800/80 hover:bg-red-500 flex items-center justify-center text-white transition-all hover:scale-105 active:scale-95"
+                                    title="Parar"
+                                    aria-label="Parar"
+                                >
+                                    <span className="material-symbols-outlined text-xl">stop</span>
+                                </button>
+
+                                {/* Reset Button */}
+                                <button
+                                    onClick={handleReset}
+                                    className="w-9 h-9 rounded-full bg-zinc-800/80 hover:bg-blue-500 flex items-center justify-center text-white transition-all hover:scale-105 active:scale-95"
+                                    title="Reiniciar"
+                                    aria-label="Reiniciar"
+                                >
+                                    <span className="material-symbols-outlined text-xl">restart_alt</span>
+                                </button>
+                            </div>
                         </div>
 
                         {/* Spotify Toggle Button */}
@@ -134,51 +178,6 @@ const CyclingSimulation = () => {
                             <span className="material-symbols-outlined text-3xl">music_note</span>
                             <span className="font-bold hidden md:inline">Spotify</span>
                         </button>
-                    </div>
-
-                    {/* Controls - Bottom Right */}
-                    <div className="absolute bottom-8 right-8 flex items-end justify-end pointer-events-none">
-                        <div className="pointer-events-auto flex items-center gap-3 bg-black/60 backdrop-blur-xl p-3 rounded-full border border-white/10 transition-all hover:bg-black/80 shadow-2xl">
-
-                            {/* Play/Pause Button */}
-                            {!isPlaying ? (
-                                <button
-                                    onClick={handleStart}
-                                    className="w-11 h-11 rounded-full bg-primary hover:bg-primary/90 flex items-center justify-center text-white shadow-lg shadow-primary/30 transition-all hover:scale-105 active:scale-95 group"
-                                    aria-label="Iniciar ciclismo"
-                                >
-                                    <span className="material-symbols-outlined text-3xl group-hover:scale-110 transition-transform">play_arrow</span>
-                                </button>
-                            ) : (
-                                <button
-                                    onClick={handlePause}
-                                    className="w-11 h-11 rounded-full bg-amber-500 hover:bg-amber-600 flex items-center justify-center text-white shadow-lg shadow-amber-500/30 transition-all hover:scale-105 active:scale-95 group"
-                                    aria-label="Pausar ciclismo"
-                                >
-                                    <span className="material-symbols-outlined text-3xl group-hover:scale-110 transition-transform">pause</span>
-                                </button>
-                            )}
-
-                            {/* Stop Button */}
-                            <button
-                                onClick={handleStop}
-                                className="w-9 h-9 rounded-full bg-zinc-800/80 hover:bg-red-500 flex items-center justify-center text-white transition-all hover:scale-105 active:scale-95"
-                                title="Parar"
-                                aria-label="Parar"
-                            >
-                                <span className="material-symbols-outlined text-xl">stop</span>
-                            </button>
-
-                            {/* Reset Button */}
-                            <button
-                                onClick={handleReset}
-                                className="w-9 h-9 rounded-full bg-zinc-800/80 hover:bg-blue-500 flex items-center justify-center text-white transition-all hover:scale-105 active:scale-95"
-                                title="Reiniciar"
-                                aria-label="Reiniciar"
-                            >
-                                <span className="material-symbols-outlined text-xl">restart_alt</span>
-                            </button>
-                        </div>
                     </div>
 
                     {/* Bottom Stats */}
