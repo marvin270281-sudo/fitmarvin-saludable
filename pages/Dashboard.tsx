@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { IMAGES } from '../constants';
 import { useUserStats } from '../context/UserStatsContext';
+import HealthTracker from '../components/HealthTracker';
 
 const Dashboard = () => {
     const navigate = useNavigate();
@@ -297,6 +298,11 @@ const Dashboard = () => {
                                 </div>
                             ))}
                         </div>
+                    </div>
+
+                    {/* 2.5 HEALTH TRACKER (NEW) */}
+                    <div className="mb-10">
+                        <HealthTracker />
                     </div>
 
                     {/* 3. EXISTING CONTENT GRID */}

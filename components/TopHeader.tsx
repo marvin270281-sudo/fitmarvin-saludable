@@ -125,6 +125,17 @@ const TopHeader = () => {
                         </span>
                     </div>
 
+                    <div className="hidden sm:flex items-center gap-2">
+                        <button
+                            onClick={() => window.open('https://www.paypal.com/donate', '_blank')}
+                            className="flex items-center gap-2 px-3 py-1.5 bg-rose-500/10 hover:bg-rose-500/20 text-rose-500 rounded-full border border-rose-500/20 transition-all group shadow-sm hover:scale-105"
+                            title="Apoyar el proyecto"
+                        >
+                            <span className="material-symbols-outlined text-lg animate-pulse">favorite</span>
+                            <span className="text-[10px] font-black uppercase tracking-widest hidden lg:inline">Donar</span>
+                        </button>
+                    </div>
+
                     <Link to="/profile" className="flex items-center gap-2 md:gap-3 pl-2 md:pl-4 md:border-l border-slate-200 dark:border-white/10 hover:opacity-80 transition-opacity">
                         <div className="text-right hidden sm:block">
                             <p className="text-sm font-bold leading-none dark:text-white">{userName}</p>

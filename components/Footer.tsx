@@ -29,6 +29,10 @@ const Footer = () => {
                     <span className="text-[10px] md:text-xs font-medium text-slate-600 dark:text-slate-400 group-hover:text-primary transition-colors">
                         Aplicación creada por Marcus De Araujo , Enero 2026 con todos los derechos.
                     </span>
+                    <div onClick={(e) => { e.stopPropagation(); window.open('https://www.paypal.com/donate', '_blank'); }} className="flex items-center gap-1.5 px-3 py-1 bg-rose-500/10 hover:bg-rose-500/20 text-rose-500 rounded-full border border-rose-500/10 transition-all text-[10px] font-black uppercase tracking-widest ml-4">
+                        <span className="material-symbols-outlined text-xs">volunteer_activism</span>
+                        Apoyar Proyecto
+                    </div>
                 </button>
             </div>
         </footer>
