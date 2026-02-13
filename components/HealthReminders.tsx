@@ -40,9 +40,13 @@ const HealthReminders = () => {
             return;
         }
 
-        const showMessage = () => {
-            const randomIndex = Math.floor(Math.random() * MESSAGES.length);
-            setCurrentMessage(MESSAGES[randomIndex].text);
+        const showMessage = (msg?: string) => {
+            if (msg) {
+                setCurrentMessage(msg);
+            } else {
+                const randomIndex = Math.floor(Math.random() * MESSAGES.length);
+                setCurrentMessage(MESSAGES[randomIndex].text);
+            }
             setIsVisible(true);
 
             // Hide after 8 seconds
@@ -51,15 +55,46 @@ const HealthReminders = () => {
             }, 8000);
         };
 
-        // Initial delay before first message (or show quickly for testing)
-        const initialTimer = setTimeout(showMessage, 30000); // 30 seconds after entering a page
+        // Check for medications every minute
+        const checkMeds = () => {
+            try {
+                const savedMeds = localStorage.getItem('health_meds');
+                if (savedMeds) {
+                    const meds = JSON.parse(savedMeds);
+                    const now = new Date();
+                    const currentTime = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
 
-        // Set interval for 15 minutes (900000 ms)
-        const interval = setInterval(showMessage, 900000);
+                    meds.forEach((med: any) => {
+                        if (med.time === currentTime) {
+                            // Only show if not already showing a med alert for this specific time
+                            // To prevent spamming in that same minute
+                            const lastMedAlert = sessionStorage.getItem(`last_med_alert_${med.id}`);
+                            if (lastMedAlert !== currentTime) {
+                                showMessage(`💊 ¡Hora de tu medicación! Toma ${med.name} (${med.quantity}).`);
+                                sessionStorage.setItem(`last_med_alert_${med.id}`, currentTime);
+                            }
+                        }
+                    });
+                }
+            } catch (e) {
+                console.error("Error checking meds:", e);
+            }
+        };
+
+        // Initial check and set interval for meds
+        checkMeds();
+        const medInterval = setInterval(checkMeds, 30000); // Check every 30 seconds
+
+        // Initial delay before first general message
+        const initialTimer = setTimeout(() => showMessage(), 30000);
+
+        // Set interval for general messages (15 minutes)
+        const generalInterval = setInterval(() => showMessage(), 900000);
 
         return () => {
             clearTimeout(initialTimer);
-            clearInterval(interval);
+            clearInterval(medInterval);
+            clearInterval(generalInterval);
         };
     }, [isNotHome, location.pathname]);
 
