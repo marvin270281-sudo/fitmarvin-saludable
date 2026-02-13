@@ -493,7 +493,7 @@ const Dashboard = () => {
                             {/* Actions - Smaller Buttons */}
                             <div className="grid grid-cols-1 gap-2">
                                 <a
-                                    href="https://www.instagram.com/fitmarvin_dev/"
+                                    href="https://www.instagram.com/marvin_dev2026/?hl=es-es"
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     className="w-full py-3 bg-[#E1306C] text-white font-black uppercase tracking-widest text-[10px] rounded-xl flex items-center justify-center gap-2 hover:scale-[1.02] active:scale-[0.98] transition-all"

@@ -3,6 +3,7 @@ import { useNavigate, Link, useLocation } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
 import { useUserStats } from '../context/UserStatsContext';
 import { IMAGES } from '../constants';
+import SupportModal from './SupportModal';
 
 const TopHeader = () => {
     const navigate = useNavigate();
@@ -12,6 +13,7 @@ const TopHeader = () => {
     const [hasNotifs, setHasNotifs] = useState(true);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [isLogoModalOpen, setIsLogoModalOpen] = useState(false);
+    const [isSupportModalOpen, setIsSupportModalOpen] = useState(false);
     const [userInstagram, setUserInstagram] = useState(() => localStorage.getItem('userInstagram')?.replace('@', '') || 'fitmarvin_dev');
 
     const [userAvatar, setUserAvatar] = useState(() => localStorage.getItem('userAvatar') || IMAGES.USER_AVATAR);
@@ -127,12 +129,12 @@ const TopHeader = () => {
 
                     <div className="hidden sm:flex items-center gap-2">
                         <button
-                            onClick={() => alert('Puedes apoyar el proyecto vía Bizum al número: 600 000 000 (Marcus De Araujo). ¡Muchas gracias!')}
+                            onClick={() => setIsSupportModalOpen(true)}
                             className="flex items-center gap-2 px-3 py-1.5 bg-rose-500/10 hover:bg-rose-500/20 text-rose-500 rounded-full border border-rose-500/20 transition-all group shadow-sm hover:scale-105"
-                            title="Apoyar el proyecto (Bizum)"
+                            title="Apoyar el proyecto (Bizum / Instagram)"
                         >
                             <span className="material-symbols-outlined text-lg animate-pulse">favorite</span>
-                            <span className="text-[10px] font-black uppercase tracking-widest hidden lg:inline">Bizum</span>
+                            <span className="text-[10px] font-black uppercase tracking-widest hidden lg:inline">Apoyar</span>
                         </button>
                     </div>
 
@@ -273,6 +275,11 @@ const TopHeader = () => {
                     </div>
                 </div>
             )}
+            {/* Support Modal */}
+            <SupportModal
+                isOpen={isSupportModalOpen}
+                onClose={() => setIsSupportModalOpen(false)}
+            />
         </header>
     );
 };

@@ -67,7 +67,7 @@ const AboutCreator = () => {
                                         ¡Conectemos en redes!
                                     </h3>
                                     <a
-                                        href="https://www.instagram.com/fitmarvin_dev/"
+                                        href="https://www.instagram.com/marvin_dev2026/?hl=es-es"
                                         target="_blank"
                                         rel="noopener noreferrer"
                                         className="inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-[#833ab4] via-[#fd1d1d] to-[#fcb045] text-white font-black uppercase tracking-widest rounded-2xl hover:scale-105 transition-all shadow-xl shadow-orange-500/20 group"

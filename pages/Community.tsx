@@ -16,7 +16,7 @@ const Community = () => {
     const [currentUser, setCurrentUser] = useState({
         name: localStorage.getItem('userName') || 'Marvin De Araujo',
         avatar: localStorage.getItem('userAvatar') || IMAGES.USER_AVATAR,
-        instagram: localStorage.getItem('userInstagram') || '@fitmarvin_dev',
+        instagram: localStorage.getItem('userInstagram') || '@marvin_dev2026',
         role: localStorage.getItem('userRole') || 'user'
     });
 
@@ -26,7 +26,7 @@ const Community = () => {
             setCurrentUser({
                 name: localStorage.getItem('userName') || 'Marvin De Araujo',
                 avatar: localStorage.getItem('userAvatar') || IMAGES.USER_AVATAR,
-                instagram: localStorage.getItem('userInstagram') || '@fitmarvin_dev',
+                instagram: localStorage.getItem('userInstagram') || '@marvin_dev2026',
                 role: localStorage.getItem('userRole') || 'user'
             });
         };
@@ -335,7 +335,7 @@ const Community = () => {
 
                             {/* Instagram Social Action */}
                             <a
-                                href={selectedUserProfile.user === 'Marvin De Araujo' || selectedUserProfile.user === currentUser.name ? "https://www.instagram.com/fitmarvin_dev/" : `https://instagram.com/${(selectedUserProfile.instagram || '@fitmarvin_dev').replace('@', '')}`}
+                                href={selectedUserProfile.user === 'Marvin De Araujo' || selectedUserProfile.user === currentUser.name ? "https://www.instagram.com/marvin_dev2026/?hl=es-es" : `https://instagram.com/${(selectedUserProfile.instagram || '@marvin_dev2026').replace('@', '')}`}
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="w-full py-4 bg-[#E1306C] text-white font-black uppercase tracking-widest rounded-2xl flex items-center justify-center gap-3 hover:scale-[1.02] active:scale-[0.98] transition-all shadow-lg shadow-pink-500/20"

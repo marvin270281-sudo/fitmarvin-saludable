@@ -16,7 +16,7 @@ const ProfileSettings = () => {
     const [name, setName] = useState(() => localStorage.getItem('userName') || 'Marvin De Araujo');
     const [weight, setWeight] = useState(() => localStorage.getItem('userWeight') || '75');
     const [height, setHeight] = useState(() => localStorage.getItem('userHeight') || '180');
-    const [instagram, setInstagram] = useState(() => localStorage.getItem('userInstagram') || '@fitmarvin_dev');
+    const [instagram, setInstagram] = useState(() => localStorage.getItem('userInstagram') || '@marvin_dev2026');
     const [phone, setPhone] = useState(() => localStorage.getItem('userPhone') || '');
     const [goal, setGoal] = useState(() => localStorage.getItem('userGoal') || '');
     const [role, setRole] = useState<'user' | 'admin'>(() => (localStorage.getItem('userRole') as 'user' | 'admin') || 'user');
