@@ -8,8 +8,8 @@ export default defineConfig(({ mode }) => {
   const apiKey = env.VITE_GEMINI_API_KEY || env.GEMINI_API_KEY;
 
   return {
-    // use root base so development URL is simply http://localhost:3000/
-    base: '/',
+    // use relative base so deployment works on GH Pages subpaths
+    base: './',
     server: {
       port: 3000,
       host: '0.0.0.0',
