@@ -222,10 +222,15 @@ const TopHeader = () => {
                                 {(['ES', 'EN', 'PT', 'DE'] as const).map((lang) => (
                                     <button
                                         key={lang}
-                                        onClick={() => setLanguage(lang)}
-                                        className={`flex-1 px-4 py-2 rounded-xl text-sm font-black transition-all ${language === lang ? 'bg-primary text-black' : 'bg-slate-50 dark:bg-white/5 text-slate-400'}`}
+                                        onClick={(e) => {
+                                            e.preventDefault();
+                                            e.stopPropagation();
+                                            setLanguage(lang);
+                                        }}
+                                        className={`flex-1 px-4 py-3 rounded-xl text-sm font-black transition-all active:scale-95 flex items-center justify-center gap-2 ${language === lang ? 'bg-primary text-black' : 'bg-slate-50 dark:bg-white/5 text-slate-400'}`}
                                     >
                                         {lang}
+                                        {language === lang && <span className="material-symbols-outlined text-[10px]">check_circle</span>}
                                     </button>
                                 ))}
                             </div>

@@ -31,7 +31,7 @@ const App = () => {
                                 <TopHeader />
                                 <GlobalSpotifyPlayer />
                                 <HealthReminders />
-                                <div className="flex-1 overflow-hidden relative">
+                                <div className="flex-1 overflow-y-auto relative scroll-smooth">
                                     <Routes>
                                         <Route path="/" element={<Dashboard />} />
                                         <Route path="/exercises" element={<ExerciseLibrary />} />
