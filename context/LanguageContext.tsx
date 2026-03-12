@@ -1,50 +1,373 @@
 import React, { createContext, useContext, useState, ReactNode } from 'react';
 
-export type Language = 'ES';
+type Language = 'ES' | 'EN' | 'PT' | 'DE';
+
+interface TranslationDict {
+  [key: string]: string;
+}
+
+const translations: Record<Language, TranslationDict> = {
+  ES: {
+    'nav.home': 'Inicio',
+    'nav.walking': 'Caminata',
+    'nav.cycling': 'Ciclismo',
+    'nav.exercises': 'Ejercicios',
+    'nav.nutrition': 'Nutrición',
+    'nav.community': 'Comunidad',
+    'dashboard.welcome': '¡Hola, {name}!',
+    'dashboard.stats': 'Peso: {weight} kg • Altura: {height} cm',
+    'dashboard.online': 'En línea: {count}',
+    'dashboard.total_users': 'Usuarios totales: {count}',
+    'dashboard.goals': 'Tu Objetivo',
+    'dashboard.routine': 'Mi Rutina',
+    'dashboard.no_exercises': 'No tienes ejercicios en tu rutina.',
+    'dashboard.evolution': 'Tu Evolución',
+    'dashboard.achievements': 'Tus Logros',
+    'goal.gain_muscle': 'Ganar Músculo',
+    'goal.lose_fat': 'Perder Grasa',
+    'goal.gain_fat': 'Ganar Peso',
+    'goal.gain_endurance': 'Ganar Resistencia',
+    'common.back': 'Volver',
+    'common.continue': 'Continuar',
+    'onboarding.welcome': 'Bienvenido a FitMarvin',
+    'onboarding.select_account': 'Selecciona tu tipo de cuenta',
+    'onboarding.user': 'Usuario',
+    'onboarding.user_desc': 'Entrena y sigue tu progreso',
+    'onboarding.admin': 'Administrador',
+    'onboarding.admin_desc': 'Gestiona la plataforma (Marvin)',
+    'onboarding.goal_q': '¿Cuál es tu objetivo principal?',
+    'onboarding.goal_help': 'Te ayudaremos a conseguirlo paso a paso.',
+    'onboarding.name_placeholder': 'Escribe tu nombre...',
+    'profile.title': 'Perfil y Ajustes',
+    'profile.name': 'Nombre de Usuario',
+    'profile.goal': 'Objetivo Actual',
+    'profile.physical_data': 'Datos Físicos Editables',
+    'profile.weight': 'Peso Actual',
+    'profile.height': 'Altura',
+    'profile.accessibility': 'Accesibilidad & Tema',
+    'profile.dark_mode': 'Modo Oscuro',
+    'profile.logout': 'Cerrar Sesión',
+    'profile.delete_account': 'Eliminar Cuenta',
+    'profile.auto_save': 'Guardado automático activado',
+    'profile.update_history': 'Actualizar Historial',
+    'footer.creator': 'Aplicación creada por Marcus De Araujo',
+    'footer.rights': 'Todos los derechos reservados',
+    'footer.support': 'Apóyanos',
+    'dashboard.online_now': 'En línea ahora',
+    'dashboard.greet': 'Saludar',
+    'dashboard.greeting_sent': '¡Saludo enviado a {name}!',
+    'dashboard.online_desc': 'Usuarios activos en la comunidad',
+    'common.creator': 'Creador',
+    'common.pro_member': 'Miembro Pro',
+    'common.main_menu': 'Menú Principal',
+    'common.slogan': 'Tu compañero definitivo en el camino hacia una vida saludable.',
+    'common.go_home': 'Ir al Inicio',
+    'common.view_instagram': 'Ver Instagram',
+    'dashboard.no_weight_data': 'No hay datos de peso registrados',
+    'dashboard.explore': 'Explorar',
+    'dashboard.hydration': 'Control de Hidratación',
+    'dashboard.glasses': '{count} Vasos',
+    'dashboard.medication': 'Control de Medicación',
+    'dashboard.add': 'Añadir',
+    'dashboard.cancel': 'Cancelar',
+    'dashboard.med_name': 'Nombre',
+    'dashboard.med_quantity': 'Cantidad',
+    'dashboard.med_time': 'Horario (ej: 08:00)',
+    'dashboard.med_freq': 'Cada cuánto (ej: 8h)',
+    'dashboard.save_med': 'Guardar Medicamento',
+    'dashboard.no_meds': 'No hay medicamentos registrados',
+    'dashboard.every': 'Cada {freq}',
+    'chart.no_data': 'No hay datos suficientes aún.',
+    'chart.weight_evolution': 'Evolución de Peso',
+    'chart.initial': 'Inicial',
+    'chart.actual': 'Actual',
+    'chart.change': 'Cambio',
+    'ach.first_steps': 'Primeros Pasos',
+    'ach.one_week': '1 Semana',
+    'ach.gym_beast': 'Bestia Gym',
+    'ach.chef_fit': 'Chef Fit',
+  },
+  EN: {
+    'nav.home': 'Home',
+    'nav.walking': 'Walking',
+    'nav.cycling': 'Cycling',
+    'nav.exercises': 'Exercises',
+    'nav.nutrition': 'Nutrition',
+    'nav.community': 'Community',
+    'dashboard.welcome': 'Hello, {name}!',
+    'dashboard.stats': 'Weight: {weight} kg • Height: {height} cm',
+    'dashboard.online': 'Online: {count}',
+    'dashboard.total_users': 'Total users: {count}',
+    'dashboard.goals': 'Your Goal',
+    'dashboard.routine': 'My Routine',
+    'dashboard.no_exercises': 'You have no exercises in your routine.',
+    'dashboard.evolution': 'Your Evolution',
+    'dashboard.achievements': 'Your Achievements',
+    'goal.gain_muscle': 'Gain Muscle',
+    'goal.lose_fat': 'Lose Fat',
+    'goal.gain_fat': 'Gain Weight',
+    'goal.gain_endurance': 'Gain Endurance',
+    'common.back': 'Back',
+    'common.continue': 'Continue',
+    'onboarding.welcome': 'Welcome to FitMarvin',
+    'onboarding.select_account': 'Select your account type',
+    'onboarding.user': 'User',
+    'onboarding.user_desc': 'Train and track your progress',
+    'onboarding.admin': 'Administrator',
+    'onboarding.admin_desc': 'Manage the platform (Marvin)',
+    'onboarding.goal_q': 'What is your main goal?',
+    'onboarding.goal_help': 'We will help you achieve it step by step.',
+    'onboarding.name_placeholder': 'Type your name...',
+    'profile.title': 'Profile & Settings',
+    'profile.name': 'Username',
+    'profile.goal': 'Current Goal',
+    'profile.physical_data': 'Physical Data',
+    'profile.weight': 'Current Weight',
+    'profile.height': 'Height',
+    'profile.accessibility': 'Accessibility & Theme',
+    'profile.dark_mode': 'Dark Mode',
+    'profile.logout': 'Logout',
+    'profile.delete_account': 'Delete Account',
+    'profile.auto_save': 'Auto-save enabled',
+    'profile.update_history': 'Update History',
+    'footer.creator': 'App created by Marcus De Araujo',
+    'footer.rights': 'All rights reserved',
+    'footer.support': 'Support Us',
+    'dashboard.online_now': 'Online Now',
+    'dashboard.greet': 'Greet',
+    'dashboard.greeting_sent': 'Greeting sent to {name}!',
+    'dashboard.online_desc': 'Active users in the community',
+    'common.creator': 'Creator',
+    'common.pro_member': 'Pro Member',
+    'common.main_menu': 'Main Menu',
+    'common.slogan': 'Your ultimate companion on the path to a healthy life.',
+    'common.go_home': 'Go Home',
+    'common.view_instagram': 'View Instagram',
+    'dashboard.no_weight_data': 'No weight data recorded',
+    'dashboard.explore': 'Explore',
+    'dashboard.hydration': 'Hydration Control',
+    'dashboard.glasses': '{count} Glasses',
+    'dashboard.medication': 'Medication Control',
+    'dashboard.add': 'Add',
+    'dashboard.cancel': 'Cancel',
+    'dashboard.med_name': 'Name',
+    'dashboard.med_quantity': 'Quantity',
+    'dashboard.med_time': 'Time (e.g. 08:00)',
+    'dashboard.med_freq': 'Frequency (e.g. 8h)',
+    'dashboard.save_med': 'Save Medication',
+    'dashboard.no_meds': 'No medications recorded',
+    'dashboard.every': 'Every {freq}',
+    'chart.no_data': 'Not enough data yet.',
+    'chart.weight_evolution': 'Weight Evolution',
+    'chart.initial': 'Initial',
+    'chart.actual': 'Actual',
+    'chart.change': 'Change',
+    'ach.first_steps': 'First Steps',
+    'ach.one_week': '1 Week',
+    'ach.gym_beast': 'Gym Beast',
+    'ach.chef_fit': 'Chef Fit',
+  },
+  PT: {
+    'nav.home': 'Início',
+    'nav.walking': 'Caminhada',
+    'nav.cycling': 'Ciclismo',
+    'nav.exercises': 'Exercícios',
+    'nav.nutrition': 'Nutrição',
+    'nav.community': 'Comunidade',
+    'dashboard.welcome': 'Olá, {name}!',
+    'dashboard.stats': 'Peso: {weight} kg • Altura: {height} cm',
+    'dashboard.online': 'Online: {count}',
+    'dashboard.total_users': 'Total de usuários: {count}',
+    'dashboard.goals': 'Seu Objetivo',
+    'dashboard.routine': 'Minha Rotina',
+    'dashboard.no_exercises': 'Você não tem exercícios na sua rotina.',
+    'dashboard.evolution': 'Sua Evolução',
+    'dashboard.achievements': 'Suas Conquistas',
+    'goal.gain_muscle': 'Ganhar Músculo',
+    'goal.lose_fat': 'Perder Gordura',
+    'goal.gain_fat': 'Ganhar Peso',
+    'goal.gain_endurance': 'Ganhar Resistência',
+    'common.back': 'Voltar',
+    'common.continue': 'Continuar',
+    'onboarding.welcome': 'Bem-vindo ao FitMarvin',
+    'onboarding.select_account': 'Selecione seu tipo de conta',
+    'onboarding.user': 'Usuário',
+    'onboarding.user_desc': 'Treine e acompanhe seu progresso',
+    'onboarding.admin': 'Administrador',
+    'onboarding.admin_desc': 'Gerencie a plataforma (Marvin)',
+    'onboarding.goal_q': 'Qual é o seu objetivo principal?',
+    'onboarding.goal_help': 'Vamos ajudá-lo a alcançá-lo passo a passo.',
+    'onboarding.name_placeholder': 'Digite seu nome...',
+    'profile.title': 'Perfil e Ajustes',
+    'profile.name': 'Nome de Usuário',
+    'profile.goal': 'Objetivo Atual',
+    'profile.physical_data': 'Dados Físicos',
+    'profile.weight': 'Peso Actual',
+    'profile.height': 'Altura',
+    'profile.accessibility': 'Acessibilidade e Tema',
+    'profile.dark_mode': 'Modo Escuro',
+    'profile.logout': 'Sair',
+    'profile.delete_account': 'Excluir Conta',
+    'profile.auto_save': 'Salvamento automático ativado',
+    'profile.update_history': 'Atualizar Histórico',
+    'footer.creator': 'Aplicativo criado por Marcus De Araujo',
+    'footer.rights': 'Todos os derechos reservados',
+    'footer.support': 'Apoie-nos',
+    'dashboard.online_now': 'Online agora',
+    'dashboard.greet': 'Saudar',
+    'dashboard.greeting_sent': 'Saudação enviada para {name}!',
+    'dashboard.online_desc': 'Usuários ativos na comunidade',
+    'common.creator': 'Criador',
+    'common.pro_member': 'Membro Pro',
+    'common.main_menu': 'Menu Principal',
+    'common.slogan': 'Seu companheiro definitivo no caminho para uma vida saudável.',
+    'common.go_home': 'Ir para o Início',
+    'common.view_instagram': 'Ver Instagram',
+    'dashboard.no_weight_data': 'Nenhum dado de peso registrado',
+    'dashboard.explore': 'Explorar',
+    'dashboard.hydration': 'Controle de Hidratação',
+    'dashboard.glasses': '{count} Copos',
+    'dashboard.medication': 'Controle de Medicação',
+    'dashboard.add': 'Adicionar',
+    'dashboard.cancel': 'Cancelar',
+    'dashboard.med_name': 'Nome',
+    'dashboard.med_quantity': 'Quantidade',
+    'dashboard.med_time': 'Horário (ex: 08:00)',
+    'dashboard.med_freq': 'Frequência (ex: 8h)',
+    'dashboard.save_med': 'Salvar Medicamento',
+    'dashboard.no_meds': 'Nenhum medicamento registrado',
+    'dashboard.every': 'A cada {freq}',
+    'chart.no_data': 'Ainda não há dados suficientes.',
+    'chart.weight_evolution': 'Evolução do Peso',
+    'chart.initial': 'Inicial',
+    'chart.actual': 'Atual',
+    'chart.change': 'Mudança',
+    'ach.first_steps': 'Primeiros Passos',
+    'ach.one_week': '1 Semana',
+    'ach.gym_beast': 'Bestia Gym',
+    'ach.chef_fit': 'Chef Fit',
+  },
+  DE: {
+    'nav.home': 'Startseite',
+    'nav.walking': 'Gehen',
+    'nav.cycling': 'Radfahren',
+    'nav.exercises': 'Übungen',
+    'nav.nutrition': 'Ernährung',
+    'nav.community': 'Gemeinschaft',
+    'dashboard.welcome': 'Hallo, {name}!',
+    'dashboard.stats': 'Gewicht: {weight} kg • Größe: {height} cm',
+    'dashboard.online': 'Online: {count}',
+    'dashboard.total_users': 'Benutzer insgesamt: {count}',
+    'dashboard.goals': 'Dein Ziel',
+    'dashboard.routine': 'Meine Routine',
+    'dashboard.no_exercises': 'Du hast keine Übungen in deiner Routine.',
+    'dashboard.evolution': 'Deine Entwicklung',
+    'dashboard.achievements': 'Deine Erfolge',
+    'goal.gain_muscle': 'Muskeln aufbauen',
+    'goal.lose_fat': 'Fett verlieren',
+    'goal.gain_fat': 'Gewicht zunehmen',
+    'goal.gain_endurance': 'Ausdauer gewinnen',
+    'common.back': 'Zurück',
+    'common.continue': 'Weiter',
+    'onboarding.welcome': 'Willkommen bei FitMarvin',
+    'onboarding.select_account': 'Wähle deinen Kontotyp',
+    'onboarding.user': 'Benutzer',
+    'onboarding.user_desc': 'Trainiere und verfolge deinen Fortschritt',
+    'onboarding.admin': 'Administrator',
+    'onboarding.admin_desc': 'Verwalte die Plattform (Marvin)',
+    'onboarding.goal_q': 'Was ist dein Hauptziel?',
+    'onboarding.goal_help': 'Wir helfen dir Schritt für Schritt, es zu erreichen.',
+    'onboarding.name_placeholder': 'Gib deinen Namen ein...',
+    'profile.title': 'Profil & Einstellungen',
+    'profile.name': 'Benutzername',
+    'profile.goal': 'Aktuelles Ziel',
+    'profile.physical_data': 'Physische Daten',
+    'profile.weight': 'Aktuelles Gewicht',
+    'profile.height': 'Größe',
+    'profile.accessibility': 'Barrierefreiheit & Design',
+    'profile.dark_mode': 'Dunkelmodus',
+    'profile.logout': 'Abmelden',
+    'profile.delete_account': 'Konto löschen',
+    'profile.auto_save': 'Automatisches Speichern aktiviert',
+    'profile.update_history': 'Verlauf aktualisieren',
+    'footer.creator': 'App erstellt von Marcus De Araujo',
+    'footer.rights': 'Alle Rechte vorbehalten',
+    'footer.support': 'Unterstützen Sie uns',
+    'dashboard.online_now': 'Jetzt online',
+    'dashboard.greet': 'Grüßen',
+    'dashboard.greeting_sent': 'Gruß an {name} gesendet!',
+    'dashboard.online_desc': 'Aktive Benutzer in der Community',
+    'common.creator': 'Ersteller',
+    'common.pro_member': 'Pro-Mitglied',
+    'common.main_menu': 'Hauptmenü',
+    'common.slogan': 'Ihr ultimativer Begleiter auf dem Weg zu einem gesunden Leben.',
+    'common.go_home': 'Zur Startseite',
+    'common.view_instagram': 'Instagram ansehen',
+    'dashboard.no_weight_data': 'Keine Gewichtsdaten aufgezeichnet',
+    'dashboard.explore': 'Erkunden',
+    'dashboard.hydration': 'Hydratationskontrolle',
+    'dashboard.glasses': '{count} Gläser',
+    'dashboard.medication': 'Medikamentenkontrolle',
+    'dashboard.add': 'Hinzufügen',
+    'dashboard.cancel': 'Abbrechen',
+    'dashboard.med_name': 'Name',
+    'dashboard.med_quantity': 'Menge',
+    'dashboard.med_time': 'Zeit (z.B. 08:00)',
+    'dashboard.med_freq': 'Häufigkeit (z.B. 8h)',
+    'dashboard.save_med': 'Medikament speichern',
+    'dashboard.no_meds': 'Keine Medikamente registriert',
+    'dashboard.every': 'Alle {freq}',
+    'chart.no_data': 'Noch nicht genug Daten.',
+    'chart.weight_evolution': 'Gewichtsentwicklung',
+    'chart.initial': 'Anfang',
+    'chart.actual': 'Aktuell',
+    'chart.change': 'Änderung',
+    'ach.first_steps': 'Erste Schritte',
+    'ach.one_week': '1 Woche',
+    'ach.gym_beast': 'Gym Bestie',
+    'ach.chef_fit': 'Chef Fit',
+  }
+};
 
 interface LanguageContextType {
-    language: Language;
-    setLanguage: (lang: Language) => void;
-    t: (key: string) => string;
+  language: Language;
+  setLanguage: (lang: Language) => void;
+  t: (key: string, params?: Record<string, string | number>) => string;
 }
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 
-export const dictionary: Record<string, Record<Language, string>> = {
-    // Sidebar
-    'nav.home': { ES: 'Inicio' },
-    'nav.exercises': { ES: 'Ejercicios' },
-    'nav.nutrition': { ES: 'Nutrición' },
-    'nav.community': { ES: 'Comunidad' },
+export const LanguageProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+  const [language, setLanguageState] = useState<Language>(() => {
+    return (localStorage.getItem('userLanguage') as Language) || 'ES';
+  });
 
-    'nav.system': { ES: 'Sistema' },
-    'nav.profile': { ES: 'Perfil' },
-    'nav.panel': { ES: 'Panel Elite' },
+  const setLanguage = (lang: Language) => {
+    setLanguageState(lang);
+    localStorage.setItem('userLanguage', lang);
+  };
 
-    // Header
-    'header.search': { ES: 'Buscar rutinas, comidas...' },
-    'header.config': { ES: 'Configurar Plan' },
-};
-
-export const LanguageProvider = ({ children }: { children: ReactNode }) => {
-    const [language, setLanguage] = useState<Language>('ES');
-
-    const t = (key: string): string => {
-        if (!dictionary[key]) return key;
-        return dictionary[key][language];
-    };
-
-    return (
-        <LanguageContext.Provider value={{ language, setLanguage, t }}>
-            {children}
-        </LanguageContext.Provider>
-    );
-};
-
-export const useLanguage = () => {
-    const context = useContext(LanguageContext);
-    if (!context) {
-        throw new Error('useLanguage must be used within a LanguageProvider');
+  const t = (key: string, params?: Record<string, string | number>) => {
+    let translation = translations[language][key] || key;
+    if (params) {
+      Object.entries(params).forEach(([param, value]) => {
+        translation = translation.replace(`{${param}}`, String(value));
+      });
     }
-    return context;
+    return translation;
+  };
+
+  return (
+    <LanguageContext.Provider value={{ language, setLanguage, t }}>
+      {children}
+    </LanguageContext.Provider>
+  );
+};
+
+export const useTranslation = () => {
+  const context = useContext(LanguageContext);
+  if (context === undefined) {
+    throw new Error('useTranslation must be used within a LanguageProvider');
+  }
+  return context;
 };

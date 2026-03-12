@@ -2,10 +2,13 @@ import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { IMAGES } from '../constants';
 import SupportModal from './SupportModal';
+import { useTranslation } from '../context/LanguageContext';
+
 
 const Footer = () => {
     const navigate = useNavigate();
     const location = useLocation();
+    const { t } = useTranslation();
     const [isSupportModalOpen, setIsSupportModalOpen] = React.useState(false);
 
     const handleCreatorClick = () => {
@@ -29,11 +32,11 @@ const Footer = () => {
                         className="h-5 md:h-6 w-auto object-contain"
                     />
                     <span className="text-[10px] md:text-xs font-medium text-slate-600 dark:text-slate-400 group-hover:text-primary transition-colors">
-                        Aplicación creada por Marcus De Araujo , Enero 2026 con todos los derechos.
+                        {t('footer.creator')} • {t('footer.rights')} • 2026
                     </span>
-                    <div onClick={(e) => { e.stopPropagation(); setIsSupportModalOpen(true); }} className="flex items-center gap-1.5 px-3 py-1 bg-rose-500/10 hover:bg-rose-500/20 text-rose-500 rounded-full border border-rose-500/10 transition-all text-[10px] font-black uppercase tracking-widest ml-4">
+                    <div onClick={(e) => { e.stopPropagation(); setIsSupportModalOpen(true); }} className="flex items-center gap-1.5 px-3 py-1 bg-rose-500/10 hover:bg-rose-500/20 text-rose-500 rounded-full border border-rose-500/10 transition-all text-[10px] font-black uppercase tracking-widest ml-4" title={t('footer.support')}>
                         <span className="material-symbols-outlined text-xs">volunteer_activism</span>
-                        Apoyar
+                        {t('footer.support')}
                     </div>
                 </button>
             </div>

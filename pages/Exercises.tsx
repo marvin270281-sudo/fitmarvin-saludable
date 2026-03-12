@@ -2,8 +2,25 @@ import React, { useState, useMemo, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { IMAGES } from '../constants';
 import { useMusic } from '../context/MusicContext';
-import { useLanguage, Language } from '../context/LanguageContext';
+
 import { useRoutine } from '../context/RoutineContext';
+
+// constante estática para reemplazar el contexto
+const language: 'ES' = 'ES';
+
+const t = (key: string) => {
+    const dict: Record<string,string> = {
+        'exercises.library': 'Biblioteca',
+        'exercises.techniqueRoutines': 'Técnica & Rutinas',
+        'exercises.myRoutine': 'Mi Rutina',
+        'filter.all': 'Todo',
+        'location.home': 'Casa',
+        'location.gym': 'Gimnasio',
+        'location.both': 'Casa / Gym',
+        'exercises.noResults': 'No hay ejercicios aquí.'
+    };
+    return dict[key] || key;
+};
 
 // --- DATA TYPES ---
 interface ExerciseDetail {
@@ -17,19 +34,19 @@ interface ExerciseDetail {
 type CategoryType = 'All' | 'Chest' | 'Back' | 'Legs' | 'Shoulders' | 'Arms' | 'Abs' | 'Cardio' | 'Routines';
 type FitnessPurpose = 'strength' | 'endurance' | 'fat-loss' | 'muscle-gain';
 
-interface Exercise {
+export interface Exercise {
     id: string;
     videoId: string;
     img: string;
     category: CategoryType;
-    details: Record<Language, ExerciseDetail>;
+    details: Record<string, ExerciseDetail>; // language code will be dynamic
     gender: 'male' | 'female' | 'both';
     location: 'home' | 'gym' | 'both';
     purpose: FitnessPurpose[];
 }
 
 // --- DATA SOURCE (Detailed Instructions & Specific Sets) ---
-const EXERCISE_DB: Exercise[] = [
+export const EXERCISE_DB: Exercise[] = [
     // --- CHEST (PECHO) ---
     {
         id: 'chest-1', videoId: '7aQY3u0Dk-Q', img: IMAGES.USER_CHEST, category: 'Chest', // Powerexplosive (Press Banca)
@@ -895,7 +912,6 @@ const EXERCISE_DB: Exercise[] = [
 
 const ExerciseLibrary = () => {
     const navigate = useNavigate();
-    const { language, t } = useLanguage();
     const [searchTerm, setSearchTerm] = useState('');
     const [activeLocation, setActiveLocation] = useState<'all' | 'home' | 'gym'>('all');
     const [activeCategory, setActiveCategory] = useState<CategoryType | 'All'>('All');
@@ -965,7 +981,7 @@ const ExerciseLibrary = () => {
                         </span>
                     </button>
                     <div className="absolute top-3 left-3 bg-black/60 backdrop-blur-md px-2 py-1 rounded text-[10px] font-bold text-white uppercase tracking-wider border border-white/10">
-                        {ex.location === 'both' ? (language === 'ES' ? 'Casa / Gym' : 'Home / Gym') : (ex.location === 'home' ? (language === 'ES' ? 'Casa' : 'Home') : 'Gym')}
+                        {ex.location === 'both' ? t('location.both') : (ex.location === 'home' ? t('location.home') : t('location.gym'))}
                     </div>
                 </div>
                 <div className="p-5 flex flex-col flex-grow">
@@ -993,10 +1009,10 @@ const ExerciseLibrary = () => {
                     <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
                         <div>
                             <h2 className="text-4xl md:text-5xl font-black tracking-tight dark:text-white leading-none mb-1">
-                                {language === 'ES' ? 'Biblioteca' : 'Library'}
+                                Biblioteca
                             </h2>
                             <p className="text-sm text-slate-500 font-bold uppercase tracking-widest">
-                                {language === 'ES' ? 'Técnica & Rutinas' : 'Technique & Routines'}
+                                Técnica & Rutinas
                             </p>
                         </div>
 
@@ -1006,7 +1022,7 @@ const ExerciseLibrary = () => {
                                 className={`flex items-center gap-2 px-6 py-3 rounded-2xl font-bold transition-all shadow-lg border-2 ${showMyRoutine ? 'bg-primary border-primary text-black shadow-primary/30' : 'bg-transparent border-slate-200 dark:border-white/10 text-slate-700 dark:text-white'}`}
                             >
                                 <span className="material-symbols-outlined fill-current">{showMyRoutine ? 'bookmark' : 'bookmark_border'}</span>
-                                {language === 'ES' ? 'Mi Rutina' : 'My Routine'}
+                                Mi Rutina
                             </button>
                         </div>
                     </div>
@@ -1023,21 +1039,21 @@ const ExerciseLibrary = () => {
                             }}
                             className={`px-8 py-3 rounded-xl text-sm font-bold transition-all ${activeLocation === 'all' && activeCategory === 'All' ? 'bg-white dark:bg-white/10 text-black dark:text-white shadow-md' : 'text-slate-500 hover:text-slate-700 dark:hover:text-slate-300'}`}
                         >
-                            {language === 'ES' ? 'Todo' : 'All'}
+                            Todo
                         </button>
                         <button
                             onClick={() => setActiveLocation('home')}
                             className={`px-8 py-3 rounded-xl text-sm font-bold transition-all flex items-center gap-2 ${activeLocation === 'home' ? 'bg-white dark:bg-white/10 text-orange-600 dark:text-orange-400 shadow-md' : 'text-slate-500 hover:text-slate-700 dark:hover:text-slate-300'}`}
                         >
                             <span className="material-symbols-outlined text-lg">home</span>
-                            {language === 'ES' ? 'Casa' : 'Home'}
+                            Casa
                         </button>
                         <button
                             onClick={() => setActiveLocation('gym')}
                             className={`px-8 py-3 rounded-xl text-sm font-bold transition-all flex items-center gap-2 ${activeLocation === 'gym' ? 'bg-white dark:bg-white/10 text-blue-600 dark:text-blue-400 shadow-md' : 'text-slate-500 hover:text-slate-700 dark:hover:text-slate-300'}`}
                         >
                             <span className="material-symbols-outlined text-lg">fitness_center</span>
-                            {language === 'ES' ? 'Gimnasio' : 'Gym'}
+                            Gimnasio
                         </button>
                     </div>
                 </div>
@@ -1054,7 +1070,7 @@ const ExerciseLibrary = () => {
                     <div className="text-center py-20 opacity-50">
                         <span className="material-symbols-outlined text-6xl text-slate-300 mb-4">search_off</span>
                         <p className="text-xl font-bold text-slate-500">
-                            {language === 'ES' ? 'No hay ejercicios aquí.' : 'No exercises found.'}
+                            No hay ejercicios aquí.
                         </p>
                     </div>
                 )}

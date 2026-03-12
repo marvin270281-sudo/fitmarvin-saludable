@@ -1,10 +1,12 @@
 import React, { useMemo } from 'react';
+import { useTranslation } from '../context/LanguageContext';
 
 interface EvolutionChartProps {
     data: { date: string; weight: number }[];
 }
 
 const EvolutionChart: React.FC<EvolutionChartProps> = ({ data }) => {
+    const { t } = useTranslation();
     const sortedData = useMemo(() => {
         return [...data].sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
     }, [data]);
@@ -14,7 +16,7 @@ const EvolutionChart: React.FC<EvolutionChartProps> = ({ data }) => {
             <div className="h-64 flex items-center justify-center bg-white dark:bg-surface-dark border border-slate-200 dark:border-border-dark rounded-2xl p-6 text-slate-400">
                 <div className="text-center">
                     <span className="material-symbols-outlined text-4xl mb-2 opacity-50">show_chart</span>
-                    <p>No hay datos suficientes aún.</p>
+                    <p>{t('chart.no_data')}</p>
                 </div>
             </div>
         );
@@ -47,7 +49,7 @@ const EvolutionChart: React.FC<EvolutionChartProps> = ({ data }) => {
         <div className="bg-card-light dark:bg-surface-dark border border-slate-200 dark:border-border-dark rounded-2xl p-6 shadow-sm">
             <h3 className="text-xl font-bold mb-6 flex items-center gap-2">
                 <span className="material-symbols-outlined text-primary">ssid_chart</span>
-                Evolución de Peso
+                {t('chart.weight_evolution')}
             </h3>
 
             <div className="relative w-full aspect-[2/1] bg-slate-50 dark:bg-card-dark rounded-xl overflow-hidden border border-slate-100 dark:border-border-dark">
@@ -102,15 +104,15 @@ const EvolutionChart: React.FC<EvolutionChartProps> = ({ data }) => {
             {/* Legend / Stats */}
             <div className="mt-4 flex justify-between items-center">
                 <div className="text-center">
-                    <p className="text-xs text-slate-500 uppercase font-bold">Inicial</p>
+                    <p className="text-xs text-slate-500 uppercase font-bold">{t('chart.initial')}</p>
                     <p className="text-lg font-bold">{sortedData[0].weight} kg</p>
                 </div>
                 <div className="text-center">
-                    <p className="text-xs text-slate-500 uppercase font-bold">Actual</p>
+                    <p className="text-xs text-slate-500 uppercase font-bold">{t('chart.actual')}</p>
                     <p className="text-lg font-bold">{sortedData[sortedData.length - 1].weight} kg</p>
                 </div>
                 <div className="text-center">
-                    <p className="text-xs text-slate-500 uppercase font-bold">Cambio</p>
+                    <p className="text-xs text-slate-500 uppercase font-bold">{t('chart.change')}</p>
                     <p className={`text-lg font-bold ${sortedData[sortedData.length - 1].weight < sortedData[0].weight ? 'text-green-500' : 'text-slate-900 dark:text-white'}`}>
                         {(sortedData[sortedData.length - 1].weight - sortedData[0].weight).toFixed(1)} kg
                     </p>

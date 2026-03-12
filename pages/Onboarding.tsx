@@ -1,15 +1,18 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { IMAGES } from '../constants';
+import { useTranslation } from '../context/LanguageContext';
+
 
 const Onboarding = () => {
     const navigate = useNavigate();
+    const { t, setLanguage, language } = useTranslation();
     const [step, setStep] = React.useState(0);
+    
     const [role, setRole] = React.useState<'user' | 'admin' | null>(null);
     const [name, setName] = React.useState('');
     const [password, setPassword] = React.useState('');
     const [error, setError] = React.useState('');
-    const [selectedGoal, setSelectedGoal] = React.useState('');
 
     React.useEffect(() => {
         const user = localStorage.getItem('userName');
@@ -19,10 +22,10 @@ const Onboarding = () => {
     }, [navigate]);
 
     const goals = [
-        { id: 'gain_fat', label: 'Ganar Peso', icon: 'fastfood', color: 'text-orange-500' },
-        { id: 'lose_fat', label: 'Perder Grasa', icon: 'local_fire_department', color: 'text-red-500' },
-        { id: 'gain_muscle', label: 'Ganar Músculo', icon: 'fitness_center', color: 'text-purple-500' },
-        { id: 'gain_endurance', label: 'Ganar Resistencia', icon: 'directions_run', color: 'text-blue-500' }
+        { id: 'gain_fat', label: t('goal.gain_fat'), icon: 'fastfood', color: 'text-orange-500' },
+        { id: 'lose_fat', label: t('goal.lose_fat'), icon: 'local_fire_department', color: 'text-red-500' },
+        { id: 'gain_muscle', label: t('goal.gain_muscle'), icon: 'fitness_center', color: 'text-purple-500' },
+        { id: 'gain_endurance', label: t('goal.gain_endurance'), icon: 'directions_run', color: 'text-blue-500' }
     ];
 
     const handleRoleSelect = (selectedRole: 'user' | 'admin') => {
@@ -76,14 +79,28 @@ const Onboarding = () => {
 
             <div className="absolute inset-0 z-0 bg-gradient-to-b from-black/80 via-black/90 to-background-dark/95"></div>
 
+            {/* Language Selection in Onboarding */}
+            <div className="absolute top-8 right-8 z-50 flex gap-2">
+                {(['ES', 'EN', 'PT', 'DE'] as const).map(lang => (
+                    <button
+                        key={lang}
+                        onClick={() => setLanguage(lang)}
+                        className={`w-10 h-10 rounded-full font-black text-xs transition-all ${language === lang ? 'bg-primary text-black' : 'bg-white/10 hover:bg-white/20'}`}
+                    >
+                        {lang}
+                    </button>
+                ))}
+            </div>
+
             <div className="max-w-xl w-full text-center mb-8 relative z-10">
                 {step === 0 ? (
                     <div className="animate-in fade-in slide-in-from-bottom duration-500">
-                        <h1 className="text-4xl md:text-5xl font-black mb-8">
-                            Bienvenido a <span className="text-primary">FitMarvin</span>
+                        <h1 className="text-4xl md:text-5xl font-black mb-8 tracking-tighter">
+                            {t('onboarding.welcome')}
                         </h1>
-                        <p className="text-slate-400 text-lg mb-10 text-balance uppercase tracking-widest font-bold">Selecciona tu tipo de cuenta</p>
-
+                        <p className="text-slate-400 text-lg mb-10 text-balance uppercase tracking-widest font-bold">
+                            {t('onboarding.select_account')}
+                        </p>
                         <div className="grid grid-cols-1 gap-4">
                             <button
                                 onClick={() => handleRoleSelect('user')}
@@ -94,8 +111,8 @@ const Onboarding = () => {
                                         <span className="material-symbols-outlined text-3xl">person</span>
                                     </div>
                                     <div className="text-left">
-                                        <h2 className="text-xl font-bold uppercase tracking-tight">Usuario</h2>
-                                        <p className="text-slate-500 text-sm">Entrena y sigue tu progreso</p>
+                                        <h2 className="text-xl font-bold uppercase tracking-tight">{t('onboarding.user')}</h2>
+                                        <p className="text-slate-500 text-sm">{t('onboarding.user_desc')}</p>
                                     </div>
                                 </div>
                                 <span className="material-symbols-outlined text-slate-600 group-hover:text-primary transition-colors">arrow_forward</span>
@@ -110,8 +127,8 @@ const Onboarding = () => {
                                         <span className="material-symbols-outlined text-3xl">shield_person</span>
                                     </div>
                                     <div className="text-left">
-                                        <h2 className="text-xl font-bold uppercase tracking-tight">Administrador</h2>
-                                        <p className="text-slate-500 text-sm">Gestiona la plataforma (Marvin)</p>
+                                        <h2 className="text-xl font-bold uppercase tracking-tight">{t('onboarding.admin')}</h2>
+                                        <p className="text-slate-500 text-sm">{t('onboarding.admin_desc')}</p>
                                     </div>
                                 </div>
                                 <span className="material-symbols-outlined text-slate-600 group-hover:text-primary transition-colors">lock</span>
@@ -121,10 +138,9 @@ const Onboarding = () => {
                 ) : step === 1 ? (
                     <div className="animate-in fade-in slide-in-from-right duration-500">
                         <h1 className="text-3xl md:text-4xl font-black mb-4">
-                            {role === 'admin' ? 'Hola Marvin, introduce tu ' : '¡Hola! '}
-                            <span className="text-primary">{role === 'admin' ? 'Contraseña' : '¿Cómo te llamas?'}</span>
+                            {role === 'admin' ? `${t('onboarding.admin')}` : `${t('onboarding.user')}`}
                         </h1>
-                        <p className="text-slate-500 text-lg">{role === 'admin' ? 'Solo para el acceso del creador.' : 'Para dirigirnos a ti como te mereces.'}</p>
+                        <p className="text-slate-500 text-lg">{role === 'admin' ? t('onboarding.admin_desc') : t('onboarding.user_desc')}</p>
 
                         <div className="mt-8">
                             {role === 'admin' ? (
@@ -143,7 +159,7 @@ const Onboarding = () => {
                                     value={name}
                                     onChange={(e) => setName(e.target.value)}
                                     onKeyDown={(e) => e.key === 'Enter' && handleContinue()}
-                                    placeholder="Escribe tu nombre..."
+                                    placeholder={t('onboarding.name_placeholder')}
                                     className="w-full text-center text-3xl font-bold py-4 bg-transparent border-b-2 border-slate-200 focus:border-primary outline-none transition-colors placeholder:text-slate-700 text-white"
                                     autoFocus
                                 />
@@ -157,35 +173,37 @@ const Onboarding = () => {
                                 className={`w-full bg-primary py-4 rounded-2xl text-black font-black text-lg shadow-xl shadow-primary/20 hover:opacity-90 transition-all ${(role === 'admin' ? !password : !name.trim()) ? 'opacity-50 cursor-not-allowed' : ''}`}
                                 disabled={role === 'admin' ? !password : !name.trim()}
                             >
-                                Continuar
+                                {t('common.continue')}
                             </button>
                             <button
                                 onClick={() => setStep(0)}
                                 className="text-slate-500 hover:text-white transition-colors text-sm font-bold flex items-center justify-center gap-2"
                             >
                                 <span className="material-symbols-outlined text-base">arrow_back</span>
-                                Volver
+                                {t('common.back')}
                             </button>
                         </div>
                     </div>
                 ) : (
                     <div className="animate-in fade-in slide-in-from-right duration-500">
-                        <h1 className="text-3xl md:text-4xl font-black mb-4">
-                            ¿Cuál es tu <span className="text-primary">objetivo principal</span>?
+                        <h1 className="text-3xl md:text-4xl font-black mb-4 tracking-tighter">
+                            {t('onboarding.goal_q')}
                         </h1>
-                        <p className="text-slate-500 text-lg mb-8">Te ayudaremos a conseguirlo paso a paso.</p>
+                        <p className="text-slate-500 text-lg mb-8 underline decoration-primary/30 underline-offset-8">
+                            {t('onboarding.goal_help')}
+                        </p>
 
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             {goals.map((goal) => (
                                 <button
                                     key={goal.id}
                                     onClick={() => handleFinish(goal.id)}
-                                    className="bg-white/5 border border-white/10 hover:border-primary hover:bg-white/10 p-6 rounded-2xl flex flex-col items-center gap-4 transition-all group"
+                                    className="bg-white/5 border border-white/10 hover:border-primary hover:bg-white/10 p-6 rounded-3xl flex flex-col items-center gap-4 transition-all group shadow-lg"
                                 >
                                     <div className={`p-4 rounded-full bg-white/5 group-hover:scale-110 transition-transform ${goal.color}`}>
                                         <span className="material-symbols-outlined text-3xl">{goal.icon}</span>
                                     </div>
-                                    <span className="font-bold text-lg">{goal.label}</span>
+                                    <span className="font-bold text-lg uppercase tracking-tight">{goal.label}</span>
                                 </button>
                             ))}
                         </div>
@@ -195,7 +213,7 @@ const Onboarding = () => {
                             className="mt-8 text-slate-500 hover:text-white transition-colors text-sm font-bold flex items-center justify-center gap-2 mx-auto"
                         >
                             <span className="material-symbols-outlined text-base">arrow_back</span>
-                            Volver
+                            {t('common.back')}
                         </button>
                     </div>
                 )}

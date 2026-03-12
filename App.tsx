@@ -1,6 +1,5 @@
 import React from 'react';
 import { HashRouter, Routes, Route } from 'react-router-dom';
-import { LanguageProvider } from './context/LanguageContext';
 import Dashboard from './pages/Dashboard';
 import ExerciseLibrary from './pages/Exercises';
 import NutritionPlan from './pages/Nutrition';
@@ -15,23 +14,23 @@ import TopHeader from './components/TopHeader';
 import { MusicProvider } from './context/MusicContext';
 import { UserStatsProvider } from './context/UserStatsContext';
 import { RoutineProvider } from './context/RoutineContext';
+import { LanguageProvider } from './context/LanguageContext';
+
 import GlobalSpotifyPlayer from './components/GlobalSpotifyPlayer';
 import Footer from './components/Footer';
 import HealthReminders from './components/HealthReminders';
-import WelcomeToast from './components/WelcomeToast';
 
 const App = () => {
     return (
         <LanguageProvider>
             <MusicProvider>
-                <HashRouter>
+                    <HashRouter>
                     <UserStatsProvider>
                         <RoutineProvider>
                             <div className="h-screen w-full overflow-hidden flex flex-col bg-background-light dark:bg-background-dark text-slate-900 dark:text-white">
                                 <TopHeader />
                                 <GlobalSpotifyPlayer />
                                 <HealthReminders />
-                                <WelcomeToast />
                                 <div className="flex-1 overflow-hidden relative">
                                     <Routes>
                                         <Route path="/" element={<Dashboard />} />
@@ -51,8 +50,9 @@ const App = () => {
                         </RoutineProvider>
                     </UserStatsProvider>
                 </HashRouter>
-            </MusicProvider>
-        </LanguageProvider>
+
+        </MusicProvider>
+    </LanguageProvider>
     );
 };
 

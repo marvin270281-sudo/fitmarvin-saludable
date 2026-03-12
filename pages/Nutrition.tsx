@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useEffect } from 'react';
-import { useLanguage } from '../context/LanguageContext';
 import { useNavigate } from 'react-router-dom';
+
 
 // --- DATA TYPES & GENERATION ---
 interface DayPlan {
@@ -165,7 +165,6 @@ const PLAN_DATA = {
 
 const NutritionPlan = () => {
     const navigate = useNavigate();
-    const { language } = useLanguage();
     const [goal, setGoal] = useState<'lose' | 'gain'>('lose');
     const [isUpdating, setIsUpdating] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
@@ -223,7 +222,7 @@ const NutritionPlan = () => {
             setWeight(newWeight);
             localStorage.setItem('userWeight', newWeight.toString());
             setIsUpdating(false);
-            alert("¡Peso actualizado correctamente!");
+            alert('¡Peso actualizado correctamente!');
         }, 800);
     };
 
@@ -255,7 +254,9 @@ const NutritionPlan = () => {
                             <div className="flex flex-col gap-2">
                                 <h1 className="text-4xl lg:text-5xl font-black text-slate-900 dark:text-white">Plan Nutricional</h1>
                                 <p className="text-slate-500 text-lg max-w-xl">
-                                    Tu hoja de ruta para {goal === 'lose' ? 'definición máxima' : 'volumen limpio'}.
+                                    {goal === 'lose'
+                                        ? 'Tu hoja de ruta para definición máxima.'
+                                        : 'Tu hoja de ruta para volumen limpio.'}
                                     <span className="block text-primary text-sm font-bold mt-2">✨ Tip: Haz clic en cualquier comida para ver cómo prepararla.</span>
                                 </p>
                             </div>

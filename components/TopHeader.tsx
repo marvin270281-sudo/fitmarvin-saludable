@@ -1,20 +1,21 @@
 import React, { useState } from 'react';
 import { useNavigate, Link, useLocation } from 'react-router-dom';
-import { useLanguage } from '../context/LanguageContext';
-import { useUserStats } from '../context/UserStatsContext';
 import { IMAGES } from '../constants';
+import { useUserStats } from '../context/UserStatsContext';
 import SupportModal from './SupportModal';
+import { useTranslation } from '../context/LanguageContext';
 
 const TopHeader = () => {
     const navigate = useNavigate();
     const location = useLocation();
-    const { t } = useLanguage();
-    const { onlineUsers, lastJoiner } = useUserStats();
+    const onlineUsers = 24; // Mock value or from context if available
+    const { t, language, setLanguage } = useTranslation();
     const [hasNotifs, setHasNotifs] = useState(true);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [isLogoModalOpen, setIsLogoModalOpen] = useState(false);
-    const [isSupportModalOpen, setIsSupportModalOpen] = useState(false);
     const [userInstagram, setUserInstagram] = useState(() => localStorage.getItem('userInstagram')?.replace('@', '') || 'fitmarvin_dev');
+    const [isSupportModalOpen, setIsSupportModalOpen] = useState(false);
+    const [isLangOpen, setIsLangOpen] = useState(false);
 
     const [userAvatar, setUserAvatar] = useState(() => localStorage.getItem('userAvatar') || IMAGES.USER_AVATAR);
     const [userName, setUserName] = useState(() => localStorage.getItem('userName') || 'Marvin De Araujo');
@@ -81,17 +82,30 @@ const TopHeader = () => {
 
                 {/* 2. Middle: Desktop Navigation (Hidden on Mobile) */}
                 <nav className="hidden md:flex items-center gap-1 bg-slate-50 dark:bg-white/5 px-2 py-1 rounded-full border border-slate-200 dark:border-white/5">
+                    {/* User Profile next to Home */}
+                    <Link to="/profile" className="flex items-center gap-2 pl-1 pr-3 py-1 rounded-full hover:bg-slate-100 dark:hover:bg-white/10 transition-all">
+                        <div className="size-8 rounded-full bg-slate-200 bg-cover bg-center border border-primary shadow-sm" style={{ backgroundImage: `url('${userAvatar}')` }}></div>
+                        <div className="text-left hidden lg:block">
+                            <p className="text-[10px] font-black leading-none dark:text-white truncate max-w-[80px]">{userName.split(' ')[0]}</p>
+                            <p className="text-[8px] text-primary font-bold uppercase tracking-tighter">
+                                {userRole === 'admin' ? t('common.creator') : t('common.pro_member')}
+                            </p>
+                        </div>
+                    </Link>
+
+                    <div className="w-px h-6 bg-slate-200 dark:bg-white/10 mx-1"></div>
+
                     <Link to="/" className={navItemClass('/')}>
                         <span className="material-symbols-outlined text-lg">dashboard</span>
                         <span className="text-sm">{t('nav.home')}</span>
                     </Link>
                     <Link to="/walking" className={navItemClass('/walking')}>
                         <span className="material-symbols-outlined text-lg">directions_walk</span>
-                        <span className="text-sm">Caminata</span>
+                        <span className="text-sm">{t('nav.walking')}</span>
                     </Link>
                     <Link to="/cycling" className={navItemClass('/cycling')}>
                         <span className="material-symbols-outlined text-lg">directions_bike</span>
-                        <span className="text-sm">Ciclismo</span>
+                        <span className="text-sm">{t('nav.cycling')}</span>
                     </Link>
                     <Link to="/exercises" className={navItemClass('/exercises')}>
                         <span className="material-symbols-outlined text-lg">fitness_center</span>
@@ -107,51 +121,53 @@ const TopHeader = () => {
                     </Link>
                 </nav>
 
-                {/* 3. Right: User Profile & Actions */}
-                <div className="flex items-center gap-2 md:gap-4">
+                {/* Language Selector Dropdown */}
+                <div className="hidden lg:relative lg:block ml-4">
+                    <button
+                        onClick={() => setIsLangOpen(!isLangOpen)}
+                        className={`p-2 rounded-xl transition-all flex items-center gap-2 border ${isLangOpen ? 'bg-primary border-primary text-black shadow-lg shadow-primary/20' : 'bg-slate-100 dark:bg-white/5 border-slate-200 dark:border-white/10 text-slate-500 dark:text-slate-300 hover:border-primary group'}`}
+                    >
+                        <span className={`material-symbols-outlined text-xl ${!isLangOpen && 'group-hover:text-primary transition-colors'}`}>language</span>
+                        <span className="text-xs font-black uppercase">{language}</span>
+                        <span className={`material-symbols-outlined text-xs transition-transform duration-300 ${isLangOpen ? 'rotate-180' : ''}`}>expand_more</span>
+                    </button>
 
-
-                    <div className="hidden lg:flex items-center gap-1 bg-green-500/10 px-3 py-1 rounded-full border border-green-500/20 relative group">
-                        {lastJoiner && (
-                            <div className="absolute -top-6 left-1/2 -translate-x-1/2 bg-yellow-400 text-white text-[10px] px-2 py-0.5 rounded-full font-black animate-bounce flex items-center gap-1 shadow-lg whitespace-nowrap">
-                                <span className="material-symbols-outlined text-[10px]">emoji_events</span>
-                                ¡NUEVO!
+                    {isLangOpen && (
+                        <>
+                            <div 
+                                className="fixed inset-0 z-40" 
+                                onClick={() => setIsLangOpen(false)}
+                            ></div>
+                            <div className="absolute top-full right-0 mt-2 w-40 bg-white dark:bg-surface-dark border border-slate-200 dark:border-border-dark rounded-2xl shadow-2xl p-2 z-50 animate-in fade-in zoom-in-95 duration-200 origin-top-right">
+                                <div className="grid grid-cols-1 gap-1">
+                                    {(['ES', 'EN', 'PT', 'DE'] as const).map((lang) => (
+                                        <button
+                                            key={lang}
+                                            onClick={() => {
+                                                setLanguage(lang);
+                                                setIsLangOpen(false);
+                                            }}
+                                            className={`flex items-center justify-between px-4 py-2.5 rounded-xl text-sm transition-all ${language === lang ? 'bg-primary text-black font-bold' : 'text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-white/5 hover:text-primary'}`}
+                                        >
+                                            <span className="font-black">{lang}</span>
+                                            {language === lang && (
+                                                <span className="material-symbols-outlined text-sm">check_circle</span>
+                                            )}
+                                        </button>
+                                    ))}
+                                </div>
                             </div>
-                        )}
-                        <span className="relative flex h-2 w-2">
-                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                            <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
-                        </span>
-                        <span className="text-xs font-bold text-green-600 dark:text-green-400 tabular-nums">
-                            {onlineUsers} online
-                        </span>
-                    </div>
+                        </>
+                    )}
+                </div>
 
-                    <div className="hidden sm:flex items-center gap-2">
-                        <button
-                            onClick={() => setIsSupportModalOpen(true)}
-                            className="flex items-center gap-2 px-3 py-1.5 bg-rose-500/10 hover:bg-rose-500/20 text-rose-500 rounded-full border border-rose-500/20 transition-all group shadow-sm hover:scale-105"
-                            title="Apoyar el proyecto (Bizum / Instagram)"
-                        >
-                            <span className="material-symbols-outlined text-lg animate-pulse">favorite</span>
-                            <span className="text-[10px] font-black uppercase tracking-widest hidden lg:inline">Apoyar</span>
-                        </button>
+                {/* 3. Right: System Info & Actions */}
+                <div className="flex items-center gap-4">
+                    {/* online count */}
+                    <div className="hidden sm:flex items-center gap-2 text-xs px-3 py-1.5 bg-blue-50 dark:bg-blue-900/20 rounded-full font-bold text-blue-500 border border-blue-100 dark:border-blue-500/20">
+                        <span className="size-1.5 rounded-full bg-blue-500 animate-pulse"></span>
+                        {t('dashboard.online', { count: onlineUsers })}
                     </div>
-
-                    <Link to="/profile" className="flex items-center gap-2 md:gap-3 pl-2 md:pl-4 md:border-l border-slate-200 dark:border-white/10 hover:opacity-80 transition-opacity">
-                        <div className="text-right hidden sm:block">
-                            <p className="text-sm font-bold leading-none dark:text-white">{userName}</p>
-                            {userRole === 'admin' ? (
-                                <p className="text-[10px] text-primary font-black uppercase tracking-tighter flex items-center justify-end gap-1">
-                                    <span className="material-symbols-outlined text-[10px]">verified</span>
-                                    Creador
-                                </p>
-                            ) : (
-                                <p className="text-[10px] text-primary font-bold">Pro Member</p>
-                            )}
-                        </div>
-                        <div className="size-8 md:size-10 rounded-full bg-slate-200 bg-cover bg-center border-2 border-primary" style={{ backgroundImage: `url('${userAvatar}')` }}></div>
-                    </Link>
                 </div>
             </div>
 
@@ -160,15 +176,7 @@ const TopHeader = () => {
                 <div className="md:hidden absolute top-full left-0 w-full bg-white dark:bg-surface-dark border-b border-slate-200 dark:border-border-dark shadow-2xl animate-in slide-in-from-top-5 duration-200 overflow-y-auto max-h-[80vh]">
                     <div className="p-4 flex flex-col">
                         <div className="mb-4 pb-4 border-b border-slate-100 dark:border-white/5 flex items-center justify-between">
-                            <span className="text-xs font-bold uppercase text-slate-400 tracking-wider">Menú Principal</span>
-                            <div className="flex items-center gap-1 bg-green-500/10 px-2 py-1 rounded-full">
-                                <span className="relative flex h-2 w-2">
-                                    <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
-                                </span>
-                                <span className="text-[10px] font-bold text-green-600 dark:text-green-400">
-                                    {onlineUsers} active
-                                </span>
-                            </div>
+                            <span className="text-xs font-bold uppercase text-slate-400 tracking-wider">{t('common.main_menu')}</span>
                         </div>
 
                         <nav className="flex flex-col">
@@ -182,13 +190,13 @@ const TopHeader = () => {
                                 <div className="p-2 bg-orange-100 dark:bg-orange-900/20 text-orange-600 rounded-lg">
                                     <span className="material-symbols-outlined text-xl">directions_walk</span>
                                 </div>
-                                <span className="font-medium">Caminata Virtual</span>
+                                <span className="font-medium">{t('nav.walking')}</span>
                             </Link>
                             <Link to="/cycling" className={mobileNavItemClass('/cycling')}>
                                 <div className="p-2 bg-blue-100 dark:bg-blue-900/20 text-blue-600 rounded-lg">
                                     <span className="material-symbols-outlined text-xl">directions_bike</span>
                                 </div>
-                                <span className="font-medium">Ciclismo Virtual</span>
+                                <span className="font-medium">{t('nav.cycling')}</span>
                             </Link>
                             <Link to="/exercises" className={mobileNavItemClass('/exercises')}>
                                 <div className="p-2 bg-primary/20 text-primary rounded-lg">
@@ -209,6 +217,18 @@ const TopHeader = () => {
                                 <span className="font-medium">{t('nav.community')}</span>
                             </Link>
 
+                            {/* Mobile Language Selector */}
+                            <div className="mt-6 flex flex-wrap gap-2 pt-6 border-t border-slate-100 dark:border-white/5">
+                                {(['ES', 'EN', 'PT', 'DE'] as const).map((lang) => (
+                                    <button
+                                        key={lang}
+                                        onClick={() => setLanguage(lang)}
+                                        className={`flex-1 px-4 py-2 rounded-xl text-sm font-black transition-all ${language === lang ? 'bg-primary text-black' : 'bg-slate-50 dark:bg-white/5 text-slate-400'}`}
+                                    >
+                                        {lang}
+                                    </button>
+                                ))}
+                            </div>
                         </nav>
                     </div>
                 </div>
@@ -246,7 +266,7 @@ const TopHeader = () => {
                             FIT<span className="text-primary">MARVIN</span>
                         </h1>
                         <p className="text-slate-400 text-xl md:text-2xl font-medium mb-10 max-w-md">
-                            Tu compañero definitivo en el camino hacia una vida saludable.
+                            {t('common.slogan')}
                         </p>
 
                         {/* Action Buttons */}
@@ -259,7 +279,7 @@ const TopHeader = () => {
                                 className="px-8 py-4 bg-primary text-black font-black uppercase tracking-widest rounded-2xl flex items-center justify-center gap-3 hover:scale-105 transition-all shadow-xl shadow-primary/30"
                             >
                                 <span className="material-symbols-outlined">home</span>
-                                Ir al Inicio
+                                {t('common.go_home')}
                             </button>
 
                             <a
@@ -269,7 +289,7 @@ const TopHeader = () => {
                                 className="px-8 py-4 bg-white/10 text-white font-black uppercase tracking-widest rounded-2xl flex items-center justify-center gap-3 hover:bg-white/20 transition-all border border-white/20"
                             >
                                 <span className="material-symbols-outlined">share</span>
-                                Ver Instagram
+                                {t('common.view_instagram')}
                             </a>
                         </div>
                     </div>

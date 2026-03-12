@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from '../context/LanguageContext';
 
 interface Medication {
     id: string;
@@ -9,6 +10,7 @@ interface Medication {
 }
 
 const HealthTracker = () => {
+    const { t } = useTranslation();
     const [meds, setMeds] = useState<Medication[]>(() => {
         const saved = localStorage.getItem('health_meds');
         return saved ? JSON.parse(saved) : [];
@@ -54,10 +56,10 @@ const HealthTracker = () => {
                     <div className="flex items-center justify-between mb-4">
                         <h3 className="font-black text-slate-800 dark:text-white flex items-center gap-2 text-sm uppercase tracking-widest">
                             <span className="material-symbols-outlined text-blue-500">water_drop</span>
-                            Control de Hidratación
+                            {t('dashboard.hydration')}
                         </h3>
                         <span className="text-xs font-bold text-blue-500 bg-blue-50 dark:bg-blue-900/20 px-2 py-1 rounded-full">
-                            {hydration} Vasos
+                            {t('dashboard.glasses', { count: hydration })}
                         </span>
                     </div>
 
@@ -90,14 +92,14 @@ const HealthTracker = () => {
                     <div className="flex items-center justify-between mb-4">
                         <h3 className="font-black text-slate-800 dark:text-white flex items-center gap-2 text-sm uppercase tracking-widest">
                             <span className="material-symbols-outlined text-rose-500">pill</span>
-                            Control de Medicación
+                            {t('dashboard.medication')}
                         </h3>
                         <button
                             onClick={() => setShowAddMed(!showAddMed)}
                             className="text-primary text-[10px] font-black uppercase tracking-widest flex items-center gap-1 hover:underline"
                         >
                             <span className="material-symbols-outlined text-sm">{showAddMed ? 'close' : 'add_circle'}</span>
-                            {showAddMed ? 'Cancelar' : 'Añadir'}
+                            {showAddMed ? t('dashboard.cancel') : t('dashboard.add')}
                         </button>
                     </div>
 
@@ -105,34 +107,34 @@ const HealthTracker = () => {
                         <form onSubmit={addMedication} className="mb-4 grid grid-cols-2 gap-2 bg-slate-50 dark:bg-white/5 p-4 rounded-2xl border border-primary/20 animate-in slide-in-from-top-2">
                             <input
                                 type="text"
-                                placeholder="Nombre"
+                                placeholder={t('dashboard.med_name')}
                                 value={newMed.name}
                                 onChange={e => setNewMed({ ...newMed, name: e.target.value })}
                                 className="col-span-2 bg-white dark:bg-surface-dark border border-slate-200 dark:border-white/10 rounded-xl px-3 py-2 text-xs"
                             />
                             <input
                                 type="text"
-                                placeholder="Cantidad"
+                                placeholder={t('dashboard.med_quantity')}
                                 value={newMed.quantity}
                                 onChange={e => setNewMed({ ...newMed, quantity: e.target.value })}
                                 className="bg-white dark:bg-surface-dark border border-slate-200 dark:border-white/10 rounded-xl px-3 py-2 text-xs"
                             />
                             <input
                                 type="text"
-                                placeholder="Horario (ej: 08:00)"
+                                placeholder={t('dashboard.med_time')}
                                 value={newMed.time}
                                 onChange={e => setNewMed({ ...newMed, time: e.target.value })}
                                 className="bg-white dark:bg-surface-dark border border-slate-200 dark:border-white/10 rounded-xl px-3 py-2 text-xs"
                             />
                             <input
                                 type="text"
-                                placeholder="Cada cuánto (ej: 8h)"
+                                placeholder={t('dashboard.med_freq')}
                                 value={newMed.frequency}
                                 onChange={e => setNewMed({ ...newMed, frequency: e.target.value })}
                                 className="col-span-2 bg-white dark:bg-surface-dark border border-slate-200 dark:border-white/10 rounded-xl px-3 py-2 text-xs"
                             />
                             <button type="submit" className="col-span-2 py-2 bg-primary text-black font-black uppercase tracking-widest text-[10px] rounded-xl">
-                                Guardar Medicamento
+                                {t('dashboard.save_med')}
                             </button>
                         </form>
                     )}
@@ -140,7 +142,7 @@ const HealthTracker = () => {
                     <div className="space-y-2">
                         {meds.length === 0 ? (
                             <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest italic text-center py-4 bg-slate-50 dark:bg-white/5 rounded-2xl border border-dashed border-slate-200 dark:border-white/10">
-                                No hay medicamentos registrados
+                                {t('dashboard.no_meds')}
                             </p>
                         ) : (
                             meds.map(med => (
@@ -152,7 +154,7 @@ const HealthTracker = () => {
                                         <div>
                                             <p className="text-xs font-black text-slate-800 dark:text-white leading-none">{med.name}</p>
                                             <p className="text-[9px] text-slate-500 font-bold uppercase tracking-tighter mt-1">
-                                                {med.quantity} • {med.time} • Cada {med.frequency}
+                                                {med.quantity} • {med.time} • {t('dashboard.every', { freq: med.frequency })}
                                             </p>
                                         </div>
                                     </div>

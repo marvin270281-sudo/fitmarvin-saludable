@@ -31,15 +31,7 @@ const HealthReminders = () => {
     const [isVisible, setIsVisible] = useState(false);
     const location = useLocation();
 
-    // Check if we are NOT on the home page
-    const isNotHome = location.pathname !== '/';
-
     useEffect(() => {
-        if (!isNotHome) {
-            setIsVisible(false);
-            return;
-        }
-
         const showMessage = (msg?: string) => {
             if (msg) {
                 setCurrentMessage(msg);
@@ -96,9 +88,9 @@ const HealthReminders = () => {
             clearInterval(medInterval);
             clearInterval(generalInterval);
         };
-    }, [isNotHome, location.pathname]);
+    }, [location.pathname]);
 
-    if (!isVisible || !isNotHome) return null;
+    if (!isVisible) return null;
 
     return (
         <div className="fixed bottom-24 right-6 z-50 animate-in slide-in-from-right-full duration-500">

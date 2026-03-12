@@ -58,10 +58,10 @@ const Community = () => {
             localStorage.setItem('community_posts', JSON.stringify(data));
             return true;
         } catch (e: any) {
+            console.error("Storage error:", e);
             if (e.name === 'QuotaExceededError' || e.name === 'NS_ERROR_DOM_QUOTA_REACHED') {
                 return false;
             }
-            console.error("Storage error:", e);
             return false;
         }
     };
@@ -69,7 +69,7 @@ const Community = () => {
     // Auto-sync limited posts to storage
     useEffect(() => {
         if (posts.length > 0) {
-            attemptSave(posts.slice(0, 10));
+            attemptSave(posts);
         }
     }, [posts]);
 
@@ -79,7 +79,7 @@ const Community = () => {
             if (e.key === 'community_posts') {
                 try {
                     const newVal = JSON.parse(e.newValue || '[]');
-                    setPosts(Array.isArray(newVal) ? newVal.slice(0, 10) : []);
+                    setPosts(Array.isArray(newVal) ? newVal : []);
                 } catch (err) {
                     console.error("Storage sync error:", err);
                 }
@@ -98,7 +98,7 @@ const Community = () => {
             const newPost = {
                 id: Date.now(),
                 user: currentUser.name,
-                time: "Hoy, " + new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+                time: new Date().toLocaleString(),
                 text: postText.trim(),
                 likes: 0,
                 avatar: currentUser.avatar,
@@ -107,18 +107,28 @@ const Community = () => {
                 role: currentUser.role
             };
 
-            let updatedPosts = [newPost, ...posts].slice(0, 15); // Slightly more posts allowed since no images
-            const success = attemptSave(updatedPosts);
+            const updatedPosts = [newPost, ...posts].slice(0, 20); // Keep last 20 posts
+            
+            // 1. Update state immediately for responsive UI
+            setPosts(updatedPosts);
+            
+            // 2. Persist to storage
+            attemptSave(updatedPosts);
+            
+            // 3. Notify other components
+            window.dispatchEvent(new Event('community-update'));
+            
+            // 4. Clear input
+            setPostText('');
+            
+            // 5. Success feedback
+            setTimeout(() => {
+                alert("¡Publicado en el muro!");
+            }, 100);
 
-            if (success) {
-                setPosts(updatedPosts);
-                window.dispatchEvent(new Event('community-update'));
-                setPostText('');
-            } else {
-                throw new Error("No se pudo guardar la publicación.");
-            }
         } catch (err: any) {
-            alert(err.message || "Error al publicar.");
+            console.error("Post error:", err);
+            alert("Error al publicar: " + (err.message || "revisa tu conexión"));
         } finally {
             setIsPublishing(false);
         }
@@ -127,18 +137,14 @@ const Community = () => {
     const handleLike = (id: number) => {
         const updated = posts.map(p => p.id === id ? { ...p, likes: (p.likes || 0) + 1 } : p);
         setPosts(updated);
-        try {
-            localStorage.setItem('community_posts', JSON.stringify(updated));
-        } catch (e) {
-            console.error("Like storage error:", e);
-        }
+        attemptSave(updated);
     };
 
     const handleDelete = (id: number) => {
         if (window.confirm("¿Seguro que quieres eliminar esta publicación?")) {
             const updated = posts.filter(p => p.id !== id);
             setPosts(updated);
-            localStorage.setItem('community_posts', JSON.stringify(updated));
+            attemptSave(updated);
             window.dispatchEvent(new Event('community-update'));
         }
     };
